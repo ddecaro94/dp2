@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.polito.it/schemas/nfvInfo"
+	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.polito.it/schemas/nfvInfo">
+	<element name="nfv">
+		<complexType>
+			<all>
+				<element name="hosts">
+					<complexType>
+						<sequence>
+							<element name="host" maxOccurs="unbounded" type="tns:hostType" minOccurs="0"></element>
+						</sequence>
+					</complexType>
+					<key name="hostKey">
+					<selector xpath="tns:hosts/tns:host"></selector>
+					<field xpath="@name"></field>
+					</key>
+				</element>
+				<element name="vnfCatalog">
+					<complexType>
+						<sequence>
+							<element name="vnf" maxOccurs="unbounded" type="tns:vnfType"></element>
+						</sequence>
+					</complexType>
+				</element>
+			</all>
+		</complexType>
+	</element>
+
+
+	<complexType name="connectionType">
+		<sequence>
+			<element name="latency">
+				<simpleType>
+					<restriction base="int">
+						<minExclusive value="0"></minExclusive>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="throughput">
+				<simpleType>
+					<restriction base="decimal">
+						<minExclusive value="0"></minExclusive>
+						<fractionDigits value="2"></fractionDigits>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="hostType">
+		
+		<all>
+			<element name="availableMemory" type="string"></element>
+			<element name="availableStorage" type="string"></element>
+			<element name="maxVNFs" type="string"></element>
+		</all>
+<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
+	
+
+	<complexType name="vnfType">
+		<sequence>
+			<element name="functionalType" type="tns:functionalType"></element>
+			<element name="requiredMemory" type="string"></element>
+			<element name="requiredStorage" type="string"></element>
+		</sequence>
+	</complexType>
+
+	<simpleType name="functionalType">
+		<restriction base="string">
+			<enumeration value="SPAM"></enumeration>
+			<enumeration value="FW"></enumeration>
+			<enumeration value="DPI"></enumeration>
+			<enumeration value="NAT"></enumeration>
+			<enumeration value="CACHE"></enumeration>
+			<enumeration value="WEB_SERVER"></enumeration>
+			<enumeration value="WEB_CLIENT"></enumeration>
+			<enumeration value="MAIL_SERVER"></enumeration>
+			<enumeration value="MAIL_CLIENT"></enumeration>
+			<enumeration value="VPN"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<complexType name="nodeType">
+		<sequence>
+			<element name="vnf" type="tns:vnfType"></element>
+		</sequence>
+	</complexType>
+
+</schema>
