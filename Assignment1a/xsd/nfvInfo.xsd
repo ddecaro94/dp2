@@ -7,18 +7,19 @@
 				<element name="hosts">
 					<complexType>
 						<sequence>
-							<element name="host" maxOccurs="unbounded" type="tns:hostType" minOccurs="0"></element>
+							<element name="host" maxOccurs="unbounded" type="tns:HostType"
+								minOccurs="0"></element>
 						</sequence>
 					</complexType>
 					<key name="hostKey">
-					<selector xpath="tns:hosts/tns:host"></selector>
-					<field xpath="@name"></field>
+						<selector xpath="tns:hosts/tns:host"></selector>
+						<field xpath="@name"></field>
 					</key>
 				</element>
 				<element name="vnfCatalog">
 					<complexType>
 						<sequence>
-							<element name="vnf" maxOccurs="unbounded" type="tns:vnfType"></element>
+							<element name="vnf" maxOccurs="unbounded" type="tns:VnfType"></element>
 						</sequence>
 					</complexType>
 				</element>
@@ -27,7 +28,7 @@
 	</element>
 
 
-	<complexType name="connectionType">
+	<complexType name="ConnectionType">
 		<sequence>
 			<element name="latency">
 				<simpleType>
@@ -48,18 +49,17 @@
 	</complexType>
 
 
-	<complexType name="hostType">
-		
+	<complexType name="HostType">
 		<all>
 			<element name="availableMemory" type="string"></element>
 			<element name="availableStorage" type="string"></element>
 			<element name="maxVNFs" type="string"></element>
 		</all>
-<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
-	
 
-	<complexType name="vnfType">
+
+	<complexType name="VnfType">
 		<sequence>
 			<element name="functionalType" type="tns:functionalType"></element>
 			<element name="requiredMemory" type="string"></element>
@@ -84,7 +84,34 @@
 
 	<complexType name="nodeType">
 		<sequence>
-			<element name="vnf" type="tns:vnfType"></element>
+			<element name="vnf" type="tns:VnfType"></element>
+			<element name="hosts" type="tns:HostsType"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="NodesType">
+		<sequence>
+			<element name="node" type="tns:nodeType" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="HostsType">
+		<sequence>
+			<element name="node" type="tns:HostType" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<element name="hosts" type="tns:HostsType">
+		<key name="hostName">
+			<selector xpath="*/host" />
+			<field xpath="@name" />
+		</key>
+	</element>
+
+	<complexType name="NffgType">
+		<sequence>
+			<element name="deployTime" type="dateTime"></element>
+			<element name="nodes" type="tns:NodesType"></element>
 		</sequence>
 	</complexType>
 
