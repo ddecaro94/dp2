@@ -1,0 +1,32 @@
+# XSD AND DTD SOLUTION DOCUMENTATION #
+
+In order to develop a well-defined data model and make use of the full potential of the XML schema specifications, an XSD-first approach has been used,
+then the DTD has been created to keep compatibility with the xml documents validating against the schema as much as possible.
+
+To make the best use of xml namespaces, elements have been defined globally instead of locally; 
+in this way is possible to define a common xml namespace at the ancestor level and let the children elements inherit the default, keeping short the notation (removing the prefix), and providing flexibility. 
+Moreover, elements defined this way can be validated in a standalone fashion without the need of an enclosing root ancestor.
+
+To represent the DP2-NFV system, an element named 'nfv' has been created, containing information about the catalog of network functions available to be allocated,
+about hosts available in the IN, and about NF-FGs that can be deployed to the infrastructure. The elements can appear in any order, but all of them must be present.
+
+Each interface inheriting from namedEntity is represented in the XML schema as an element having the attribute 'name' of type ID, in order to be unique in the NFV infrastructure, except for the 'ConnectionType', used both for describing connections between hosts and links between nodes, 
+in which the 'name' attribute is of type token and is optional.
+
+The element 'vnfCatalog' contains a list of elements 'vfn', each with an attribute 'functionalType', an enumerated string representing all possible vfn categories. 'requiredMemory' and 'requiredStorage' elements, referenced by 'vfnType' have been defined as of type nonNegativeInteger, 
+it's assumed that a function can require no storage or no memory (or at least less than 1 MB) and therefore the zero value is allowed.
+A key is defined on the attribute 'name' of the 'vfn' elements inside the catalog, enforcing uniqueness and allowing other elements to reference it.
+
+The 'hosts' element represents the list of available nodes in the infrastructure, each containing the host information about available resources, modeled as non negative integers, a list of deployed node names, and a list of connection elements having the host as source. 
+The 'connection' type stores information about the name of the connection, optional in case of connection between hosts, the destination of the connection as an attribute of type IDREF, and performance values as latency and throughput. Both latency and throughput are non-negative non-zero values, it is assumed that a link with zero latency does not exist, and so does not a connection with no throughput.
+In the same way, a link between two nodes of an NF-FG requiring zero latency or no throughput is not considered. Throughput precision is set to two decimal digits.
+A key is set on the hosts attribute name in order to keep them unique.
+
+The element 'nffgs' represents the list of NF-FGs available on the system, each of them characterized by a deployment time, which is optional and represents if the graph has been deployed on the system. Graphs stored but not deployed are represented without the element 'deploymentTime'.
+The element 'nodes' of each nffg keeps track of the available nodes, which are the union of all node elements of all nffgs; this is represented by means of a key constraint referencing the node name inside every node set. Each node stores a reference to the host on which it is deployed (optional), a reference to a vnf element in the catalog, and a list of links, of type 'ConnectionType'.
+The presence of the attribute 'name' in the link element is enforced by a key constraint.
+
+Keyref constraints make sure that names referencing entities refer to existing ones, such as the vnf type of each host, the destination (host or node) inside connection elements, and the name of deployed nodes on each host.
+
+On purpose no constraints have been set to ensure that the destination name of each connection does not refer to the element itself: this to model the possibility to have a loopback interface, or multiple network interfaces, such as wired and wireless.
+Another constraint could be set in order to keep the links between nffg nodes referencing only nodes internal to the same nffg, but being the nodes unique at the NFV model level, it is assumed that is possible to reference a node belonging to a different nffg.

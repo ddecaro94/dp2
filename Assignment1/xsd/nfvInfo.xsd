@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.polito.it/schemas/nfvInfo"
+	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.polito.it/schemas/nfvInfo">
+	<element name="nfv">
+		<complexType>
+			<all>
+				<element ref="tns:vnfCatalog" maxOccurs="1" minOccurs="1"/>
+				<element ref="tns:hosts" maxOccurs="1" minOccurs="1" />
+
+				
+				<element ref="tns:nffgs" maxOccurs="1" minOccurs="1"/>
+			</all>
+		</complexType>
+
+
+		<keyref name="typeRef" refer="tns:vnfName">
+			<selector xpath="tns:nffgs/tns:nffg/tns:nodes/tns:node" />
+			<field xpath="@vnf" />
+		</keyref>
+
+		<keyref name="destinationHostRef" refer="tns:hostName">
+			<selector xpath="tns:hosts/tns:host/tns:connections/tns:connection" />
+			<field xpath="@destination" />
+		</keyref>
+
+		<keyref name="destinationNodeRef" refer="tns:nodeName">
+			<selector xpath="tns:nffgs/tns:nffg/tns:nodes/tns:node/tns:link" />
+			<field xpath="@destination" />
+		</keyref>		
+		<keyref name="deployedNodeName" refer="tns:nodeName">
+			<selector xpath="tns:hosts/tns:host/tns:deployedNodes/tns:deployedNode" />
+			<field xpath="@name" />
+		</keyref>
+	</element>
+
+	<element name="vnf" type="tns:VnfType" />
+
+
+	<complexType name="NffgType">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:deployTime" />
+			<element maxOccurs="1" minOccurs="1" ref="tns:nodes" />
+
+		</sequence>
+		<attribute name="name" type="ID" use="required" />
+	</complexType>
+
+	<complexType name="ConnectionType">
+		<all>
+			<element ref="tns:performance" maxOccurs="1" minOccurs="1" />
+		</all>
+		<attribute name="name" type="token" use="optional"/>
+		<attribute name="destination" type="IDREF" use="required"/>
+		
+	</complexType>
+
+	<complexType name="Catalog">
+		<sequence>
+			<element ref="tns:vnf" maxOccurs="unbounded" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="HostsType">
+		<sequence>
+			<element ref="tns:host" maxOccurs="unbounded" minOccurs="0"></element>
+		</sequence>
+	</complexType>
+	
+	<element name="host" type="tns:HostType">			
+		<unique name="deployedNodeUnique">
+			<selector xpath="tns:deployedNodes/tns:deployedNode" />
+			<field xpath="@name" />
+		</unique>
+	</element>
+	
+	<complexType name="ConnectionPerformanceType">
+		<sequence>
+			<element ref="tns:latency" maxOccurs="1" minOccurs="1"/>
+			<element ref="tns:throughput" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="HostType">
+		<all>
+			<element ref="tns:availableMemory" maxOccurs="1"
+				minOccurs="1" />
+			<element ref="tns:availableStorage" maxOccurs="1"
+				minOccurs="1" />
+			<element ref="tns:maxVNFs" maxOccurs="1" minOccurs="1" />
+			<element ref="tns:deployedNodes" maxOccurs="1"
+				minOccurs="1" />
+			<element ref="tns:connections" maxOccurs="1" minOccurs="1"></element>
+		</all>
+		<attribute name="name" type="ID" use="required" />
+	</complexType>
+
+	<complexType name="VnfType">
+        <all>
+			<element ref="tns:requiredMemory" maxOccurs="1" minOccurs="1"/>
+			<element ref="tns:requiredStorage" maxOccurs="1" minOccurs="1"/>
+		</all>
+		<attribute name="functionalType" type="tns:FunctionalType" use="required"/>
+		<attribute name="name" type="ID" use="required" />
+	</complexType>
+
+	<simpleType name="FunctionalType">
+		<restriction base="string">
+			<enumeration value="SPAM" />
+			<enumeration value="FW" />
+			<enumeration value="DPI" />
+			<enumeration value="NAT" />
+			<enumeration value="CACHE" />
+			<enumeration value="WEB_SERVER" />
+			<enumeration value="WEB_CLIENT" />
+			<enumeration value="MAIL_SERVER" />
+			<enumeration value="MAIL_CLIENT" />
+			<enumeration value="VPN" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="NodeType">
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="tns:link" />
+
+		</sequence>
+		<attribute name="name" type="ID" use="required" />
+		<attribute name="host" type="IDREF" use="optional" />
+		<attribute name="vnf" type="IDREF" use="required" />
+	</complexType>
+
+
+	<element name="vnfCatalog" type="tns:Catalog">
+		<key name="vnfName">
+			<selector xpath="tns:vnf" />
+			<field xpath="@name" />
+		</key>
+	</element>
+
+	<element name="hosts" type="tns:HostsType">
+		<key name="hostName">
+			<selector xpath="tns:host" />
+			<field xpath="@name" />
+		</key>
+
+	</element>
+
+	<element name="connections">
+		<complexType>
+			<sequence>
+				<element maxOccurs="unbounded" minOccurs="0" ref="tns:connection" />
+
+			</sequence>
+		</complexType>
+
+	</element>
+
+	<element name="nffgs">
+		<complexType>
+			<sequence>
+				<element ref="tns:nffg" maxOccurs="unbounded" minOccurs="0" />
+
+			</sequence>
+		</complexType>
+		<key name="nffgName">
+			<selector xpath="tns:nffg" />
+			<field xpath="@name" />
+		</key>
+
+		<key name="nodeName">
+			<selector xpath="tns:nffg/tns:nodes/tns:node" />
+			<field xpath="@name" />
+		</key>
+
+
+
+	</element>
+
+	<element name="requiredMemory" type="nonNegativeInteger" />
+	<element name="requiredStorage" type="nonNegativeInteger" />
+
+	<element name="nffg" type="tns:NffgType">
+
+		<key name="linkName">
+			<selector xpath="tns:nodes/tns:node/tns:link" />
+			<field xpath="@name" />
+		</key>
+	</element>
+	<element name="availableMemory" type="nonNegativeInteger" />
+
+	<element name="availableStorage" type="nonNegativeInteger" />
+
+	<element name="maxVNFs" type="nonNegativeInteger" />
+
+	<element name="deployedNodes">
+		<complexType>
+			<sequence>
+				<element minOccurs="0" maxOccurs="unbounded" ref="tns:deployedNode" />
+
+			</sequence>
+		</complexType>
+	</element>
+	<element name="deployedNode">
+		<complexType>
+			<attribute use="required" name="name" type="IDREF" />
+
+		</complexType>
+	</element>
+	<element name="connection" type="tns:ConnectionType" />
+
+	<element name="performance" type="tns:ConnectionPerformanceType" />
+
+	<element name="latency">
+		<simpleType>
+			<restriction base="int">
+				<minExclusive value="0" />
+			</restriction>
+		</simpleType>
+	</element>
+	<element name="throughput">
+		<simpleType>
+			<restriction base="decimal">
+				<minExclusive value="0" />
+				<fractionDigits value="2" />
+			</restriction>
+		</simpleType>
+	</element>
+	<element name="link" type="tns:ConnectionType" />
+
+	<element name="deployTime" type="dateTime" />
+	<element name="node" type="tns:NodeType" />
+	<element name="nodes">
+		<complexType>
+			<sequence>
+				<element ref="tns:node" minOccurs="0" maxOccurs="unbounded"/>
+			</sequence>
+		</complexType>
+		
+	</element>
+	<element name="destination" type="IDREF"></element>
+</schema>

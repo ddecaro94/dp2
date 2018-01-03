@@ -1,0 +1,66 @@
+<?xml encoding="UTF-8"?>
+
+<!ELEMENT nfv (vnfCatalog,hosts,nffgs)>
+
+<!ELEMENT vnfCatalog (vnf)*>
+
+<!ELEMENT hosts (host)*>
+
+<!ELEMENT nffgs (nffg)*>
+
+<!ELEMENT vnf (requiredMemory,requiredStorage)>
+<!ATTLIST vnf
+  functionalType (SPAM|FW|DPI|NAT|CACHE|WEB_SERVER|WEB_CLIENT|MAIL_SERVER|MAIL_CLIENT|VPN) #REQUIRED
+  name ID #REQUIRED>
+
+<!ELEMENT host (availableMemory,availableStorage,maxVNFs,deployedNodes,
+                connections)>
+<!ATTLIST host
+  name ID #REQUIRED>
+
+<!ELEMENT nffg (deployTime?,nodes)>
+<!ATTLIST nffg
+  name ID #REQUIRED>
+
+<!ELEMENT requiredMemory (#PCDATA)>
+
+<!ELEMENT requiredStorage (#PCDATA)>
+
+<!ELEMENT availableMemory (#PCDATA)>
+
+<!ELEMENT availableStorage (#PCDATA)>
+
+<!ELEMENT maxVNFs (#PCDATA)>
+
+<!ELEMENT deployedNodes (deployedNode)*>
+
+<!ELEMENT connections (connection)*>
+
+<!ELEMENT deployTime (#PCDATA)>
+
+<!ELEMENT nodes (node)*>
+
+<!ELEMENT deployedNode EMPTY>
+<!ATTLIST deployedNode  
+  name IDREF #REQUIRED>
+
+<!ELEMENT connection (performance)>
+<!ATTLIST connection  
+  destination IDREF #REQUIRED
+  name NMTOKEN #IMPLIED>
+
+<!ELEMENT node (link)>
+<!ATTLIST node  
+  name ID #REQUIRED
+  vnf IDREF #REQUIRED>
+
+<!ELEMENT link (performance)>
+<!ATTLIST link
+  destination IDREF #REQUIRED
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT performance (latency,throughput)>
+
+<!ELEMENT latency (#PCDATA)>
+
+<!ELEMENT throughput (#PCDATA)>
