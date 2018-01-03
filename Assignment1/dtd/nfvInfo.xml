@@ -37,6 +37,7 @@
 						<throughput>0.01</throughput>
 					</performance>
 				</connection>
+				
 			</connections>
 		</host>
 		<host name="host2">
