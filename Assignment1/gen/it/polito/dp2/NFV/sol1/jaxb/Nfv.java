@@ -1,8 +1,8 @@
 //
-// Questo file Ë stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
+// Questo file √® stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
-// Qualsiasi modifica a questo file andr‡ persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.03 alle 03:57:55 PM CET 
+// Qualsiasi modifica a questo file andr√† persa durante la ricompilazione dello schema di origine. 
+// Generato il: 2018.01.04 alle 06:25:48 PM CET 
 //
 
 
@@ -51,7 +51,7 @@ public class Nfv {
     protected Nffgs nffgs;
 
     /**
-     * Recupera il valore della propriet‡ vnfCatalog.
+     * Recupera il valore della propriet√† vnfCatalog.
      * 
      * @return
      *     possible object is
@@ -63,7 +63,7 @@ public class Nfv {
     }
 
     /**
-     * Imposta il valore della propriet‡ vnfCatalog.
+     * Imposta il valore della propriet√† vnfCatalog.
      * 
      * @param value
      *     allowed object is
@@ -75,7 +75,7 @@ public class Nfv {
     }
 
     /**
-     * Recupera il valore della propriet‡ hosts.
+     * Recupera il valore della propriet√† hosts.
      * 
      * @return
      *     possible object is
@@ -87,7 +87,7 @@ public class Nfv {
     }
 
     /**
-     * Imposta il valore della propriet‡ hosts.
+     * Imposta il valore della propriet√† hosts.
      * 
      * @param value
      *     allowed object is
@@ -99,7 +99,7 @@ public class Nfv {
     }
 
     /**
-     * Recupera il valore della propriet‡ nffgs.
+     * Recupera il valore della propriet√† nffgs.
      * 
      * @return
      *     possible object is
@@ -111,7 +111,7 @@ public class Nfv {
     }
 
     /**
-     * Imposta il valore della propriet‡ nffgs.
+     * Imposta il valore della propriet√† nffgs.
      * 
      * @param value
      *     allowed object is

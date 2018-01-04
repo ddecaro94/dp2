@@ -60,6 +60,8 @@
 			<arg value="${gen.dir}" />
 			<arg value="-p" />
 			<arg value="it.polito.dp2.NFV.sol1.jaxb" />
+			<arg value="-encoding" />
+			<arg value="utf8" />
 			<arg value="${schema.dir}/nfvInfo.xsd" />
 		</exec>
 		<touch file="${gen.dir}/.flagfile" />

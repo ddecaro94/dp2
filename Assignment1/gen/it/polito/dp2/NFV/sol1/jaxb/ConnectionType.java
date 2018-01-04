@@ -1,8 +1,8 @@
 //
-// Questo file Ë stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
+// Questo file √® stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
-// Qualsiasi modifica a questo file andr‡ persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.03 alle 03:57:55 PM CET 
+// Qualsiasi modifica a questo file andr√† persa durante la ricompilazione dello schema di origine. 
+// Generato il: 2018.01.04 alle 06:25:48 PM CET 
 //
 
 
@@ -58,7 +58,7 @@ public class ConnectionType {
     protected Object destination;
 
     /**
-     * Recupera il valore della propriet‡ performance.
+     * Recupera il valore della propriet√† performance.
      * 
      * @return
      *     possible object is
@@ -70,7 +70,7 @@ public class ConnectionType {
     }
 
     /**
-     * Imposta il valore della propriet‡ performance.
+     * Imposta il valore della propriet√† performance.
      * 
      * @param value
      *     allowed object is
@@ -82,7 +82,7 @@ public class ConnectionType {
     }
 
     /**
-     * Recupera il valore della propriet‡ name.
+     * Recupera il valore della propriet√† name.
      * 
      * @return
      *     possible object is
@@ -94,7 +94,7 @@ public class ConnectionType {
     }
 
     /**
-     * Imposta il valore della propriet‡ name.
+     * Imposta il valore della propriet√† name.
      * 
      * @param value
      *     allowed object is
@@ -106,7 +106,7 @@ public class ConnectionType {
     }
 
     /**
-     * Recupera il valore della propriet‡ destination.
+     * Recupera il valore della propriet√† destination.
      * 
      * @return
      *     possible object is
@@ -118,7 +118,7 @@ public class ConnectionType {
     }
 
     /**
-     * Imposta il valore della propriet‡ destination.
+     * Imposta il valore della propriet√† destination.
      * 
      * @param value
      *     allowed object is

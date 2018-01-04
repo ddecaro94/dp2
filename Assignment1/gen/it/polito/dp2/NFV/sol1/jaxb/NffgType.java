@@ -1,8 +1,8 @@
 //
-// Questo file Ë stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
+// Questo file √® stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
-// Qualsiasi modifica a questo file andr‡ persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.03 alle 03:57:55 PM CET 
+// Qualsiasi modifica a questo file andr√† persa durante la ricompilazione dello schema di origine. 
+// Generato il: 2018.01.04 alle 06:25:48 PM CET 
 //
 
 
@@ -59,7 +59,7 @@ public class NffgType {
     protected String name;
 
     /**
-     * Recupera il valore della propriet‡ deployTime.
+     * Recupera il valore della propriet√† deployTime.
      * 
      * @return
      *     possible object is
@@ -71,7 +71,7 @@ public class NffgType {
     }
 
     /**
-     * Imposta il valore della propriet‡ deployTime.
+     * Imposta il valore della propriet√† deployTime.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +83,7 @@ public class NffgType {
     }
 
     /**
-     * Recupera il valore della propriet‡ nodes.
+     * Recupera il valore della propriet√† nodes.
      * 
      * @return
      *     possible object is
@@ -95,7 +95,7 @@ public class NffgType {
     }
 
     /**
-     * Imposta il valore della propriet‡ nodes.
+     * Imposta il valore della propriet√† nodes.
      * 
      * @param value
      *     allowed object is
@@ -107,7 +107,7 @@ public class NffgType {
     }
 
     /**
-     * Recupera il valore della propriet‡ name.
+     * Recupera il valore della propriet√† name.
      * 
      * @return
      *     possible object is
@@ -119,7 +119,7 @@ public class NffgType {
     }
 
     /**
-     * Imposta il valore della propriet‡ name.
+     * Imposta il valore della propriet√† name.
      * 
      * @param value
      *     allowed object is
