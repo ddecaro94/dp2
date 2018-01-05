@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nfv xmlns="http://www.polito.it/schemas/nfvInfo">
+    <vnfCatalog>
+        <vnf functionalType="FW" name="FWb">
+            <requiredMemory>67</requiredMemory>
+            <requiredStorage>760</requiredStorage>
+        </vnf>
+        <vnf functionalType="MAIL_CLIENT" name="MAILCLIENTt">
+            <requiredMemory>64</requiredMemory>
+            <requiredStorage>720</requiredStorage>
+        </vnf>
+        <vnf functionalType="MAIL_SERVER" name="MAILSERVERt">
+            <requiredMemory>490</requiredMemory>
+            <requiredStorage>6900</requiredStorage>
+        </vnf>
+        <vnf functionalType="DPI" name="DPId">
+            <requiredMemory>24</requiredMemory>
+            <requiredStorage>690</requiredStorage>
+        </vnf>
+        <vnf functionalType="WEB_CLIENT" name="WEBCLIENTt">
+            <requiredMemory>95</requiredMemory>
+            <requiredStorage>220</requiredStorage>
+        </vnf>
+        <vnf functionalType="WEB_SERVER" name="WEBSERVERt">
+            <requiredMemory>530</requiredMemory>
+            <requiredStorage>8800</requiredStorage>
+        </vnf>
+        <vnf functionalType="SPAM" name="SPAMc">
+            <requiredMemory>19</requiredMemory>
+            <requiredStorage>490</requiredStorage>
+        </vnf>
+        <vnf functionalType="SPAM" name="SPAMa">
+            <requiredMemory>10</requiredMemory>
+            <requiredStorage>980</requiredStorage>
+        </vnf>
+    </vnfCatalog>
+    <hosts>
+        <host name="H0">
+            <availableMemory>1300</availableMemory>
+            <availableStorage>93000</availableStorage>
+            <maxVNFs>4</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="FWb1Nffg0"/>
+                <deployedNode name="FWb7Nffg0"/>
+                <deployedNode name="MAILSERVERt2Nffg1"/>
+                <deployedNode name="MAILCLIENTt0Nffg0"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>95.13</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>4</latency>
+                        <throughput>58.66</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>63</latency>
+                        <throughput>48.71</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>87</latency>
+                        <throughput>66.31</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H4">
+                    <performance>
+                        <latency>113</latency>
+                        <throughput>48.74</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H5">
+                    <performance>
+                        <latency>52</latency>
+                        <throughput>24.51</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H1">
+            <availableMemory>8200</availableMemory>
+            <availableStorage>30000</availableStorage>
+            <maxVNFs>13</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="SPAMa5Nffg3"/>
+                <deployedNode name="MAILSERVERt3Nffg1"/>
+                <deployedNode name="SPAMc2Nffg0"/>
+                <deployedNode name="FWb3Nffg2"/>
+                <deployedNode name="WEBCLIENTt1Nffg3"/>
+                <deployedNode name="MAILSERVERt0Nffg0"/>
+                <deployedNode name="DPId4Nffg2"/>
+                <deployedNode name="MAILCLIENTt0Nffg1"/>
+                <deployedNode name="DPId4Nffg3"/>
+                <deployedNode name="MAILSERVERt0Nffg2"/>
+                <deployedNode name="WEBCLIENTt0Nffg3"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>4</latency>
+                        <throughput>39.53</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>36.3</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>64</latency>
+                        <throughput>77.25</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>87</latency>
+                        <throughput>87.44</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H4">
+                    <performance>
+                        <latency>117</latency>
+                        <throughput>35.64</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H5">
+                    <performance>
+                        <latency>56</latency>
+                        <throughput>39.42</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H2">
+            <availableMemory>8300</availableMemory>
+            <availableStorage>73000</availableStorage>
+            <maxVNFs>13</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="DPId3Nffg0"/>
+                <deployedNode name="MAILSERVERt1Nffg3"/>
+                <deployedNode name="WEBSERVERt2Nffg2"/>
+                <deployedNode name="WEBSERVERt2Nffg3"/>
+                <deployedNode name="WEBSERVERt1Nffg0"/>
+                <deployedNode name="FWb0Nffg3"/>
+                <deployedNode name="WEBCLIENTt1Nffg1"/>
+                <deployedNode name="MAILCLIENTt2Nffg3"/>
+                <deployedNode name="MAILSERVERt4Nffg1"/>
+                <deployedNode name="WEBSERVERt1Nffg2"/>
+                <deployedNode name="FWb5Nffg2"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>63</latency>
+                        <throughput>88.3</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>64</latency>
+                        <throughput>41.6</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>71.24</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>34</latency>
+                        <throughput>66.08</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H4">
+                    <performance>
+                        <latency>68</latency>
+                        <throughput>32.06</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H5">
+                    <performance>
+                        <latency>63</latency>
+                        <throughput>68.46</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H3">
+            <availableMemory>6900</availableMemory>
+            <availableStorage>99000</availableStorage>
+            <maxVNFs>11</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="DPId1Nffg3"/>
+                <deployedNode name="SPAMa0Nffg1"/>
+                <deployedNode name="MAILSERVERt2Nffg0"/>
+                <deployedNode name="MAILCLIENTt2Nffg1"/>
+                <deployedNode name="SPAMa6Nffg2"/>
+                <deployedNode name="SPAMa4Nffg0"/>
+                <deployedNode name="DPId0Nffg2"/>
+                <deployedNode name="MAILCLIENTt3Nffg3"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>87</latency>
+                        <throughput>48.87</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>87</latency>
+                        <throughput>24.32</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>34</latency>
+                        <throughput>59.98</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>79.39</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H4">
+                    <performance>
+                        <latency>88</latency>
+                        <throughput>7.14</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H5">
+                    <performance>
+                        <latency>97</latency>
+                        <throughput>79.13</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H4">
+            <availableMemory>5200</availableMemory>
+            <availableStorage>34000</availableStorage>
+            <maxVNFs>10</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="MAILCLIENTt4Nffg3"/>
+                <deployedNode name="MAILSERVERt3Nffg0"/>
+                <deployedNode name="DPId2Nffg3"/>
+                <deployedNode name="DPId5Nffg0"/>
+                <deployedNode name="DPId1Nffg1"/>
+                <deployedNode name="SPAMa7Nffg2"/>
+                <deployedNode name="FWb1Nffg2"/>
+                <deployedNode name="MAILSERVERt0Nffg1"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>113</latency>
+                        <throughput>2.92</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>117</latency>
+                        <throughput>90.82</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>68</latency>
+                        <throughput>79.42</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>88</latency>
+                        <throughput>21.46</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H4">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>40.74</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H5">
+                    <performance>
+                        <latency>77</latency>
+                        <throughput>91.8</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H5">
+            <availableMemory>5500</availableMemory>
+            <availableStorage>32000</availableStorage>
+            <maxVNFs>13</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="MAILSERVERt1Nffg1"/>
+                <deployedNode name="DPId6Nffg0"/>
+                <deployedNode name="DPId0Nffg0"/>
+                <deployedNode name="FWb2Nffg2"/>
+                <deployedNode name="MAILSERVERt0Nffg3"/>
+                <deployedNode name="FWb3Nffg3"/>
+                <deployedNode name="SPAMc8Nffg2"/>
+                <deployedNode name="WEBCLIENTt0Nffg2"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>52</latency>
+                        <throughput>60.48</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>56</latency>
+                        <throughput>59.89</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>63</latency>
+                        <throughput>49.88</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>97</latency>
+                        <throughput>43.91</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H4">
+                    <performance>
+                        <latency>77</latency>
+                        <throughput>78.6</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H5">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>2.91</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+    </hosts>
+    <nffgs>
+        <nffg name="Nffg3">
+            <deployTime>2016-09-25T00:01:20.000+02:00</deployTime>
+            <nodes>
+                <node name="SPAMa5Nffg3" host="H1" vnf="SPAMa">
+                    <link name="Link24" destination="DPId1Nffg3"/>
+                </node>
+                <node name="MAILCLIENTt4Nffg3" host="H4" vnf="MAILCLIENTt">
+                    <link name="Link22" destination="DPId2Nffg3"/>
+                    <link name="Link8" destination="DPId4Nffg3"/>
+                </node>
+                <node name="WEBSERVERt2Nffg3" host="H2" vnf="WEBSERVERt">
+                    <link name="Link14" destination="FWb0Nffg3"/>
+                </node>
+                <node name="WEBCLIENTt1Nffg3" host="H1" vnf="WEBCLIENTt">
+                    <link name="Link2" destination="DPId2Nffg3"/>
+                </node>
+                <node name="MAILCLIENTt2Nffg3" host="H2" vnf="MAILCLIENTt">
+                    <link name="Link4" destination="FWb3Nffg3"/>
+                </node>
+                <node name="DPId4Nffg3" host="H1" vnf="DPId">
+                    <link name="Link26" destination="MAILSERVERt0Nffg3"/>
+                    <link name="Link9" destination="MAILCLIENTt4Nffg3"/>
+                </node>
+                <node name="MAILSERVERt1Nffg3" host="H2" vnf="MAILSERVERt">
+                    <link name="Link12" destination="FWb0Nffg3"/>
+                </node>
+                <node name="DPId1Nffg3" host="H3" vnf="DPId">
+                    <link name="Link23" destination="MAILCLIENTt4Nffg3"/>
+                    <link name="Link25" destination="DPId2Nffg3"/>
+                    <link name="Link18" destination="MAILCLIENTt3Nffg3"/>
+                </node>
+                <node name="DPId2Nffg3" host="H4" vnf="DPId">
+                    <link name="Link16" destination="MAILCLIENTt4Nffg3"/>
+                    <link name="Link3" destination="WEBCLIENTt1Nffg3"/>
+                    <link name="Link17" destination="MAILCLIENTt2Nffg3"/>
+                </node>
+                <node name="MAILSERVERt0Nffg3" host="H5" vnf="MAILSERVERt">
+                    <link name="Link10" destination="FWb0Nffg3"/>
+                    <link name="Link20" destination="FWb3Nffg3"/>
+                </node>
+                <node name="FWb0Nffg3" host="H2" vnf="FWb">
+                    <link name="Link11" destination="MAILSERVERt0Nffg3"/>
+                    <link name="Link15" destination="WEBSERVERt2Nffg3"/>
+                    <link name="Link1" destination="WEBCLIENTt0Nffg3"/>
+                    <link name="Link13" destination="MAILSERVERt1Nffg3"/>
+                    <link name="Link7" destination="MAILCLIENTt3Nffg3"/>
+                </node>
+                <node name="FWb3Nffg3" host="H5" vnf="FWb">
+                    <link name="Link19" destination="FWb0Nffg3"/>
+                    <link name="Link5" destination="MAILCLIENTt2Nffg3"/>
+                </node>
+                <node name="WEBCLIENTt0Nffg3" host="H1" vnf="WEBCLIENTt">
+                    <link name="Link21" destination="DPId2Nffg3"/>
+                    <link name="Link0" destination="FWb0Nffg3"/>
+                </node>
+                <node name="MAILCLIENTt3Nffg3" host="H3" vnf="MAILCLIENTt">
+                    <link name="Link6" destination="FWb0Nffg3"/>
+                </node>
+            </nodes>
+        </nffg>
+        <nffg name="Nffg2">
+            <deployTime>2016-09-27T09:58:20.000+02:00</deployTime>
+            <nodes>
+                <node name="WEBSERVERt2Nffg2" host="H2" vnf="WEBSERVERt">
+                    <link name="Link6" destination="SPAMc8Nffg2"/>
+                </node>
+                <node name="SPAMa6Nffg2" host="H3" vnf="SPAMa">
+                    <link name="Link13" destination="MAILSERVERt0Nffg2"/>
+                    <link name="Link5" destination="WEBSERVERt1Nffg2"/>
+                    <link name="Link9" destination="WEBSERVERt2Nffg2"/>
+                </node>
+                <node name="DPId4Nffg2" host="H1" vnf="DPId">
+                    <link name="Link15" destination="FWb1Nffg2"/>
+                </node>
+                <node name="WEBSERVERt1Nffg2" host="H2" vnf="WEBSERVERt">
+                    <link name="Link4" destination="SPAMa6Nffg2"/>
+                </node>
+                <node name="FWb1Nffg2" host="H4" vnf="FWb"/>
+                <node name="FWb2Nffg2" host="H5" vnf="FWb"/>
+                <node name="FWb3Nffg2" host="H1" vnf="FWb">
+                    <link name="Link3" destination="MAILSERVERt0Nffg2"/>
+                </node>
+                <node name="SPAMa7Nffg2" host="H4" vnf="SPAMa">
+                    <link name="Link1" destination="WEBCLIENTt0Nffg2"/>
+                </node>
+                <node name="SPAMc8Nffg2" host="H5" vnf="SPAMc">
+                    <link name="Link7" destination="WEBSERVERt2Nffg2"/>
+                </node>
+                <node name="DPId0Nffg2" host="H3" vnf="DPId">
+                    <link name="Link10" destination="SPAMc8Nffg2"/>
+                    <link name="Link8" destination="WEBCLIENTt0Nffg2"/>
+                </node>
+                <node name="MAILSERVERt0Nffg2" host="H1" vnf="MAILSERVERt">
+                    <link name="Link2" destination="FWb3Nffg2"/>
+                </node>
+                <node name="FWb5Nffg2" host="H2" vnf="FWb">
+                    <link name="Link11" destination="MAILSERVERt0Nffg2"/>
+                    <link name="Link14" destination="FWb3Nffg2"/>
+                </node>
+                <node name="WEBCLIENTt0Nffg2" host="H5" vnf="WEBCLIENTt">
+                    <link name="Link12" destination="SPAMa6Nffg2"/>
+                    <link name="Link0" destination="SPAMa7Nffg2"/>
+                </node>
+            </nodes>
+        </nffg>
+        <nffg name="Nffg1">
+            <deployTime>2016-09-27T07:19:20.000+02:00</deployTime>
+            <nodes>
+                <node name="MAILSERVERt1Nffg1" host="H5" vnf="MAILSERVERt">
+                    <link name="Link8" destination="DPId1Nffg1"/>
+                </node>
+                <node name="MAILSERVERt3Nffg1" host="H1" vnf="MAILSERVERt">
+                    <link name="Link12" destination="DPId1Nffg1"/>
+                </node>
+                <node name="SPAMa0Nffg1" host="H3" vnf="SPAMa">
+                    <link name="Link1" destination="MAILCLIENTt0Nffg1"/>
+                    <link name="Link5" destination="MAILCLIENTt2Nffg1"/>
+                    <link name="Link7" destination="MAILSERVERt0Nffg1"/>
+                </node>
+                <node name="MAILSERVERt2Nffg1" host="H0" vnf="MAILSERVERt">
+                    <link name="Link10" destination="DPId1Nffg1"/>
+                </node>
+                <node name="MAILCLIENTt2Nffg1" host="H3" vnf="MAILCLIENTt">
+                    <link name="Link4" destination="SPAMa0Nffg1"/>
+                </node>
+                <node name="WEBCLIENTt1Nffg1" host="H2" vnf="WEBCLIENTt">
+                    <link name="Link2" destination="DPId1Nffg1"/>
+                </node>
+                <node name="DPId1Nffg1" host="H4" vnf="DPId">
+                    <link name="Link11" destination="MAILSERVERt2Nffg1"/>
+                    <link name="Link15" destination="MAILSERVERt4Nffg1"/>
+                    <link name="Link13" destination="MAILSERVERt3Nffg1"/>
+                    <link name="Link3" destination="WEBCLIENTt1Nffg1"/>
+                    <link name="Link9" destination="MAILSERVERt1Nffg1"/>
+                </node>
+                <node name="MAILCLIENTt0Nffg1" host="H1" vnf="MAILCLIENTt">
+                    <link name="Link0" destination="SPAMa0Nffg1"/>
+                </node>
+                <node name="MAILSERVERt4Nffg1" host="H2" vnf="MAILSERVERt">
+                    <link name="Link14" destination="DPId1Nffg1"/>
+                </node>
+                <node name="MAILSERVERt0Nffg1" host="H4" vnf="MAILSERVERt">
+                    <link name="Link6" destination="SPAMa0Nffg1"/>
+                </node>
+            </nodes>
+        </nffg>
+        <nffg name="Nffg0">
+            <deployTime>2016-09-25T21:42:20.000+02:00</deployTime>
+            <nodes>
+                <node name="FWb1Nffg0" host="H0" vnf="FWb"/>
+                <node name="DPId3Nffg0" host="H2" vnf="DPId">
+                    <link name="Link3" destination="MAILSERVERt0Nffg0"/>
+                </node>
+                <node name="DPId6Nffg0" host="H5" vnf="DPId">
+                    <link name="Link9" destination="MAILSERVERt3Nffg0"/>
+                </node>
+                <node name="DPId0Nffg0" host="H5" vnf="DPId">
+                    <link name="Link12" destination="WEBSERVERt1Nffg0"/>
+                    <link name="Link11" destination="SPAMa4Nffg0"/>
+                    <link name="Link13" destination="DPId5Nffg0"/>
+                </node>
+                <node name="MAILSERVERt3Nffg0" host="H4" vnf="MAILSERVERt">
+                    <link name="Link8" destination="DPId6Nffg0"/>
+                </node>
+                <node name="FWb7Nffg0" host="H0" vnf="FWb">
+                    <link name="Link1" destination="MAILCLIENTt0Nffg0"/>
+                    <link name="Link7" destination="MAILSERVERt2Nffg0"/>
+                </node>
+                <node name="WEBSERVERt1Nffg0" host="H2" vnf="WEBSERVERt">
+                    <link name="Link4" destination="SPAMa4Nffg0"/>
+                </node>
+                <node name="SPAMc2Nffg0" host="H1" vnf="SPAMc">
+                    <link name="Link10" destination="MAILSERVERt2Nffg0"/>
+                    <link name="Link14" destination="DPId0Nffg0"/>
+                </node>
+                <node name="MAILSERVERt2Nffg0" host="H3" vnf="MAILSERVERt">
+                    <link name="Link6" destination="FWb7Nffg0"/>
+                </node>
+                <node name="MAILSERVERt0Nffg0" host="H1" vnf="MAILSERVERt">
+                    <link name="Link2" destination="DPId3Nffg0"/>
+                </node>
+                <node name="SPAMa4Nffg0" host="H3" vnf="SPAMa">
+                    <link name="Link5" destination="WEBSERVERt1Nffg0"/>
+                </node>
+                <node name="DPId5Nffg0" host="H4" vnf="DPId"/>
+                <node name="MAILCLIENTt0Nffg0" host="H0" vnf="MAILCLIENTt">
+                    <link name="Link0" destination="FWb7Nffg0"/>
+                </node>
+            </nodes>
+        </nffg>
+    </nffgs>
+</nfv>

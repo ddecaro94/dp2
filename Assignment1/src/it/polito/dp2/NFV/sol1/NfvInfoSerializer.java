@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,17 +12,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
-import it.polito.dp2.NFV.*;
+import org.xml.sax.SAXException;
+
+import it.polito.dp2.NFV.ConnectionPerformanceReader;
+import it.polito.dp2.NFV.HostReader;
+import it.polito.dp2.NFV.LinkReader;
+import it.polito.dp2.NFV.NffgReader;
+import it.polito.dp2.NFV.NfvReaderException;
+import it.polito.dp2.NFV.NodeReader;
+import it.polito.dp2.NFV.VNFTypeReader;
 import it.polito.dp2.NFV.sol1.jaxb.*;
 
 public class NfvInfoSerializer {
-	private NfvReader monitor;
+	private it.polito.dp2.NFV.NfvReader monitor;
 	private DateFormat dateFormat;
 	private Nfv nfv;
 	private Map<String, HostType> hosts;
@@ -36,7 +46,7 @@ public class NfvInfoSerializer {
 	 * @throws NfvReaderException 
 	 */
 	public NfvInfoSerializer() throws NfvReaderException {
-		NfvReaderFactory factory = NfvReaderFactory.newInstance();
+		it.polito.dp2.NFV.NfvReaderFactory factory = NfvReaderFactory.newInstance();
 		monitor = factory.newNfvReader();
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 		nfv = new Nfv();
@@ -103,8 +113,15 @@ public class NfvInfoSerializer {
 		
 		
 		try {
+	        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
+	        Schema schema = sf.newSchema(new File("xsd/nfvInfo.xsd")); 
+	        
 			jc = JAXBContext.newInstance("it.polito.dp2.NFV.sol1.jaxb");
 			m = jc.createMarshaller();
+			
+			m.setSchema(schema);
+			m.setEventHandler(new NfvValidationEventHandler());
+			
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			
 			m.marshal(nfv, os);
@@ -112,6 +129,9 @@ public class NfvInfoSerializer {
 			e.printStackTrace();
 			throw new NfvInfoSerializerException(e);
 			
+		} catch (SAXException e) {
+			e.printStackTrace();
+			throw new NfvInfoSerializerException(e);
 		}
 	}
 
@@ -125,7 +145,7 @@ public class NfvInfoSerializer {
 	private Catalog createVnfCatalog(HashMap<String, VnfType> catalog) {
 		Catalog vnfCatalog = new Catalog();
 		vnfCatalog.getVnf().addAll(catalog.values());
-		return null;
+		return vnfCatalog;
 	}
 
 	private void setNodes(Map<String, NodeType> nodes, Map<String, HostType> hosts,
@@ -197,8 +217,12 @@ public class NfvInfoSerializer {
 				ConnectionType c = new ConnectionType();
 				ConnectionPerformanceType p = new ConnectionPerformanceType();
 				
-				p.setLatency(BigInteger.valueOf(cpr.getLatency()));
-				p.setThroughput(BigDecimal.valueOf(cpr.getThroughput()));
+				//add latency
+				p.getLatencyOrThroughput().add((BigInteger.valueOf(cpr.getLatency())));
+				
+				//add throughput
+				p.getLatencyOrThroughput().add(cpr.getThroughput());
+				
 				c.setPerformance(p);
 				c.setDestination(hosts.get(srj.getName()));
 				
@@ -284,13 +308,12 @@ public class NfvInfoSerializer {
 					link.setDestination(nodes.get(l.getDestinationNode().getName()));
 					
 					BigInteger lat = BigInteger.valueOf(l.getLatency());
-					if (lat.intValue() != 0) performance.setLatency(lat);
+					if (lat.intValue() != 0) performance.getLatencyOrThroughput().add(lat);
 					
-					BigDecimal thr = BigDecimal.valueOf(l.getThroughput());
-					if (thr.doubleValue() != 0.0) performance.setThroughput(thr);
+					if (l.getThroughput() != 0.0) performance.getLatencyOrThroughput().add(l.getThroughput());
 					
 					//the performance object is attached only if one of its children is present
-					if (lat.intValue() != 0||thr.doubleValue() != 0.0) link.setPerformance(performance);
+					if (lat.intValue() != 0||l.getThroughput() != 0.0) link.setPerformance(performance);
 					
 					nodes.get(nr.getName()).getLink().add(link);
 				}

@@ -74,10 +74,10 @@
 	</element>
 	
 	<complexType name="ConnectionPerformanceType">
-		<sequence>
-			<element ref="tns:latency" maxOccurs="1" minOccurs="0"/>
-			<element ref="tns:throughput" maxOccurs="1" minOccurs="0"/>
-		</sequence>
+		<choice minOccurs="1" maxOccurs="2">
+			<element ref="tns:latency" minOccurs="1"/>
+			<element ref="tns:throughput" minOccurs="1"/>
+		</choice>
 	</complexType>
 
 	<complexType name="HostType">
@@ -148,10 +148,8 @@
 		<complexType>
 			<sequence>
 				<element maxOccurs="unbounded" minOccurs="0" ref="tns:connection" />
-
 			</sequence>
 		</complexType>
-
 	</element>
 
 	<element name="nffgs">
@@ -205,19 +203,23 @@
 
 		</complexType>
 	</element>
-	<element name="connection" type="tns:ConnectionType" />
+	<element name="connection" type="tns:ConnectionType"></element>
 
-	<element name="performance" type="tns:ConnectionPerformanceType" />
+	<element name="performance" type="tns:ConnectionPerformanceType">
+			<unique name="uniqueLatency">
+			<selector xpath="."></selector>
+			<field xpath="tns:latency"></field>
+		</unique>
+		<unique name="uniqueThroughput">
+			<selector xpath="."></selector>
+			<field xpath="tns:throughput"></field>
+		</unique>
+	
+	</element>
+	
 
 	<element name="latency" type="nonNegativeInteger"/>
-	<element name="throughput">
-		<simpleType>
-			<restriction base="decimal">
-				<minExclusive value="0" />
-				<fractionDigits value="2" />
-			</restriction>
-		</simpleType>
-	</element>
+	<element name="throughput" type="float"></element>
 	<element name="link" type="tns:ConnectionType" />
 
 	<element name="deployTime" type="dateTime" />

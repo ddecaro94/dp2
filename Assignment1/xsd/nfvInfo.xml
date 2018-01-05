@@ -79,10 +79,7 @@
 				</node>
 				<node name="node1" vnf="www1">
 					<link name="link2" destination="node1">
-						<performance>
-							<latency>1</latency>
-							<throughput>0.01</throughput>
-						</performance>
+					
 					</link>
 				</node>
 			</nodes>

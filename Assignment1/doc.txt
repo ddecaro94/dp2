@@ -18,9 +18,9 @@ it's assumed that a function can require no storage or no memory (or at least le
 A key is defined on the attribute 'name' of the 'vfn' elements inside the catalog, enforcing uniqueness and allowing other elements to reference it.
 
 The 'hosts' element represents the list of available nodes in the infrastructure, each containing the host information about available resources, modeled as non negative integers, a list of deployed node names, and a list of connection elements having the host as source. 
-The 'connection' type stores information about the name of the connection, optional in case of connection between hosts, the destination of the connection as an attribute of type IDREF, and performance values as latency and throughput. Both latency and throughput are non-negative.
-In the same way, a link between two nodes of an NF-FG requiring zero latency or no throughput is not considered. Throughput precision is set to two decimal digits.
-A key is set on the hosts attribute name in order to keep them unique.
+The 'connection' type stores information about the name of the connection, optional in case of connection between hosts, the destination of the connection as an attribute of type IDREF, and performance values as latency and throughput.
+The the element 'performance' of type 'connectionPerformanceType' is not compulsory to describe a link between nodes, therefore it has been set as optional.
+At least one of the elements children of 'performance', 'latency' and 'throughput', should be present to allow the presence of a performance object: this has been modeled using a choice group between the latency and throughput elements, and then enforcing their uniqueness through a unique constraint.
 
 The element 'nffgs' represents the list of NF-FGs available on the system, each of them characterized by a deployment time, which is optional and represents if the graph has been deployed on the system. Graphs stored but not deployed are represented without the element 'deploymentTime'.
 The element 'nodes' of each nffg keeps track of the available nodes, which are the union of all node elements of all nffgs; this is represented by means of a key constraint referencing the node name inside every node set. Each node stores a reference to the host on which it is deployed (optional), a reference to a vnf element in the catalog, and a list of links, of type 'ConnectionType'.
