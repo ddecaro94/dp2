@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +21,6 @@ import javax.xml.datatype.DatatypeFactory;
 
 import it.polito.dp2.NFV.*;
 import it.polito.dp2.NFV.sol1.jaxb.*;
-import it.polito.dp2.NFV.sol1.jaxb.FunctionalType;
 
 public class NfvInfoSerializer {
 	private NfvReader monitor;
@@ -44,6 +42,7 @@ public class NfvInfoSerializer {
 		nfv = new Nfv();
 		hosts = new HashMap<String, HostType>();
 		nodes = new HashMap<String, NodeType>();
+		catalog = new HashMap<String, VnfType>();
 	}
 	
 	public NfvInfoSerializer(NfvReader monitor) {
@@ -93,13 +92,21 @@ public class NfvInfoSerializer {
 		
 		setCatalog(catalog);
 		setHosts(hosts);
-		setNfggs(nodes);
-		setDeployedNodes(nfv);
-		setConnections(nfv);
+		setConnections(hosts);
+		setNodes(nodes, hosts, catalog);
+		setDeployedNodes(hosts, nodes);
+		setLinks(nodes);
+		
+		nfv.setNffgs(createNGGraph(nodes));
+		nfv.setVnfCatalog(createVnfCatalog(catalog));
+		nfv.setHosts(createHostSet(hosts));
+		
 		
 		try {
 			jc = JAXBContext.newInstance("it.polito.dp2.NFV.sol1.jaxb");
 			m = jc.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			
 			m.marshal(nfv, os);
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -109,12 +116,51 @@ public class NfvInfoSerializer {
 	}
 
 
+	private HostsType createHostSet(Map<String, HostType> hosts) {
+		HostsType hostSet = new HostsType();
+		hostSet.getHost().addAll(hosts.values());
+		return hostSet;
+	}
+
+	private Catalog createVnfCatalog(HashMap<String, VnfType> catalog) {
+		Catalog vnfCatalog = new Catalog();
+		vnfCatalog.getVnf().addAll(catalog.values());
+		return null;
+	}
+
+	private void setNodes(Map<String, NodeType> nodes, Map<String, HostType> hosts,
+			HashMap<String, VnfType> catalog2) {
+		//get NF-FGs
+		Set<NffgReader> set = monitor.getNffgs(null);
+
+		for (NffgReader nffg_r: set) {
+			//get nodes from reader
+			Set<NodeReader> nodeSet = nffg_r.getNodes();
+
+			//for each read node create the corresponding xml node
+			for (NodeReader nr: nodeSet) {
+				//create new node object
+				NodeType node = new NodeType();
+				node.setName(nr.getName());
+				
+				
+				//set the host reference
+				node.setHost(hosts.get(nr.getHost().getName()));
+				
+				//set the vnf type reference
+				node.setVnf(catalog.get(nr.getFuncType().getName()));
+				
+				nodes.put(nr.getName(), node); //update global nodes registry
+			}
+		}
+	}
+
 	private void setCatalog(Map<String, VnfType> catalog) {;
 		
 		for (VNFTypeReader r : monitor.getVNFCatalog()) {
 			VnfType type = new VnfType();
 			type.setName(r.getName());
-			type.setFunctionalType(FunctionalType.fromValue(r.getFunctionalType().toString()));
+			type.setFunctionalType(it.polito.dp2.NFV.sol1.jaxb.FunctionalType.fromValue(r.getFunctionalType().toString()));
 			type.setRequiredMemory(BigInteger.valueOf(r.getRequiredMemory()));
 			type.setRequiredStorage(BigInteger.valueOf(r.getRequiredStorage()));
 			
@@ -122,49 +168,50 @@ public class NfvInfoSerializer {
 		}		
 	}
 
-	private void setHosts(Map<String, HostType> hosts2) {
+	private void setHosts(Map<String, HostType> hosts) {
 		// Get the list of Hosts
 		Set<HostReader> set = monitor.getHosts();
-		HostsType hosts = new HostsType();
 		
 		// For each Host print related data
 		for (HostReader host_r: set) {
 			HostType h = new HostType();
 			h.setName(host_r.getName());
-			this.hosts.put(host_r.getName(), h); //update global hosts registry
-			
 			h.setMaxVNFs(BigInteger.valueOf(host_r.getMaxVNFs()));
 			h.setAvailableMemory(BigInteger.valueOf(host_r.getAvailableMemory()));
 			h.setAvailableStorage(BigInteger.valueOf(host_r.getAvailableStorage()));
-			hosts.getHost().add(h);
+			
+			hosts.put(host_r.getName(), h);
 		}
-		hosts2.setHosts(hosts);
 	}
 
-	private void setConnections(Nfv nfv) {
+	private void setConnections(Map<String, HostType> hosts) {
 		// Get the list of Hosts
 		Set<HostReader> set = monitor.getHosts();
 
 		for (HostReader sri: set) {
+			Connections conns = new Connections();
 			for (HostReader srj: set) {
 				ConnectionPerformanceReader cpr = monitor.getConnectionPerformance(sri, srj);
 				
-				Connections conns = new Connections();
+				
 				ConnectionType c = new ConnectionType();
 				ConnectionPerformanceType p = new ConnectionPerformanceType();
-				c.setDestination(this.hosts.get(srj.getName()));
-				p.setLatency(cpr.getLatency());
+				
+				p.setLatency(BigInteger.valueOf(cpr.getLatency()));
 				p.setThroughput(BigDecimal.valueOf(cpr.getThroughput()));
 				c.setPerformance(p);
+				c.setDestination(hosts.get(srj.getName()));
 				
-				//set connections for node
-				this.hosts.get(sri.getName()).setConnections(conns);
+				conns.getConnection().add(c);
+
 			}
+			//set connections for node
+			hosts.get(sri.getName()).setConnections(conns);
 		}
 		
 	}
 
-	private void setDeployedNodes(Nfv nfv) {
+	private void setDeployedNodes(Map<String, HostType> hosts, Map<String, NodeType> nodes) {
 		// Get the list of Hosts
 		Set<HostReader> set = monitor.getHosts();
 		
@@ -175,21 +222,19 @@ public class NfvInfoSerializer {
 			
 			for (NodeReader nr: nodeSet) {
 				DeployedNode node = new DeployedNode();
-				node.setName(this.nodes.get(nr.getName()));
+				node.setName(nodes.get(nr.getName()));
 				dn.getDeployedNode().add(node);
 			}
 			
-			for (HostType h : nfv.getHosts().getHost()) {
-				if (h.getName().equals(host_r.getName())) {
-					h.setDeployedNodes(dn);
-				}
+			if (dn.getDeployedNode().size() > 0) {
+				hosts.get(host_r.getName()).setDeployedNodes(dn);
 			}
 			
 		}
 		
 	}
 
-	private void setNfggs(Map<String, NodeType> nodes2) throws NfvInfoSerializerException{
+	private Nffgs createNGGraph(Map<String, NodeType> nodes) throws NfvInfoSerializerException{
 		// Get the list of NF-FGs
 		Set<NffgReader> set = monitor.getNffgs(null);
 		Nffgs nffgs = new Nffgs();
@@ -209,48 +254,21 @@ public class NfvInfoSerializer {
 				throw new NfvInfoSerializerException("Could not set xml date");
 			}
 
-			//get nodes from reader
-			Set<NodeReader> nodeSet = nffg_r.getNodes();
-			
-			//set nodes
-			Nodes nodes = new Nodes();
-			
-			//for each read node create the corresponding xml node
-			for (NodeReader nr: nodeSet) {
-				//create new node object
-				NodeType node = new NodeType();
-				node.setName(nr.getName());
-				this.nodes.put(nr.getName(), node); //update global nodes registry
-				
-				//set the host reference
-				//the hosts object must have been already created and set!
-				node.setHost(this.hosts.get(nr.getHost().getName()));
-				
-				//set the vnf type reference
-				//the vnf catalog object must have been already created and set!
-				//iterate over each entry of the catalog to search for the referenced one
-				for (VnfType type : nodes2.getVnfCatalog().getVnf()) {
-					//if the type has been found
-					if (type.getName().equals(nr.getFuncType().getName())) {
-						//set the reference using
-						node.setVnf(type);
-					}
-				}
-
-				nodes.getNode().add(node);
+			Nodes nodeSet = new Nodes();
+			//for each read node attach the corresponding xml node
+			for (NodeReader nr: nffg_r.getNodes()) {
+				nodeSet.getNode().add(nodes.get(nr.getName()));
 			}
 			
-			nffg.setNodes(nodes);
+			nffg.setNodes(nodeSet);
 			nffgs.getNffg().add(nffg);
 		}
 		
-		nodes2.setNffgs(nffgs);
-		
-		setLinks(nodes2);
+		return nffgs;
 		
 	}
 	
-	private void setLinks(Nfv nfv) {
+	private void setLinks(Map<String, NodeType> nodes) {
 		for (NffgReader nffg_r: monitor.getNffgs(null)) {
 			Set<NodeReader> nodeSet = nffg_r.getNodes();
 			
@@ -261,15 +279,22 @@ public class NfvInfoSerializer {
 				for (LinkReader l : linkSet) {
 					ConnectionType link = new ConnectionType();
 					ConnectionPerformanceType performance = new ConnectionPerformanceType();
+					
 					link.setName(l.getName());
-					link.setDestination(this.nodes.get(l.getDestinationNode().getName()));
-					performance.setLatency(l.getLatency());
-					performance.setThroughput(BigDecimal.valueOf(l.getThroughput()));
-					link.setPerformance(performance);
-					this.nodes.get(nr.getName()).getLink().add(link);
+					link.setDestination(nodes.get(l.getDestinationNode().getName()));
+					
+					BigInteger lat = BigInteger.valueOf(l.getLatency());
+					if (lat.intValue() != 0) performance.setLatency(lat);
+					
+					BigDecimal thr = BigDecimal.valueOf(l.getThroughput());
+					if (thr.doubleValue() != 0.0) performance.setThroughput(thr);
+					
+					//the performance object is attached only if one of its children is present
+					if (lat.intValue() != 0||thr.doubleValue() != 0.0) link.setPerformance(performance);
+					
+					nodes.get(nr.getName()).getLink().add(link);
 				}
 			}
 		}
 	}
-
 }

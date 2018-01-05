@@ -46,9 +46,9 @@
 	</complexType>
 
 	<complexType name="ConnectionType">
-		<all>
-			<element ref="tns:performance" maxOccurs="1" minOccurs="1" />
-		</all>
+		<sequence>
+			<element ref="tns:performance" maxOccurs="1" minOccurs="0" />
+		</sequence>
 		<attribute name="name" type="token" use="optional"/>
 		<attribute name="destination" type="IDREF" use="required"/>
 		
@@ -75,8 +75,8 @@
 	
 	<complexType name="ConnectionPerformanceType">
 		<sequence>
-			<element ref="tns:latency" maxOccurs="1" minOccurs="1"/>
-			<element ref="tns:throughput" maxOccurs="1" minOccurs="1"/>
+			<element ref="tns:latency" maxOccurs="1" minOccurs="0"/>
+			<element ref="tns:throughput" maxOccurs="1" minOccurs="0"/>
 		</sequence>
 	</complexType>
 
@@ -209,13 +209,7 @@
 
 	<element name="performance" type="tns:ConnectionPerformanceType" />
 
-	<element name="latency">
-		<simpleType>
-			<restriction base="int">
-				<minExclusive value="0" />
-			</restriction>
-		</simpleType>
-	</element>
+	<element name="latency" type="nonNegativeInteger"/>
 	<element name="throughput">
 		<simpleType>
 			<restriction base="decimal">
