@@ -1,43 +1,42 @@
 package it.polito.dp2.NFV.sol1;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import it.polito.dp2.NFV.NodeReader;
+import it.polito.dp2.NFV.sol1.jaxb.HostType;
+import it.polito.dp2.NFV.sol1.jaxb.NodeType;
 
 public class HostReader implements it.polito.dp2.NFV.HostReader {
+	private HostType host;
 
-	public HostReader() {
-		// TODO Auto-generated constructor stub
+	public HostReader(HostType host) {
+		this.host = host;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.host.getName();
 	}
 
 	@Override
 	public int getAvailableMemory() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.host.getAvailableMemory().intValue();
 	}
 
 	@Override
 	public int getAvailableStorage() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.host.getAvailableStorage().intValue();
 	}
 
 	@Override
 	public int getMaxVNFs() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.host.getMaxVNFs().intValue();
 	}
 
 	@Override
 	public Set<NodeReader> getNodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.host.getDeployedNodes().getDeployedNode().parallelStream().map(t->new it.polito.dp2.NFV.sol1.NodeReader((NodeType) t.getName())).collect(Collectors.toSet());
 	}
 
 }

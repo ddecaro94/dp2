@@ -79,7 +79,6 @@
 				</node>
 				<node name="node1" vnf="www1">
 					<link name="link2" destination="node1">
-					
 					</link>
 				</node>
 			</nodes>

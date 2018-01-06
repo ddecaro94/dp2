@@ -1,25 +1,31 @@
 package it.polito.dp2.NFV.sol1;
 
-import it.polito.dp2.NFV.sol1.jaxb.ConnectionPerformanceType;
+import it.polito.dp2.NFV.sol1.jaxb.ConnectionType;
 
 public class ConnectionPerformanceReader implements it.polito.dp2.NFV.ConnectionPerformanceReader {
 
-	private ConnectionPerformanceType p;
+	private ConnectionType conn;
 	
-	public ConnectionPerformanceReader(ConnectionPerformanceType p) {
-		this.p = p;
+	public ConnectionPerformanceReader(ConnectionType conn) {
+		this.conn = conn;
 	}
 
 	@Override
 	public int getLatency() {
-		// TODO Auto-generated method stub
-		return 0;
+		if(conn.getPerformance() != null) {
+			return conn.getPerformance().getLatency().intValue();
+		} else {
+			return Integer.MAX_VALUE;
+		}
 	}
 
 	@Override
 	public float getThroughput() {
-		// TODO Auto-generated method stub
-		return 0;
+		if(conn.getPerformance() != null) {
+			return conn.getPerformance().getThroughput().floatValue();
+		} else {
+			return 0;
+		}
 	}
 
 }

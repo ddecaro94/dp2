@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<nfv xmlns="http://www.polito.it/schemas/nfvInfo">
+<nfv xmlns="http://www.polito.it/schemas/nfvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.polito.it/schemas/nfvInfo xsd/nfvInfo.xsd">
     <vnfCatalog>
         <vnf functionalType="FW" name="FWb">
             <requiredMemory>67</requiredMemory>

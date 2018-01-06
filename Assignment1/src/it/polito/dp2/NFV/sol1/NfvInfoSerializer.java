@@ -2,6 +2,7 @@ package it.polito.dp2.NFV.sol1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.math.BigInteger;
@@ -16,6 +17,8 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.util.ValidationEventCollector;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.validation.Schema;
@@ -36,6 +39,7 @@ import it.polito.dp2.NFV.sol1.jaxb.*;
 public class NfvInfoSerializer {
 	private it.polito.dp2.NFV.NfvReader monitor;
 	private DateFormat dateFormat;
+	private ObjectFactory objectFactory;
 	private Nfv nfv;
 	private Map<String, HostType> hosts;
 	private Map<String, NodeType> nodes;
@@ -48,22 +52,24 @@ public class NfvInfoSerializer {
 	 */
 	public NfvInfoSerializer() throws NfvReaderException {
 		it.polito.dp2.NFV.NfvReaderFactory factory = NfvReaderFactory.newInstance();
-		monitor = factory.newNfvReader();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-		nfv = new Nfv();
-		hosts = new HashMap<String, HostType>();
-		nodes = new HashMap<String, NodeType>();
-		catalog = new HashMap<String, VnfType>();
+		this.monitor = factory.newNfvReader();
+		this.dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		this.objectFactory = new ObjectFactory();
+		this.nfv = this.objectFactory.createNfv();
+		this.hosts = new HashMap<String, HostType>();
+		this.nodes = new HashMap<String, NodeType>();
+		this.catalog = new HashMap<String, VnfType>();
 	}
 	
 	public NfvInfoSerializer(NfvReader monitor) {
 		super();
 		this.monitor = monitor;
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-		nfv = new Nfv();
-		catalog = new HashMap<String, VnfType>();
-		hosts = new HashMap<String, HostType>();
-		nodes = new HashMap<String, NodeType>();
+		this.dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		this.objectFactory = new ObjectFactory();
+		this.nfv = this.objectFactory.createNfv();
+		this.catalog = new HashMap<String, VnfType>();
+		this.hosts = new HashMap<String, HostType>();
+		this.nodes = new HashMap<String, NodeType>();
 	}
 
 	/**
@@ -76,7 +82,7 @@ public class NfvInfoSerializer {
 		
 		if (outfile != null) {
 			try {
-				os = new PrintStream(new File(outfile));
+				os = new FileOutputStream(outfile);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -84,7 +90,7 @@ public class NfvInfoSerializer {
 		}
 		try {
 			wf = new NfvInfoSerializer();
-			wf.printAll(os);
+			wf.serialize(os);
 		} catch (NfvReaderException e) {
 			System.err.println("Could not instantiate data generator.");
 			e.printStackTrace();
@@ -97,7 +103,7 @@ public class NfvInfoSerializer {
 	}
 
 
-	public void printAll(OutputStream os) throws NfvInfoSerializerException {
+	public void serialize(OutputStream os) throws NfvInfoSerializerException {
 		JAXBContext jc;
 		Marshaller m;
 		
@@ -115,17 +121,35 @@ public class NfvInfoSerializer {
 		
 		try {
 	        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
-	        Schema schema = sf.newSchema(new File("xsd/nfvInfo.xsd")); 
+	        Schema schema = sf.newSchema(new File("xsd/nfvInfo.xsd"));
+	        ValidationEventCollector validationCollector= new ValidationEventCollector();
 	        
 			jc = JAXBContext.newInstance("it.polito.dp2.NFV.sol1.jaxb");
 			m = jc.createMarshaller();
 			
 			m.setSchema(schema);
-			m.setEventHandler(new NfvValidationEventHandler());
+			m.setEventHandler(validationCollector);
 			
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			
 			m.marshal(nfv, os);
+			
+			if (validationCollector.hasEvents()) {
+				for (ValidationEvent event : validationCollector.getEvents()) {
+			        System.out.println("\nEVENT");
+			        System.out.println("SEVERITY:  " + event.getSeverity());
+			        System.out.println("MESSAGE:  " + event.getMessage());
+			        System.out.println("LINKED EXCEPTION:  " + event.getLinkedException());
+			        System.out.println("LOCATOR");
+			        System.out.println("    LINE NUMBER:  " + event.getLocator().getLineNumber());
+			        System.out.println("    COLUMN NUMBER:  " + event.getLocator().getColumnNumber());
+			        System.out.println("    OFFSET:  " + event.getLocator().getOffset());
+			        System.out.println("    OBJECT:  " + event.getLocator().getObject());
+			        System.out.println("    NODE:  " + event.getLocator().getNode());
+			        System.out.println("    URL:  " + event.getLocator().getURL());
+				}
+			}
+			
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			throw new NfvInfoSerializerException(e);
@@ -138,13 +162,13 @@ public class NfvInfoSerializer {
 
 
 	private HostsType createHostSet(Map<String, HostType> hosts) {
-		HostsType hostSet = new HostsType();
+		HostsType hostSet = objectFactory.createHostsType();
 		hostSet.getHost().addAll(hosts.values());
 		return hostSet;
 	}
 
 	private Catalog createVnfCatalog(HashMap<String, VnfType> catalog) {
-		Catalog vnfCatalog = new Catalog();
+		Catalog vnfCatalog = objectFactory.createCatalog();
 		vnfCatalog.getVnf().addAll(catalog.values());
 		return vnfCatalog;
 	}
@@ -161,7 +185,7 @@ public class NfvInfoSerializer {
 			//for each read node create the corresponding xml node
 			for (NodeReader nr: nodeSet) {
 				//create new node object
-				NodeType node = new NodeType();
+				NodeType node = objectFactory.createNodeType();
 				node.setName(nr.getName());
 				
 				
@@ -179,7 +203,7 @@ public class NfvInfoSerializer {
 	private void setCatalog(Map<String, VnfType> catalog) {;
 		
 		for (VNFTypeReader r : monitor.getVNFCatalog()) {
-			VnfType type = new VnfType();
+			VnfType type = objectFactory.createVnfType();
 			type.setName(r.getName());
 			type.setFunctionalType(it.polito.dp2.NFV.sol1.jaxb.FunctionalType.fromValue(r.getFunctionalType().toString()));
 			type.setRequiredMemory(BigInteger.valueOf(r.getRequiredMemory()));
@@ -195,7 +219,7 @@ public class NfvInfoSerializer {
 		
 		// For each Host print related data
 		for (HostReader host_r: set) {
-			HostType h = new HostType();
+			HostType h = objectFactory.createHostType();
 			h.setName(host_r.getName());
 			h.setMaxVNFs(BigInteger.valueOf(host_r.getMaxVNFs()));
 			h.setAvailableMemory(BigInteger.valueOf(host_r.getAvailableMemory()));
@@ -210,19 +234,19 @@ public class NfvInfoSerializer {
 		Set<HostReader> set = monitor.getHosts();
 
 		for (HostReader sri: set) {
-			Connections conns = new Connections();
+			Connections conns = objectFactory.createConnections();
 			for (HostReader srj: set) {
 				ConnectionPerformanceReader cpr = monitor.getConnectionPerformance(sri, srj);
 				
 				
-				ConnectionType c = new ConnectionType();
-				ConnectionPerformanceType p = new ConnectionPerformanceType();
+				ConnectionType c = objectFactory.createConnectionType();
+				ConnectionPerformanceType p = objectFactory.createConnectionPerformanceType();
 				
 				//add latency
-				p.getLatencyOrThroughput().add((BigInteger.valueOf(cpr.getLatency())));
+				p.setLatency(BigInteger.valueOf(cpr.getLatency()));
 				
 				//add throughput
-				p.getLatencyOrThroughput().add(cpr.getThroughput());
+				p.setThroughput(cpr.getThroughput());
 				
 				c.setPerformance(p);
 				c.setDestination(hosts.get(srj.getName()));
@@ -243,10 +267,10 @@ public class NfvInfoSerializer {
 		for (HostReader host_r: set) {
 			
 			Set<NodeReader> nodeSet = host_r.getNodes();
-			DeployedNodes dn = new DeployedNodes();
+			DeployedNodes dn = objectFactory.createDeployedNodes();
 			
 			for (NodeReader nr: nodeSet) {
-				DeployedNode node = new DeployedNode();
+				DeployedNode node = objectFactory.createDeployedNode();
 				node.setName(nodes.get(nr.getName()));
 				dn.getDeployedNode().add(node);
 			}
@@ -262,11 +286,11 @@ public class NfvInfoSerializer {
 	private Nffgs createNGGraph(Map<String, NodeType> nodes) throws NfvInfoSerializerException{
 		// Get the list of NF-FGs
 		Set<NffgReader> set = monitor.getNffgs(null);
-		Nffgs nffgs = new Nffgs();
+		Nffgs nffgs = objectFactory.createNffgs();
 		
 		for (NffgReader nffg_r: set) {
 			//create new nffg object
-			NffgType nffg = new NffgType();
+			NffgType nffg = objectFactory.createNffgType();
 			
 			//set nffg properties: name, deployTime
 			nffg.setName(nffg_r.getName());
@@ -279,7 +303,7 @@ public class NfvInfoSerializer {
 				throw new NfvInfoSerializerException("Could not set xml date");
 			}
 
-			Nodes nodeSet = new Nodes();
+			Nodes nodeSet = objectFactory.createNodes();
 			//for each read node attach the corresponding xml node
 			for (NodeReader nr: nffg_r.getNodes()) {
 				nodeSet.getNode().add(nodes.get(nr.getName()));
@@ -302,16 +326,16 @@ public class NfvInfoSerializer {
 				Set<LinkReader> linkSet = nr.getLinks();
 				//iterate over links and add them as xml objects to node
 				for (LinkReader l : linkSet) {
-					ConnectionType link = new ConnectionType();
-					ConnectionPerformanceType performance = new ConnectionPerformanceType();
+					ConnectionType link = objectFactory.createConnectionType();
+					ConnectionPerformanceType performance = objectFactory.createConnectionPerformanceType();
 					
 					link.setName(l.getName());
 					link.setDestination(nodes.get(l.getDestinationNode().getName()));
 					
 					BigInteger lat = BigInteger.valueOf(l.getLatency());
-					if (lat.intValue() != 0) performance.getLatencyOrThroughput().add(lat);
+					if (lat.intValue() != 0) performance.setLatency(lat);
 					
-					if (l.getThroughput() != 0.0) performance.getLatencyOrThroughput().add(l.getThroughput());
+					if (l.getThroughput() != 0.0) performance.setThroughput(l.getThroughput());
 					
 					//the performance object is attached only if one of its children is present
 					if (lat.intValue() != 0||l.getThroughput() != 0.0) link.setPerformance(performance);
