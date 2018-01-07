@@ -13,13 +13,13 @@ public class VnfTypeReader implements VNFTypeReader {
 	}
 
 	@Override
-	public String getName() {
-		return this.vnf.getName();
+	public FunctionalType getFunctionalType() {
+		return FunctionalType.fromValue(this.vnf.getFunctionalType().name());
 	}
 
 	@Override
-	public FunctionalType getFunctionalType() {
-		return FunctionalType.fromValue(this.vnf.getFunctionalType().name());
+	public String getName() {
+		return this.vnf.getName();
 	}
 
 	@Override

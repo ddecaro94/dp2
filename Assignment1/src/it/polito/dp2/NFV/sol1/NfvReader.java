@@ -2,7 +2,6 @@ package it.polito.dp2.NFV.sol1;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,129 +12,135 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.UnmarshallerHandler;
 import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.helpers.ValidationEventImpl;
-import javax.xml.bind.util.ValidationEventCollector;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
 import it.polito.dp2.NFV.ConnectionPerformanceReader;
-import it.polito.dp2.NFV.sol1.jaxb.ConnectionType;
-import it.polito.dp2.NFV.sol1.jaxb.HostType;
-import it.polito.dp2.NFV.sol1.jaxb.NffgType;
-import it.polito.dp2.NFV.sol1.jaxb.Nfv;
 import it.polito.dp2.NFV.HostReader;
-
 import it.polito.dp2.NFV.NffgReader;
 import it.polito.dp2.NFV.VNFTypeReader;
+import it.polito.dp2.NFV.sol1.jaxb.ConnectionType;
+import it.polito.dp2.NFV.sol1.jaxb.HostType;
+import it.polito.dp2.NFV.sol1.jaxb.Nfv;
 
 public class NfvReader implements it.polito.dp2.NFV.NfvReader {
 	private String filePath;
 	private Nfv nfv;
-	
-	public NfvReader() {
-		this.filePath = System.getProperty("it.polito.dp2.NFV.sol1.NfvInfo.file");
-		
+	private Map<String, HostReader> hosts;
+	private Map<String, NffgReader> nffgs;
+	private Map<String, Map<String, ConnectionPerformanceReader>> connections;
+	private Map<String, VNFTypeReader> catalog;
+
+	public NfvReader(String file) throws NfvReaderException {
+		this.filePath = file;
+
 		try {
-	        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
-	        Schema schema = sf.newSchema(new File("xsd/nfvInfo.xsd")); 
-	        ValidationEventCollector validationCollector= new ValidationEventCollector();
-			JAXBContext jc= JAXBContext.newInstance("it.polito.dp2.NFV.sol1.jaxb");
+			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = sf.newSchema(new File("xsd/nfvInfo.xsd"));
+			NfvValidationEventCollector validationCollector = new NfvValidationEventCollector();
+			JAXBContext jc = JAXBContext.newInstance("it.polito.dp2.NFV.sol1.jaxb");
 			Unmarshaller u = jc.createUnmarshaller();
-			
+
 			u.setSchema(schema);
-			
+
 			u.setEventHandler(validationCollector);
-			
+
 			this.nfv = (Nfv) u.unmarshal(new File(this.filePath));
-			
+
 			if (validationCollector.hasEvents()) {
+				String details = "";
 				for (ValidationEvent event : validationCollector.getEvents()) {
-			        System.out.println("\nEVENT");
-			        System.out.println("SEVERITY:  " + event.getSeverity());
-			        System.out.println("MESSAGE:  " + event.getMessage());
-			        System.out.println("LINKED EXCEPTION:  " + event.getLinkedException());
-			        System.out.println("LOCATOR");
-			        System.out.println("    LINE NUMBER:  " + event.getLocator().getLineNumber());
-			        System.out.println("    COLUMN NUMBER:  " + event.getLocator().getColumnNumber());
-			        System.out.println("    OFFSET:  " + event.getLocator().getOffset());
-			        System.out.println("    OBJECT:  " + event.getLocator().getObject());
-			        System.out.println("    NODE:  " + event.getLocator().getNode());
-			        System.out.println("    URL:  " + event.getLocator().getURL());
+
+					details = details + event.getSeverity() + ": " + event.getMessage() + " - detected at line: "
+							+ event.getLocator().getLineNumber() + "/column: " + event.getLocator().getColumnNumber()
+							+ "\n";
 				}
+				throw new NfvReaderException(details);
+
+			} else {
+				this.hosts = new HashMap<String, HostReader>();
+				this.connections = new HashMap<String, Map<String, ConnectionPerformanceReader>>();
+				this.nffgs = new HashMap<String, NffgReader>();
+				this.catalog = new HashMap<String, VNFTypeReader>();
+
+				createNfv(nfv);
 			}
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new NfvReaderException(e);
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new NfvReaderException(e);
+		}
+	}
+
+	private void createNfv(Nfv nfv) {
+		// populate catalog data
+		this.catalog.putAll(nfv.getVnfCatalog().getVnf().stream().map(t -> new it.polito.dp2.NFV.sol1.VnfTypeReader(t))
+				.collect(Collectors.toMap(VnfTypeReader::getName, p -> p)));
+
+		// create hosts
+		this.hosts.putAll(nfv.getHosts().getHost().stream().map(t -> new it.polito.dp2.NFV.sol1.HostReader(t, this))
+				.collect(Collectors.toMap(HostReader::getName, p -> p)));
+
+		// create NF-FGs
+		this.nffgs.putAll(nfv.getNffgs().getNffg().stream().map(t -> new it.polito.dp2.NFV.sol1.NffgReader(t, this))
+				.collect(Collectors.toMap(NffgReader::getName, p -> p)));
+
+		// create connection information
+		for (HostType src : nfv.getHosts().getHost()) {
+			this.connections.put(src.getName(), new HashMap<String, ConnectionPerformanceReader>());
+			for (ConnectionType dst : src.getConnections().getConnection()) {
+				this.connections.get(src.getName()).put(((HostType) dst.getDestination()).getName(),
+						new it.polito.dp2.NFV.sol1.ConnectionPerformanceReader(dst));
+			}
 		}
 	}
 
 	@Override
 	public ConnectionPerformanceReader getConnectionPerformance(HostReader from, HostReader to) {
-		for(HostType src : nfv.getHosts().getHost()) {
-			if(src.getName().equals(from.getName())) {
-				for(ConnectionType dst : src.getConnections().getConnection()) {
-					if ( ((HostType) dst.getDestination()).getName().equals(to.getName())) {
-						return new it.polito.dp2.NFV.sol1.ConnectionPerformanceReader(dst);
-					}
-				}
-			}
-		}
-		return null;
+		return this.connections.getOrDefault(from.getName(), new HashMap<String, ConnectionPerformanceReader>())
+				.getOrDefault(to.getName(), null);
 	}
 
 	@Override
 	public HostReader getHost(String hostName) {
-		for(HostType host : nfv.getHosts().getHost()) {
-			if(host.getName().equals(hostName)) {
-				return new it.polito.dp2.NFV.sol1.HostReader(host);
-			}
-		}
-		return null;
+		return this.hosts.getOrDefault(hostName, null);
 	}
 
 	@Override
 	public Set<HostReader> getHosts() {
-		Set<HostReader> hostSet = new HashSet<HostReader>();
-		hostSet.addAll(nfv.getHosts().getHost().parallelStream().map(t-> new it.polito.dp2.NFV.sol1.HostReader(t)).collect(Collectors.toSet()));
-		return hostSet;
+		return this.hosts.values().stream().collect(Collectors.toSet());
 	}
 
 	@Override
 	public NffgReader getNffg(String graphName) {
-		for(NffgType graph : nfv.getNffgs().getNffg()) {
-			if(graph.getName().equals(graphName)) {
-				return new it.polito.dp2.NFV.sol1.NffgReader(graph);
-			}
-		}
-		return null;
+		return this.nffgs.get(graphName);
 	}
 
 	@Override
 	public Set<NffgReader> getNffgs(Calendar deployTime) {
+
 		Set<NffgReader> nffgSet = new HashSet<NffgReader>();
-		Calendar since;
-		if (deployTime == null) {
-			Calendar minimumDate = Calendar.getInstance();
-			minimumDate.setTime(new Date(Long.MIN_VALUE));
-			since = minimumDate;
-		} else {
-			since = deployTime;
+		for (NffgReader nffg : this.nffgs.values()) {
+			if (deployTime == null) {
+				nffgSet.add(nffg);
+			} else {
+				if (nffg.getDeployTime().compareTo(deployTime) >= 0) {
+					nffgSet.add(nffg);
+				}
+			}
 		}
-		nffgSet.addAll(nfv.getNffgs().getNffg().parallelStream().map(t-> new it.polito.dp2.NFV.sol1.NffgReader(t)).filter(t->t.getDeployTime().compareTo(since) >= 0).collect(Collectors.toSet()));
+
 		return nffgSet;
 	}
 
 	@Override
 	public Set<VNFTypeReader> getVNFCatalog() {
 		Set<VNFTypeReader> catalog = new HashSet<VNFTypeReader>();
-		catalog.addAll(nfv.getVnfCatalog().getVnf().parallelStream().map(t-> new it.polito.dp2.NFV.sol1.VnfTypeReader(t)).collect(Collectors.toSet()));
+		catalog.addAll(nfv.getVnfCatalog().getVnf().parallelStream()
+				.map(t -> new it.polito.dp2.NFV.sol1.VnfTypeReader(t)).collect(Collectors.toSet()));
 		return catalog;
 	}
 

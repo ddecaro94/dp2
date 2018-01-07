@@ -201,9 +201,6 @@
 		<echo>*** XML file validated ***</echo>
 
 		<junit printsummary="yes" dir="${temp.dir}" fork="yes" haltonfailure="no" showoutput="no" filtertrace="true">
-			<jvmarg value="-Xdebug"/>
-			<jvmarg value="-Xnoagent"/>
-			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=5555,server=y,suspend=y"/>
 
 			<sysproperty key="it.polito.dp2.NFV.Random.testcase" value="${testcase}"/>
 			<sysproperty key="it.polito.dp2.NFV.Random.seed" value="${seed}"/>

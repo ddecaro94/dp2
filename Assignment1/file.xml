@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <nfv xmlns="http://www.polito.it/schemas/nfvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.polito.it/schemas/nfvInfo xsd/nfvInfo.xsd">
     <vnfCatalog>
-        <vnf functionalType="FW" name="FWb">
+        <vnf functionalType="FWA" name="FWb">
             <requiredMemory>67</requiredMemory>
             <requiredStorage>760</requiredStorage>
         </vnf>
@@ -31,7 +31,6 @@
         </vnf>
         <vnf functionalType="SPAM" name="SPAMa">
             <requiredMemory>10</requiredMemory>
-            <requiredStorage>980</requiredStorage>
         </vnf>
     </vnfCatalog>
     <hosts>
@@ -104,8 +103,7 @@
             <connections>
                 <connection destination="H0">
                     <performance>
-                        <latency>4</latency>
-                        <throughput>39.53</throughput>
+
                     </performance>
                 </connection>
                 <connection destination="H1">
@@ -504,7 +502,6 @@
             </nodes>
         </nffg>
         <nffg name="Nffg0">
-            <deployTime>2016-09-25T21:42:20.000+02:00</deployTime>
             <nodes>
                 <node name="FWb1Nffg0" host="H0" vnf="FWb"/>
                 <node name="DPId3Nffg0" host="H2" vnf="DPId">

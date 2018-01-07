@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nfv xmlns="http://www.polito.it/schemas/nfvInfo">
+    <vnfCatalog>
+        <vnf functionalType="MAIL_CLIENT" name="MAILCLIENTt">
+            <requiredMemory>42</requiredMemory>
+            <requiredStorage>520</requiredStorage>
+        </vnf>
+        <vnf functionalType="MAIL_SERVER" name="MAILSERVERt">
+            <requiredMemory>920</requiredMemory>
+            <requiredStorage>3200</requiredStorage>
+        </vnf>
+        <vnf functionalType="DPI" name="DPIb">
+            <requiredMemory>17</requiredMemory>
+            <requiredStorage>260</requiredStorage>
+        </vnf>
+        <vnf functionalType="CACHE" name="CACHEa">
+            <requiredMemory>40</requiredMemory>
+            <requiredStorage>820</requiredStorage>
+        </vnf>
+        <vnf functionalType="WEB_CLIENT" name="WEBCLIENTt">
+            <requiredMemory>59</requiredMemory>
+            <requiredStorage>120</requiredStorage>
+        </vnf>
+        <vnf functionalType="WEB_SERVER" name="WEBSERVERt">
+            <requiredMemory>730</requiredMemory>
+            <requiredStorage>1000</requiredStorage>
+        </vnf>
+        <vnf functionalType="CACHE" name="CACHEc">
+            <requiredMemory>84</requiredMemory>
+            <requiredStorage>650</requiredStorage>
+        </vnf>
+    </vnfCatalog>
+    <hosts>
+        <host name="H0">
+            <availableMemory>4500</availableMemory>
+            <availableStorage>30000</availableStorage>
+            <maxVNFs>14</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="CACHEc3Nffg0"/>
+                <deployedNode name="DPIb1Nffg1"/>
+                <deployedNode name="MAILSERVERt0Nffg0"/>
+                <deployedNode name="WEBCLIENTt0Nffg0"/>
+                <deployedNode name="MAILSERVERt4Nffg0"/>
+                <deployedNode name="WEBSERVERt1Nffg1"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>90.76</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>78</latency>
+                        <throughput>28.03</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>93</latency>
+                        <throughput>44.97</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>76</latency>
+                        <throughput>14.91</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H1">
+            <availableMemory>3800</availableMemory>
+            <availableStorage>87000</availableStorage>
+            <maxVNFs>6</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="MAILSERVERt1Nffg0"/>
+                <deployedNode name="MAILCLIENTt1Nffg0"/>
+                <deployedNode name="MAILSERVERt2Nffg1"/>
+                <deployedNode name="CACHEc2Nffg1"/>
+                <deployedNode name="CACHEa0Nffg0"/>
+                <deployedNode name="CACHEa4Nffg0"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>78</latency>
+                        <throughput>37.11</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>24.06</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>64</latency>
+                        <throughput>27.12</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>15</latency>
+                        <throughput>96.28</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H2">
+            <availableMemory>6600</availableMemory>
+            <availableStorage>50000</availableStorage>
+            <maxVNFs>12</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="WEBCLIENTt2Nffg0"/>
+                <deployedNode name="WEBSERVERt2Nffg0"/>
+                <deployedNode name="MAILSERVERt3Nffg1"/>
+                <deployedNode name="DPIb3Nffg1"/>
+                <deployedNode name="CACHEa1Nffg0"/>
+                <deployedNode name="WEBCLIENTt0Nffg1"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>93</latency>
+                        <throughput>61.82</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>64</latency>
+                        <throughput>8.23</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>72.44</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>50</latency>
+                        <throughput>89.29</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+        <host name="H3">
+            <availableMemory>5300</availableMemory>
+            <availableStorage>96000</availableStorage>
+            <maxVNFs>11</maxVNFs>
+            <deployedNodes>
+                <deployedNode name="WEBSERVERt3Nffg0"/>
+                <deployedNode name="WEBCLIENTt3Nffg0"/>
+                <deployedNode name="CACHEc2Nffg0"/>
+                <deployedNode name="CACHEc0Nffg1"/>
+                <deployedNode name="CACHEc4Nffg1"/>
+                <deployedNode name="MAILSERVERt0Nffg1"/>
+            </deployedNodes>
+            <connections>
+                <connection destination="H0">
+                    <performance>
+                        <latency>76</latency>
+                        <throughput>17.36</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H1">
+                    <performance>
+                        <latency>15</latency>
+                        <throughput>79.44</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H2">
+                    <performance>
+                        <latency>50</latency>
+                        <throughput>81.46</throughput>
+                    </performance>
+                </connection>
+                <connection destination="H3">
+                    <performance>
+                        <latency>0</latency>
+                        <throughput>19.48</throughput>
+                    </performance>
+                </connection>
+            </connections>
+        </host>
+    </hosts>
+    <nffgs>
+        <nffg name="Nffg1">
+            <deployTime>2016-09-28T05:42:20.000+02:00</deployTime>
+            <nodes>
+                <node name="MAILSERVERt3Nffg1" host="H2" vnf="MAILSERVERt">
+                    <link name="Link15" destination="CACHEc0Nffg1"/>
+                    <link name="Link8" destination="CACHEc2Nffg1"/>
+                </node>
+                <node name="DPIb3Nffg1" host="H2" vnf="DPIb">
+                    <link name="Link1" destination="WEBCLIENTt0Nffg1"/>
+                    <link name="Link3" destination="MAILSERVERt0Nffg1"/>
+                    <link name="Link17" destination="CACHEc4Nffg1"/>
+                </node>
+                <node name="MAILSERVERt2Nffg1" host="H1" vnf="MAILSERVERt">
+                    <link name="Link14" destination="DPIb3Nffg1"/>
+                    <link name="Link6" destination="CACHEc0Nffg1"/>
+                </node>
+                <node name="DPIb1Nffg1" host="H0" vnf="DPIb">
+                    <link name="Link12" destination="DPIb3Nffg1"/>
+                </node>
+                <node name="CACHEc2Nffg1" host="H1" vnf="CACHEc">
+                    <link name="Link9" destination="MAILSERVERt3Nffg1"/>
+                </node>
+                <node name="WEBCLIENTt0Nffg1" host="H2" vnf="WEBCLIENTt">
+                    <link name="Link0" destination="DPIb3Nffg1"/>
+                </node>
+                <node name="CACHEc0Nffg1" host="H3" vnf="CACHEc">
+                    <link name="Link7" destination="MAILSERVERt2Nffg1"/>
+                </node>
+                <node name="CACHEc4Nffg1" host="H3" vnf="CACHEc">
+                    <link name="Link10" destination="MAILSERVERt2Nffg1"/>
+                    <link name="Link16" destination="CACHEc0Nffg1"/>
+                    <link name="Link13" destination="MAILSERVERt3Nffg1"/>
+                    <link name="Link5" destination="WEBSERVERt1Nffg1"/>
+                </node>
+                <node name="MAILSERVERt0Nffg1" host="H3" vnf="MAILSERVERt">
+                    <link name="Link2" destination="DPIb3Nffg1"/>
+                </node>
+                <node name="WEBSERVERt1Nffg1" host="H0" vnf="WEBSERVERt">
+                    <link name="Link11" destination="CACHEc2Nffg1"/>
+                    <link name="Link4" destination="CACHEc4Nffg1"/>
+                </node>
+            </nodes>
+        </nffg>
+        <nffg name="Nffg0">
+            <deployTime>2016-09-26T13:07:20.000+02:00</deployTime>
+            <nodes>
+                <node name="WEBSERVERt2Nffg0" host="H2" vnf="WEBSERVERt">
+                    <link name="Link12" destination="CACHEa1Nffg0"/>
+                </node>
+                <node name="MAILCLIENTt1Nffg0" host="H1" vnf="MAILCLIENTt">
+                    <link name="Link22" destination="CACHEa1Nffg0"/>
+                    <link name="Link24" destination="CACHEc2Nffg0"/>
+                    <link name="Link2" destination="CACHEa0Nffg0"/>
+                </node>
+                <node name="WEBCLIENTt3Nffg0" host="H3" vnf="WEBCLIENTt">
+                    <link name="Link23" destination="CACHEc2Nffg0"/>
+                    <link name="Link25" destination="CACHEa4Nffg0"/>
+                    <link name="Link6" destination="CACHEc3Nffg0"/>
+                </node>
+                <node name="CACHEc3Nffg0" host="H0" vnf="CACHEc">
+                    <link name="Link19" destination="MAILCLIENTt1Nffg0"/>
+                    <link name="Link7" destination="WEBCLIENTt3Nffg0"/>
+                </node>
+                <node name="CACHEa1Nffg0" host="H2" vnf="CACHEa">
+                    <link name="Link11" destination="MAILSERVERt1Nffg0"/>
+                    <link name="Link15" destination="WEBSERVERt3Nffg0"/>
+                    <link name="Link13" destination="WEBSERVERt2Nffg0"/>
+                    <link name="Link17" destination="MAILSERVERt4Nffg0"/>
+                    <link name="Link9" destination="MAILSERVERt0Nffg0"/>
+                </node>
+                <node name="CACHEc2Nffg0" host="H3" vnf="CACHEc">
+                    <link name="Link1" destination="WEBCLIENTt0Nffg0"/>
+                </node>
+                <node name="MAILSERVERt4Nffg0" host="H0" vnf="MAILSERVERt">
+                    <link name="Link16" destination="CACHEa1Nffg0"/>
+                </node>
+                <node name="CACHEa4Nffg0" host="H1" vnf="CACHEa">
+                    <link name="Link18" destination="WEBSERVERt3Nffg0"/>
+                </node>
+                <node name="WEBCLIENTt2Nffg0" host="H2" vnf="WEBCLIENTt">
+                    <link name="Link20" destination="CACHEa1Nffg0"/>
+                    <link name="Link4" destination="CACHEa0Nffg0"/>
+                </node>
+                <node name="MAILSERVERt1Nffg0" host="H1" vnf="MAILSERVERt">
+                    <link name="Link10" destination="CACHEa1Nffg0"/>
+                </node>
+                <node name="WEBSERVERt3Nffg0" host="H3" vnf="WEBSERVERt">
+                    <link name="Link14" destination="CACHEa1Nffg0"/>
+                </node>
+                <node name="MAILSERVERt0Nffg0" host="H0" vnf="MAILSERVERt">
+                    <link name="Link8" destination="CACHEa1Nffg0"/>
+                </node>
+                <node name="WEBCLIENTt0Nffg0" host="H0" vnf="WEBCLIENTt">
+                    <link name="Link0" destination="CACHEc2Nffg0"/>
+                </node>
+                <node name="CACHEa0Nffg0" host="H1" vnf="CACHEa">
+                    <link name="Link21" destination="CACHEc2Nffg0"/>
+                    <link name="Link26" destination="CACHEa4Nffg0"/>
+                    <link name="Link3" destination="MAILCLIENTt1Nffg0"/>
+                    <link name="Link5" destination="WEBCLIENTt2Nffg0"/>
+                </node>
+            </nodes>
+        </nffg>
+    </nffgs>
+</nfv>
