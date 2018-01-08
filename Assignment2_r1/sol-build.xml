@@ -18,7 +18,7 @@
 			<customizations dir="${lab2.location}" includes="binding.xjc" />
 			<produces dir="${gen.dir}/it/polito/dp2/NFV/sol2/client" includes="*.java" />
 			<depends dir="${lab2.location}" includes="build.xml" />
-			<customClassName uri="${URL}/" classname="${service.name}Client" />
+			<customClassName uri="${URL}/" classname="${service.name}" />
 		</wjc>
 	</target>
 
