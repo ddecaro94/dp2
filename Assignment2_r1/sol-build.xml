@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="generate-artifacts" name="NFV-SOL2">
+	<description>
+			Script for NFV Assignment 2 solution
+	</description>
+
+	<taskdef name="wjc" classname="org.jvnet.ws.wadl2java.WJCTask">
+		<classpath>
+			<fileset dir="${ext.lib.dir}" includes="*.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="generate-artifacts">
+		<mkdir dir="${gen.dir}" />
+		<echo message="Compiling the descriptions..." />
+		<wjc description="${WADL}" package="it.polito.dp2.NFV.sol2" autoSchemaPackage="false" target="${gen.dir}">
+			<customizations dir="${lab2.location}" includes="binding.xjc" />
+			<produces dir="${gen.dir}/it/polito/dp2/NFV/sol2/client" includes="*.java" />
+			<depends dir="${lab2.location}" includes="build.xml" />
+			<customClassName uri="${URL}/" classname="${service.name}Client" />
+		</wjc>
+	</target>
+
+</project>
