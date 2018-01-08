@@ -1,6 +1,8 @@
 package it.polito.dp2.NFV.sol2;
 
+import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,9 +25,7 @@ import it.polito.dp2.NFV.lab2.ExtendedNodeReader;
 import it.polito.dp2.NFV.lab2.NoGraphException;
 import it.polito.dp2.NFV.lab2.ServiceException;
 import it.polito.dp2.NFV.lab2.UnknownNameException;
-import it.polito.dp2.NFV.sol2.*;
 import it.polito.dp2.NFV.sol2.Neo4JSimpleXML.Data;
-import it.polito.dp2.NFV.sol2.Neo4JSimpleXML.*;
 
 public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTester {
 
@@ -34,6 +34,7 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 	private Map<String, String> allNodeIDs;
 	private Map<String, String> hostIDs;
 	private Map<String, Map<String, String>> nffgNodeIDs;
+	private Map<String, ExtendedNodeReader> extendedReaders;
 	private Data dataApi;
 	
 	public ReachabilityTester() throws ReachabilityTesterException {
@@ -44,17 +45,19 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 		} catch (FactoryConfigurationError e) {
 			throw new ReachabilityTesterException(e.getMessage());
 		}
+		
+		this.extendedReaders = new HashMap<String, ExtendedNodeReader>();
 		this.loadedGraphs = new HashMap<String, NffgReader>();
 		this.nffgNodeIDs = new HashMap<String, Map<String, String>>();
 		this.allNodeIDs = new HashMap<String, String>();
 		this.hostIDs = new HashMap<String, String>();
 		
-		this.dataApi = new Neo4JSimpleXML().data();
+		this.dataApi = Neo4JSimpleXML.data(Neo4JSimpleXML.createClient() , URI.create(System.getProperty("it.polito.dp2.NFV.lab2.URL")));
 	}
 
 	@Override
 	public void loadGraph(String nffgName) throws UnknownNameException, AlreadyLoadedException, ServiceException {
-		// TODO Auto-generated method stub
+
 		if (nffgName == null) throw new UnknownNameException("No graph name specified");
 		if (nfv.getNffg(nffgName) == null) throw new UnknownNameException("Graph name: '"+nffgName+"' does not exist");
 		
@@ -122,6 +125,9 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 					ClientResponse r = this.dataApi.nodeNodeidLabels(createdNode.getId()).putXml(labels, ClientResponse.class);
 					if (r.getStatus() >= 400) throw new ServiceException("Unable to create labels for node with id "+createdNode.getId());
 					
+					//create ExtendedReader
+					this.extendedReaders.put(createdNode.getId(), new it.polito.dp2.NFV.sol2.ExtendedNodeReader(createdNode.getId(), node.getName(), nffgName, nfv, this.loadedGraphs, dataApi));
+					
 				} catch (WebApplicationException e) {
 					throw new ServiceException(e);
 				}
@@ -171,6 +177,8 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 					throw new ServiceException(e);
 				}
 			}
+			
+			
 		}
 		
 		this.nffgNodeIDs.put(nffgName, nodeIDs);
@@ -194,13 +202,14 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 			throw new NoGraphException("Graph name: '"+nffgName+"' has no nodes loaded");
 		}
 		
+		Set<ExtendedNodeReader> nffgNodes = new HashSet<ExtendedNodeReader>();
+		
 		for (String id : this.nffgNodeIDs.get(nffgName).values()) {
 			//create an ExtendedNode for each nodeID
-			
+			nffgNodes.add(this.extendedReaders.get(id));
 		}
 		
-		
-		return null;
+		return nffgNodes;
 	}
 
 	@Override
