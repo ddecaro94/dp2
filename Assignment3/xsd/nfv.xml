@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tns:nfv xmlns:tns="http://www.polito.it/schemas/nfvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.polito.it/schemas/nfvInfo NfvDeployer.xsd ">
+  <vnfCatalog href="/catalog"/>
+  <hosts href="/hosts"/>
+  <nffgs href="/nffgs"/>
+  <connections href="/connections" />
+</tns:nfv>

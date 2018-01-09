@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.polito.it/schemas/nfvInfo"
+	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.polito.it/schemas/nfvInfo">
+    <element name="nfv">
+		<complexType>
+			<all>
+				<element name="vnfCatalog" maxOccurs="1" minOccurs="1"
+					type="tns:Hyperlink" />
+				<element name="hosts" maxOccurs="1" minOccurs="1"
+					type="tns:Hyperlink" />
+				<element name="nffgs" maxOccurs="1" minOccurs="1"
+					type="tns:Hyperlink" />
+				<element name="connections" type="tns:Hyperlink" maxOccurs="1" minOccurs="1"></element>
+			</all>
+		</complexType>
+	</element>
+
+
+    <complexType name="NffgType">
+    	<complexContent>
+    		<extension base="tns:NamedEntity">
+    			<sequence>
+    				<element name="deployTime" type="dateTime"></element>
+    				<element name="nodes" type="tns:Hyperlink"></element>
+    				<element name="links" type="tns:Hyperlink"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="NamedEntity">
+		<complexContent>
+			<extension base="tns:Hyperlink">
+				<attribute name="name" type="token" use="required"></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Hyperlink">
+		<attribute name="href" type="anyURI" use="required"></attribute>
+	</complexType>
+
+
+	<complexType name="HostType">
+		<all>
+			<element name="deployedNodes" maxOccurs="1" minOccurs="1" />
+			<element name="connections" maxOccurs="1" minOccurs="1"></element>
+		</all>
+		<attribute name="name" type="ID" use="required" />
+		<attribute name="availableMemory" use="required" />
+		<attribute name="availableStorage" use="required" />
+		<attribute name="maxVNFs" use="required" />
+	</complexType>
+
+	<complexType name="VnfType">
+		<all>
+			<element name="requiredMemory" maxOccurs="1" minOccurs="1" />
+			<element name="requiredStorage" maxOccurs="1" minOccurs="1" />
+		</all>
+		<attribute name="functionalType" type="tns:FunctionalType"
+			use="required" />
+		<attribute name="name" type="ID" use="required" />
+	</complexType>
+
+	<simpleType name="FunctionalType">
+		<restriction base="string">
+			<enumeration value="SPAM" />
+			<enumeration value="FW" />
+			<enumeration value="DPI" />
+			<enumeration value="NAT" />
+			<enumeration value="CACHE" />
+			<enumeration value="WEB_SERVER" />
+			<enumeration value="WEB_CLIENT" />
+			<enumeration value="MAIL_SERVER" />
+			<enumeration value="MAIL_CLIENT" />
+			<enumeration value="VPN" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="NodeType">
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" name="link" />
+
+		</sequence>
+		<attribute name="name" type="ID" use="required" />
+		<attribute name="host" type="IDREF" use="optional" />
+		<attribute name="vnf" type="IDREF" use="required" />
+	</complexType>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<element name="nodes">
+		<complexType>
+			<sequence>
+				<element name="node" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+
+	</element>
+
+	<element name="nffgs">
+		<complexType>
+			<sequence>
+				<element name="nffg" maxOccurs="unbounded" minOccurs="0" type="tns:NamedEntity"/>
+			</sequence>
+		</complexType>
+		<key name="graphNameKey">
+			<selector xpath="nffg"></selector>
+			<field xpath="@name"></field>
+		</key>
+	</element>
+
+    <element name="nffg" type="tns:NffgType"></element>
+
+
+    <complexType name="Relationship">
+    	<attribute name="src" type="string"></attribute>
+    	<attribute name="dst" type="string"></attribute>
+    </complexType>
+</schema>

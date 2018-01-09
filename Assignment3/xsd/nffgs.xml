@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:nffgs xmlns:tns="http://www.polito.it/schemas/nfvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.polito.it/schemas/nfvInfo NfvDeployer.xsd ">
+<nffg href="/nffgs/Nffg0" name="Nffg0"/>
+<nffg href="/nffgs/Nffg1" name="Nffg1"/>
+</tns:nffgs>
