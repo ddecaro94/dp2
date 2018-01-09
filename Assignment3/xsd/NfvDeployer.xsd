@@ -46,7 +46,6 @@
 	<complexType name="Host">
 		<complexContent>
 			<extension base="tns:NamedEntity">
-				<attribute name="name" type="ID" use="required" />
 				<attribute name="availableMemory" use="required" />
 				<attribute name="availableStorage" use="required" />
 				<attribute name="maxVNFs" use="required" />
