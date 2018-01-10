@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:links xmlns:tns="http://www.polito.it/schemas/nfvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.polito.it/schemas/nfvInfo NfvDeployer.xsd ">
+  <link src="" dst="token" href="http://tempuri.org" name="token" requiredLatency="" requiredThroughput=""/>
+</tns:links>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build-service" name="NFV-SOL3">
+	<description>
+			Script for NFV Assignment 3 solution
+	</description>
+		
+	<property name="basedir" value="." />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="schema.dir" value="${basedir}/xsd" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="model.dir" value="${src.dir}/it/polito/dp2/NFV/sol3/model" />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="debug" value="true" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+
+	<!-- Target init	-->
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${gen.dir}" />
+	</target>
+
+	<target name="build-service" depends="generate-bindings">
+		<echo>Building NfvDeployer (if needed)...</echo>
+		<javac 
+			destdir="${build.dir}"
+			debug="${debug}"
+			debuglevel="${debuglevel}"
+			source="${source}"
+			target="${target}"
+			includeantruntime="false">
+				<src path="${src.dir}" />
+				<include name="it/polito/dp2/NFV/sol3/**" />
+				<classpath>
+					<path refid="sol.classpath" />
+				</classpath>
+		</javac>
+		<echo>Done.</echo>
+	</target>
+
+
+
+	<!-- Target chk-bindings -->
+	<target name="-chk-bindings">
+		<uptodate property="generate-bindings.notRequired" targetfile="${model.dir}/.flagfile">
+			<srcfiles dir="${schema.dir}" includes="**/*.xsd" />
+		</uptodate>
+	</target>
+
+	<!-- Target clean-bindings -->
+	<target name="clean-bindings">
+		<delete dir="${model.dir}" />
+	</target>
+
+	<!-- Target generate-bindings -->
+	<target name="generate-bindings" unless="generate-bindings.notRequired" depends="-chk-bindings" description="Generate bindings from schema">
+		<exec executable="xjc" failonerror="true" >
+			<arg value="-d" />
+			<arg value="${src.dir}" />
+			<arg value="-p" />
+			<arg value="it.polito.dp2.NFV.sol3.model" />
+			<arg value="-encoding" />
+			<arg value="utf8" />
+			<arg value="${schema.dir}/NfvDeployer.xsd" />
+		</exec>
+		<touch file="${model.dir}/.flagfile" />
+	</target>
+
+	<!-- The classpath to be used for compilation of the solution -->
+	<path id="sol.classpath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+		<fileset dir="${ext.lib.dir}" includes="jersey-*.jar" />
+		<fileset dir="${ext.lib.dir}" includes="javax.ws.rs-api-2.1.jar" />
+	</path>
+
+
+
+</project>

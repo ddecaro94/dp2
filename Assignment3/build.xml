@@ -40,7 +40,7 @@
 	<property name="doc.dir" location="${lab3.location}/doc" />
 	
 	<!-- The location for extra jar files -->
-    <property name="shared.location" location="/opt/dp2/shared"/>
+    <property name="shared.location" location="${basedir}/shared"/>
 	<property name="ext.lib.dir" location="${shared.location}/lib" />
 	
     <!-- The location of the Neo4JSimpleXML web service -->

@@ -1,0 +1,8 @@
+/bin/
+*.class
+
+*.class
+/build/*.class
+/build
+/target
+/war

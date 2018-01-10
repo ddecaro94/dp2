@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://www.polito.it/schemas/nfvInfo"
 	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.polito.it/schemas/nfvInfo">
-	
+
 	<element name="nfv">
 		<complexType>
 			<all>
@@ -11,41 +11,104 @@
 					type="tns:Hyperlink" />
 				<element name="nffgs" maxOccurs="1" minOccurs="1"
 					type="tns:Hyperlink" />
-				<element name="connections" type="tns:Hyperlink" maxOccurs="1"
-					minOccurs="1"></element>
 			</all>
 		</complexType>
 	</element>
+	
+	<element name="catalog">
+		<complexType>
+			<sequence>
+				<element name="vnf" type="tns:Vnf" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		<key name="vnfNameKey">
+			<selector xpath="vnf" />
+			<field xpath="@name" />
+		</key>
+	</element>
+	
+	<element name="nffgs">
+		<complexType>
+			<sequence>
+				<element name="nffg" maxOccurs="unbounded" minOccurs="0"
+					type="tns:NamedEntity" />
+			</sequence>
+		</complexType>
+		<key name="graphNameKey">
+			<selector xpath="nffg" />
+			<field xpath="@name" />
+		</key>
+	</element>
 
+	<element name="nodes">
+		<complexType>
+			<sequence>
+				<element name="node" minOccurs="0" maxOccurs="unbounded"
+					type="tns:NamedEntity" />
+			</sequence>
+		</complexType>
 
+		<key name="nodeNameKey">
+			<selector xpath="node" />
+			<field xpath="@name" />
+		</key>
+	</element>
+	
+    <element name="hosts">
+	    <complexType>
+		    <sequence>
+		    	<element name="host" type="tns:NamedEntity" minOccurs="0" maxOccurs="unbounded"/>
+		    </sequence>
+	    </complexType>
+	    <key name="hostNameKey">
+			<selector xpath="host"/>
+			<field xpath="@name"/>
+		</key>
+    </element>
+
+    <element name="links">
+	    <complexType>
+		    <sequence>
+		    	<element name="link" minOccurs="0" maxOccurs="unbounded" type="tns:Link"/>
+		    </sequence>
+	    </complexType>
+    </element>
+
+	<element name="connections">
+		<complexType>
+			<sequence>
+				<element name="connection" type="tns:Connection" maxOccurs="unbounded"
+					minOccurs="0" />
+			</sequence>
+		</complexType>
+	</element>
+	
+	<element name="node" type="tns:Node"/>
+	
+	<element name="nffg" type="tns:Nffg" />
+	
+	<element name="host" type="tns:Host" />
+	
+	<element name="vnf" type="tns:Vnf" />
+	    
 	<complexType name="Nffg">
 		<complexContent>
 			<extension base="tns:NamedEntity">
 				<sequence>
-					<element name="deployTime" type="dateTime"></element>
-					<element name="nodes" type="tns:Hyperlink"></element>
-					<element name="links" type="tns:Hyperlink"></element>
+					<element name="deployTime" type="dateTime" />
+					<element name="nodes" type="tns:Hyperlink" />
+					<element name="links" type="tns:Hyperlink" />
 				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
 
-	<complexType name="NamedEntity">
-		<complexContent>
-			<extension base="tns:Hyperlink">
-				<attribute name="name" type="token" use="required"></attribute>
-			</extension>
-		</complexContent>
-	</complexType>
-
-	<complexType name="Hyperlink">
-		<attribute name="href" type="anyURI" use="required"></attribute>
-	</complexType>
-
-
 	<complexType name="Host">
 		<complexContent>
 			<extension base="tns:NamedEntity">
+				<sequence>
+					<element name="connections" type="tns:Hyperlink" />
+				</sequence>
 				<attribute name="availableMemory" use="required" />
 				<attribute name="availableStorage" use="required" />
 				<attribute name="maxVNFs" use="required" />
@@ -56,20 +119,76 @@
 	<complexType name="Vnf">
 		<complexContent>
 			<extension base="tns:NamedEntity">
-
 				<attribute name="requiredMemory" type="nonNegativeInteger"
 					use="required" />
-
 				<attribute name="requiredStorage" type="nonNegativeInteger"
 					use="required" />
-
 				<attribute name="functionalType" type="tns:FunctionalType"
 					use="required" />
-
 			</extension>
 		</complexContent>
 	</complexType>
 
+	<complexType name="Node">
+		<complexContent>
+			<extension base="tns:NamedEntity">
+				<sequence>
+					<element name="host" type="tns:NamedEntity" />
+					<element name="vnf" type="tns:NamedEntity" />
+					<element name="reachableHosts" type="tns:Hyperlink" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Connection">
+		<complexContent>
+			<extension base="tns:Relationship">
+				<attribute name="throughput" type="tns:nonNegativeFloat"
+					use="required" />
+				<attribute name="latency" type="nonNegativeInteger" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Link">
+		<complexContent>
+			<extension base="tns:NamedRelationship">
+				<attribute name="requiredLatency" type="string" />
+				<attribute name="requiredThroughput" type="string" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="NamedRelationship">
+		<complexContent>
+			<extension base="tns:Relationship">
+				<attribute name="name" type="token" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Relationship">
+		<complexContent>
+			<extension base="tns:Hyperlink">
+				<attribute name="src" type="token" use="required" />
+				<attribute name="dst" type="token" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="NamedEntity">
+		<complexContent>
+			<extension base="tns:Hyperlink">
+				<attribute name="name" type="token" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Hyperlink">
+		<attribute name="href" type="anyURI" use="required" />
+	</complexType>
+	
 	<simpleType name="FunctionalType">
 		<restriction base="string">
 			<enumeration value="SPAM" />
@@ -84,105 +203,17 @@
 			<enumeration value="VPN" />
 		</restriction>
 	</simpleType>
-
-	<complexType name="Node">
-		<complexContent>
-			<extension base="tns:NamedEntity">
-				<sequence>
-					<element name="host" type="tns:NamedEntity" />
-					<element name="vnf" type="tns:NamedEntity"/>
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-
-	<element name="nodes">
-		<complexType>
-			<sequence>
-				<element name="node" minOccurs="0" maxOccurs="unbounded"
-					type="tns:NamedEntity" />
-			</sequence>
-		</complexType>
-
-		<key name="nodeNameKey">
-			<selector xpath="node"></selector>
-			<field xpath="@name"></field>
-		</key>
-	</element>
-
-	<element name="nffgs">
-		<complexType>
-			<sequence>
-				<element name="nffg" maxOccurs="unbounded" minOccurs="0"
-					type="tns:NamedEntity" />
-			</sequence>
-		</complexType>
-		<key name="graphNameKey">
-			<selector xpath="nffg"></selector>
-			<field xpath="@name"></field>
-		</key>
-	</element>
-
-    <element name="nffg" type="tns:Nffg"></element>
-
-    <complexType name="NamedRelationship">
-    	<complexContent>
-    		<extension base="tns:Relationship">
-    			<attribute name="name" type="token"></attribute>
-    		</extension>
-    	</complexContent>
-    </complexType>
-
-    <complexType name="Relationship">
-    	<complexContent>
-    		<extension base="tns:Hyperlink">
-    			<attribute name="src" type="token"></attribute>
-    			<attribute name="dst" type="token"></attribute>
-    		</extension>
-    	</complexContent>
-    </complexType>
-    
-    <element name="connections">
-    <complexType>
-    <sequence>
-    <element name="connection" type="tns:Connection"></element>
-    </sequence>
-    </complexType>
-    </element>
-
-    <complexType name="Connection">
-    	<complexContent>
-    		<extension base="tns:Relationship">
-    			<attribute name="throughput" type="tns:nonNegativeFloat" use="required"></attribute>
-    			<attribute name="latency" type="nonNegativeInteger" use="required"></attribute>
-    		</extension>
-    	</complexContent>
-    </complexType>
-
-    <element name="catalog">
-    <complexType>
-    <sequence>
-    <element name="vnf" type="tns:NamedEntity" minOccurs="0" maxOccurs="unbounded"></element>
-    </sequence>
-    </complexType>
-    <key name="vnfNameKey">
-    <selector xpath="vnf"></selector>
-    <field xpath="@name"></field>
-    </key>
-    </element>
-
-    <complexType name="Link">
-    	<complexContent>
-    		<extension base="tns:NamedRelationship">
-    			<attribute name="requiredLatency" type="string"></attribute>
-    			<attribute name="requiredThroughput" type="string"></attribute>
-    		</extension>
-    	</complexContent>
-    </complexType>
-
-    <simpleType name="nonNegativeFloat">
-	<restriction base="float">
-	<minInclusive value="0"/>
-	</restriction>
+	
+	<simpleType name="nonNegativeFloat">
+		<restriction base="float">
+			<minInclusive value="0" />
+		</restriction>
 	</simpleType>
+
+
+
+
+
+
+
 </schema>
