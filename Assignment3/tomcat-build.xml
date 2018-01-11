@@ -62,7 +62,7 @@
 	
 	
 	<!-- WEBSERVICE LIFECICLE MANAGEMENT-->
-	<target name="deployWS" depends="package-service" description="Deploy service to tomcat">
+	<target name="deployWS" depends="package-service, undeployWS" description="Deploy service to tomcat">
 		<!-- Set seed in Tomcat Server -->
 		<java classname="it.polito.dp2.NFV.lab3.SeedSetter" failonerror="true" fork="yes">
 			<sysproperty key="it.polito.dp2.NFV.Random.seed" value="${seed}"/>
@@ -78,7 +78,7 @@
 		<echo>Deploying to tomcat...</echo>
 		<deploy url="${tomcatUrl}" username="${tomcatUsername}"
 				password="${tomcatPassword}" path="/${service.name}"
-				localWar="file:${root.location}/war/${service.name}.war" />
+				localWar="file:${root.location}/war/${service.name}.war"/>
 	</target>
 	
 	<target name="undeployWS" description="Undeploy service in tomcat">

@@ -71,7 +71,7 @@
 	<!-- The classpath to be used for compilation of the solution -->
 	<path id="sol.classpath">
 		<fileset dir="${lib.dir}" includes="*.jar" />
-		<fileset dir="${ext.lib.dir}" includes="jersey-*.jar" />
+		<fileset dir="${ext.lib.dir}" includes="*.jar" excludes="ant-*" />
 		<fileset dir="${ext.lib.dir}" includes="javax.ws.rs-api-2.1.jar" />
 	</path>
 

@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 
 import it.polito.dp2.NFV.NfvReaderFactory;
@@ -189,7 +186,7 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 	@Override
 	public Set<ExtendedNodeReader> getExtendedNodes(String nffgName)
 			throws UnknownNameException, NoGraphException, ServiceException {
-		// TODO Auto-generated method stub
+		
 		if (nffgName == null) throw new UnknownNameException("No graph name specified");
 		if (nfv.getNffg(nffgName) == null) throw new UnknownNameException("Graph name: '"+nffgName+"' does not exist");
 		if(!isLoaded(nffgName)) throw new NoGraphException("Graph name: '"+nffgName+"' has not been loaded");
@@ -214,7 +211,7 @@ public class ReachabilityTester implements it.polito.dp2.NFV.lab2.ReachabilityTe
 
 	@Override
 	public boolean isLoaded(String nffgName) throws UnknownNameException {
-		// TODO Auto-generated method stub
+		
 		if (nffgName == null) throw new UnknownNameException("No graph name specified");
 		if (nfv.getNffg(nffgName) == null) throw new UnknownNameException("Graph name: '"+nffgName+"' does not exist");
 		

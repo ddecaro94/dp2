@@ -25,7 +25,6 @@ public class ExtendedNodeReader implements it.polito.dp2.NFV.lab2.ExtendedNodeRe
 	private Map<String, NffgReader> loadedGraphs;
 	
 	public ExtendedNodeReader(String id, String nodeName, String nffgName, NfvReader nfv, Map<String, NffgReader> loadedGraphs, Data dataApi) {
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.name = nffgName;
 		this.nfv = nfv;
@@ -36,37 +35,31 @@ public class ExtendedNodeReader implements it.polito.dp2.NFV.lab2.ExtendedNodeRe
 
 	@Override
 	public VNFTypeReader getFuncType() {
-		// TODO Auto-generated method stub
 		return this.node.getFuncType();
 	}
 
 	@Override
 	public HostReader getHost() {
-		// TODO Auto-generated method stub
 		return this.node.getHost();
 	}
 
 	@Override
 	public Set<LinkReader> getLinks() {
-		// TODO Auto-generated method stub
 		return this.node.getLinks();
 	}
 
 	@Override
 	public NffgReader getNffg() {
-		// TODO Auto-generated method stub
 		return this.node.getNffg();
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return this.node.getName();
 	}
 
 	@Override
 	public Set<HostReader> getReachableHosts() throws NoGraphException, ServiceException {
-		// TODO Auto-generated method stub
 		if (!loadedGraphs.containsKey(name)) throw new NoGraphException("NF-FG "+name+" has not been loaded");
 		
 		Set<HostReader> resultSet = new HashSet<HostReader>();

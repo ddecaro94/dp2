@@ -3,5 +3,4 @@
   <vnfCatalog href="/catalog"/>
   <hosts href="/hosts"/>
   <nffgs href="/nffgs"/>
-  <connections href="/connections" />
 </tns:nfv>

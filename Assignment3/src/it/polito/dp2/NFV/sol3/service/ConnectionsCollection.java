@@ -6,7 +6,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import it.polito.dp2.NFV.sol3.model.Connections;
-import sun.security.util.HostnameChecker;
 
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -24,6 +23,4 @@ public class ConnectionsCollection {
 		return this.deployer.getConnections(this.hostName);
 	}
 	
-	
-
 }

@@ -1,75 +1,88 @@
 package it.polito.dp2.NFV.sol3.service;
 
 import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import it.polito.dp2.NFV.FactoryConfigurationError;
 import it.polito.dp2.NFV.NfvReader;
 import it.polito.dp2.NFV.NfvReaderException;
 import it.polito.dp2.NFV.NfvReaderFactory;
+import it.polito.dp2.NFV.lab1.NfvInfo;
 import it.polito.dp2.NFV.sol3.model.*;
 
 public class NfvDeployer {
-	private static final NfvDeployer INSTANCE = new NfvDeployer();
-	private String nfvPath = "";
-	private String hostsPath = "hosts";
-	private String nffgsPath = "nffgs";
-	private String catalogPath = "catalog";
-	private String connectionsPath = "connections";
-
-	private Nfv nfv;
-	private Hosts hosts;
-	private Nffgs nffgs;
-	private Catalog catalog;
-
-	private Map<String, Host> hostMap;
-	private Map<String, String> hostIds;
-	
-	private Map<String, Connections> connections;
-	
-	private Map<String, Vnf> vnfs;
-    
-    private NfvDeployer() {
-    	this.nfv = new Nfv();
-    	/*
-    	try {
-			NfvReader referenceNfvReader = NfvReaderFactory.newInstance().newNfvReader();
-		} catch (NfvReaderException e) {
-			System
+	private static final NfvDeployer INSTANCE;
+	static {
+		try {
+			INSTANCE = new NfvDeployer();
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (FactoryConfigurationError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ExceptionInInitializerError(e);
 		}
-		*/
+	}
+	
+	private static final String nfvPath = "";
+	private static final String hostsPath = "hosts";
+	private static final String nffgsPath = "nffgs";
+	private static final String catalogPath = "catalog";
+	private static final String connectionsPath = "connections";
+	private static final String nodesPath = "nodes";
+	private static final String linksPath = "links";
+
+	private Nfv nfv = new Nfv();
+	private Hosts hosts = new Hosts();
+	private Nffgs nffgs = new Nffgs();
+	private Nodes nodes = new Nodes();
+	private Catalog catalog = new Catalog();
+
+	private static Map<String, Host> hostMap = new HashMap<>(); //hostId, host
+	private static Map<String, String> hostIds = new HashMap<>(); //hostname, hostId
+	private static Map<String, Connections> connections = new HashMap<>(); //hostname, connections
+	private static Map<String, Vnf> vnfs = new HashMap<>(); //name,vnf
+	private static Map<String, Nffg> nffgMap = new HashMap<>(); //name,nffg
+	private static Map<String, Node> nodeMap = new HashMap<>(); //nodeId, node
+	private static Map<String, String> nodeIds = new HashMap<>(); //nodename, nodeId
+    
+    private NfvDeployer() throws DatatypeConfigurationException, NfvReaderException, FactoryConfigurationError {
     	
-    	Hyperlink hostsRef = createLink("/hosts");
-    	Hyperlink nffgsRef = createLink("/nffgs");
-    	Hyperlink catalogRef = createLink("/catalog");
+		NfvReader NfvReader = NfvReaderFactory.newInstance().newNfvReader();
+ 	
+    	this.nfv.setHosts(createLink(hostsPath));
+    	this.nfv.setNffgs(createLink(nffgsPath));
+    	this.nfv.setVnfCatalog(createLink(catalogPath));
     	
-    	this.nfv.setHosts(hostsRef);
-    	this.nfv.setNffgs(nffgsRef);
-    	this.nfv.setVnfCatalog(catalogRef);
+    	this.hosts.getHost().add(createNamedRef("host1", hostsPath+"/host1"));
+    	NfvDeployer.hostIds.put("host1", "1");
+    	NfvDeployer.hostMap.put("1", createHost("host1", 0, 0, 0));
     	
-    	this.hosts = new Hosts();
-    	this.hosts.getHost().add(createNamedRef("host1", "/hosts/host1"));
+    	this.nffgs.getNffg().add(createNamedRef("Nffg0", nffgsPath+"/Nffg0"));
+    	NfvDeployer.nffgMap.put("Nffg0", createNffg("Nffg0", nffgsPath+"/Nffg0", Calendar.getInstance()));
     	
-    	this.nffgs = new Nffgs();
-    	this.nffgs.getNffg().add(createNamedRef("Nffg0", "/nffgs/Nffg0"));
-    	
-    	this.catalog = new Catalog();
+    	this.nodes.getNode().add(createNamedRef("node1", nffgsPath+"/Nffg0"+nodesPath+"/node1"));
+
     	this.catalog.getVnf().add(createVnf(FunctionalType.FW, "fw1", "/catalog/fw1", BigInteger.valueOf(120), BigInteger.valueOf(240)));
-    	
-    	this.hostMap = new HashMap<>();
-    	this.hostIds = new HashMap<>();
-    	
-    	this.hostIds.put("host1", "1");
-    	this.hostMap.put("1", createHost("host1", 0, 0, 0));
-    	
-    	this.connections = new HashMap<>();
+
     };
+
+
+
+	private Nffg createNffg(String name, String ref, Calendar deployTime) throws DatatypeConfigurationException {
+		Nffg nffg = new Nffg();
+		nffg.setDeployTime(DatatypeFactory.newInstance().newXMLGregorianCalendar());
+		nffg.setName(name);
+		nffg.setHref(ref);
+		nffg.setNodes(createLink(nfvPath+"/"+NfvDeployer.nffgsPath+"/"+name+"/"+NfvDeployer.nodesPath));
+		nffg.setLinks(createLink(NfvDeployer.nfvPath+"/"+NfvDeployer.nffgsPath+"/"+name+"/"+NfvDeployer.linksPath));
+		return nffg;
+	}
 
 
 
@@ -118,7 +131,7 @@ public class NfvDeployer {
 	
 	private Host createHost(String name, Integer availableMem, Integer availableStorage, Integer maxVnfs) {
 		Host h = new Host();
-		h.setHref(this.nfvPath+"/"+this.hostsPath+"/"+name);
+		h.setHref(NfvDeployer.nfvPath+"/"+NfvDeployer.hostsPath+"/"+name);
 		h.setName(name);
 		h.setAvailableMemory(availableMem.toString());
 		h.setAvailableStorage(availableStorage.toString());
@@ -129,8 +142,8 @@ public class NfvDeployer {
 	}
 
 	public Host getHostByName(String name) {
-		String id = this.hostIds.get(name);
-		return this.hostMap.get(id);
+		String id = NfvDeployer.hostIds.get(name);
+		return NfvDeployer.hostMap.get(id);
 	}
 
 	public Vnf getVnfByName(String name) {
@@ -140,7 +153,14 @@ public class NfvDeployer {
 	public Connections getConnections(String hostName) {
 		// TODO Auto-generated method stub
 		String id = hostIds.get(hostName);
-		return this.connections.get(id);
+		return NfvDeployer.connections.get(id);
+	}
+
+
+
+	public Nffg getNffgByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
