@@ -92,7 +92,9 @@
 					<sequence>
 						<element name="host" type="tns:NamedEntity" />
 						<element name="vnf" type="tns:NamedEntity" />
-						<element name="reachableHosts" type="tns:Hyperlink" />
+						<element name="reachableHosts"
+							type="tns:Hyperlink" />
+						<element name="links" type="tns:Hyperlink"></element>
 					</sequence>
 				</extension>
 			</complexContent>

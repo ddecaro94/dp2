@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.11 alle 11:27:59 AM CET 
+// Generato il: 2018.01.11 alle 03:46:05 PM CET 
 //
 
 
@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="host" type="{http://www.polito.it/schemas/nfvInfo}NamedEntity"/>
  *         &lt;element name="vnf" type="{http://www.polito.it/schemas/nfvInfo}NamedEntity"/>
  *         &lt;element name="reachableHosts" type="{http://www.polito.it/schemas/nfvInfo}Hyperlink"/>
+ *         &lt;element name="links" type="{http://www.polito.it/schemas/nfvInfo}Hyperlink"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -40,7 +41,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "host",
     "vnf",
-    "reachableHosts"
+    "reachableHosts",
+    "links"
 })
 @XmlRootElement(name = "node")
 public class Node
@@ -53,6 +55,8 @@ public class Node
     protected NamedEntity vnf;
     @XmlElement(required = true)
     protected Hyperlink reachableHosts;
+    @XmlElement(required = true)
+    protected Hyperlink links;
 
     /**
      * Recupera il valore della proprietà host.
@@ -124,6 +128,30 @@ public class Node
      */
     public void setReachableHosts(Hyperlink value) {
         this.reachableHosts = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà links.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Hyperlink }
+     *     
+     */
+    public Hyperlink getLinks() {
+        return links;
+    }
+
+    /**
+     * Imposta il valore della proprietà links.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Hyperlink }
+     *     
+     */
+    public void setLinks(Hyperlink value) {
+        this.links = value;
     }
 
 }

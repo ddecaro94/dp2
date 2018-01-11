@@ -24,6 +24,9 @@ public class NfvResource {
 	private NffgsCollection nffgs = new NffgsCollection();
 	private CatalogCollection catalog = new CatalogCollection();
 	
+	public NfvResource() {
+		
+	}
 	@GET
     @ApiOperation(value = "Get the properties for the NFV system")
     @ApiResponses(value = {
@@ -52,10 +55,7 @@ public class NfvResource {
 	}
 	
 	@Path("catalog")
-    @ApiOperation(value = "Get the vnf catalog")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
+
 	public CatalogCollection getCatalog() {
 		return this.catalog;
 	}

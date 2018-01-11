@@ -25,8 +25,10 @@ public class HostsCollection {
 	}
 
 	@GET
+    @ApiOperation(value = "Get the host list")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Hosts getHosts() {
 		return deployer.getHosts();

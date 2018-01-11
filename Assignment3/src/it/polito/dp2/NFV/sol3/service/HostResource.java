@@ -27,6 +27,7 @@ public class HostResource {
 	@ApiOperation(value = "Get host info")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Host getHost() {
 		return this.deployer.getHostByName(name);

@@ -40,8 +40,6 @@
 		<echo>Done.</echo>
 	</target>
 
-
-
 	<!-- Target chk-bindings -->
 	<target name="-chk-bindings">
 		<uptodate property="generate-bindings.notRequired" targetfile="${model.dir}/.flagfile">
