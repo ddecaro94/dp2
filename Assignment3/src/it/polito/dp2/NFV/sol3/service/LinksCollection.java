@@ -15,18 +15,23 @@ import it.polito.dp2.NFV.sol3.model.Links;
 public class LinksCollection {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private String nodeName;
+	private String graphName;
 	
-	public LinksCollection() {
-		// TODO Auto-generated constructor stub
+	public LinksCollection(String graphName, String nodeName) {
+		this.nodeName = nodeName;
+		this.graphName = graphName;
+		System.out.println("GRAPH, NODE: "+graphName+" "+nodeName);
 	}
 	
 	@GET
-    @ApiOperation(value = "Get the forward relationships in a NF-FG")
+    @ApiOperation(value = "Get the forward relationships")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Links getLinks(String nffg) {
-		return deployer.getLinksByGraph(nffg);
+	public Links getLinks() {
+		return deployer.getLinks(graphName, nodeName);
 	}
+	
 }

@@ -31,10 +31,14 @@ public class NffgResource {
 		return this.deployer.getNffgByName(name);
 	}
 	
-	@Path("/nodes")
+	@Path(NfvDeployer.nodesPath)
 	public NodesCollection getNodes() {
 		return new NodesCollection(name);
 	}
 	
+	@Path(NfvDeployer.linksPath)
+	public LinksCollection getLinks() {
+		return new LinksCollection(name, null);
+	}
 
 }

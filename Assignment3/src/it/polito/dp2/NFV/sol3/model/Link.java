@@ -2,15 +2,17 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.11 alle 03:46:05 PM CET 
+// Generato il: 2018.01.12 alle 03:39:19 PM CET 
 //
 
 
 package it.polito.dp2.NFV.sol3.model;
 
+import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -22,9 +24,9 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="Link">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.polito.it/schemas/nfvInfo}NamedRelationship">
- *       &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="requiredThroughput" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *     &lt;extension base="{http://www.polito.it/schemas/nfv}NamedRelationship">
+ *       &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
+ *       &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -39,19 +41,20 @@ public class Link
 {
 
     @XmlAttribute(name = "requiredLatency")
-    protected String requiredLatency;
+    @XmlSchemaType(name = "nonNegativeInteger")
+    protected BigInteger requiredLatency;
     @XmlAttribute(name = "requiredThroughput")
-    protected String requiredThroughput;
+    protected Float requiredThroughput;
 
     /**
      * Recupera il valore della proprietà requiredLatency.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link BigInteger }
      *     
      */
-    public String getRequiredLatency() {
+    public BigInteger getRequiredLatency() {
         return requiredLatency;
     }
 
@@ -60,10 +63,10 @@ public class Link
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link BigInteger }
      *     
      */
-    public void setRequiredLatency(String value) {
+    public void setRequiredLatency(BigInteger value) {
         this.requiredLatency = value;
     }
 
@@ -72,10 +75,10 @@ public class Link
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Float }
      *     
      */
-    public String getRequiredThroughput() {
+    public Float getRequiredThroughput() {
         return requiredThroughput;
     }
 
@@ -84,10 +87,10 @@ public class Link
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Float }
      *     
      */
-    public void setRequiredThroughput(String value) {
+    public void setRequiredThroughput(Float value) {
         this.requiredThroughput = value;
     }
 

@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.11 alle 03:46:05 PM CET 
+// Generato il: 2018.01.12 alle 03:39:19 PM CET 
 //
 
 
@@ -25,11 +25,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.polito.it/schemas/nfvInfo}NamedEntity">
+ *     &lt;extension base="{http://www.polito.it/schemas/nfv}NamedEntity">
  *       &lt;sequence>
  *         &lt;element name="deployTime" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="nodes" type="{http://www.polito.it/schemas/nfvInfo}Hyperlink"/>
- *         &lt;element name="links" type="{http://www.polito.it/schemas/nfvInfo}Hyperlink"/>
+ *         &lt;element name="nodes" type="{http://www.polito.it/schemas/nfv}Hyperlink"/>
+ *         &lt;element name="links" type="{http://www.polito.it/schemas/nfv}Hyperlink"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>

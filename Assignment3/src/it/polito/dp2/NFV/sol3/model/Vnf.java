@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.11 alle 03:46:05 PM CET 
+// Generato il: 2018.01.12 alle 03:39:19 PM CET 
 //
 
 
@@ -25,10 +25,10 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.polito.it/schemas/nfvInfo}NamedEntity">
+ *     &lt;extension base="{http://www.polito.it/schemas/nfv}NamedEntity">
  *       &lt;attribute name="requiredMemory" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
  *       &lt;attribute name="requiredStorage" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
- *       &lt;attribute name="functionalType" use="required" type="{http://www.polito.it/schemas/nfvInfo}FunctionalType" />
+ *       &lt;attribute name="functionalType" use="required" type="{http://www.polito.it/schemas/nfv}FunctionalType" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>

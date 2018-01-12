@@ -36,7 +36,7 @@ public class NodesCollection {
 	
 	@Path("{nodeName}")
 	public NodeResource getNode(@PathParam("nodeName") String nodeName) {
-		return new NodeResource(nodeName);
+		return new NodeResource(graph, nodeName);
 	}
 
 }

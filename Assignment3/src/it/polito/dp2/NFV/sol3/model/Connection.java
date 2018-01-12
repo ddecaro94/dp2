@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.11 alle 03:46:05 PM CET 
+// Generato il: 2018.01.12 alle 03:39:19 PM CET 
 //
 
 
@@ -24,9 +24,9 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="Connection">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.polito.it/schemas/nfvInfo}Relationship">
- *       &lt;attribute name="throughput" use="required" type="{http://www.polito.it/schemas/nfvInfo}nonNegativeFloat" />
+ *     &lt;extension base="{http://www.polito.it/schemas/nfv}Relationship">
  *       &lt;attribute name="latency" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
+ *       &lt;attribute name="throughput" use="required" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -40,27 +40,11 @@ public class Connection
     extends Relationship
 {
 
-    @XmlAttribute(name = "throughput", required = true)
-    protected float throughput;
     @XmlAttribute(name = "latency", required = true)
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger latency;
-
-    /**
-     * Recupera il valore della proprietà throughput.
-     * 
-     */
-    public float getThroughput() {
-        return throughput;
-    }
-
-    /**
-     * Imposta il valore della proprietà throughput.
-     * 
-     */
-    public void setThroughput(float value) {
-        this.throughput = value;
-    }
+    @XmlAttribute(name = "throughput", required = true)
+    protected float throughput;
 
     /**
      * Recupera il valore della proprietà latency.
@@ -84,6 +68,22 @@ public class Connection
      */
     public void setLatency(BigInteger value) {
         this.latency = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà throughput.
+     * 
+     */
+    public float getThroughput() {
+        return throughput;
+    }
+
+    /**
+     * Imposta il valore della proprietà throughput.
+     * 
+     */
+    public void setThroughput(float value) {
+        this.throughput = value;
     }
 
 }

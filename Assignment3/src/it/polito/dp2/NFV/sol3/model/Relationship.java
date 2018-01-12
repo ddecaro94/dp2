@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.11 alle 03:46:05 PM CET 
+// Generato il: 2018.01.12 alle 03:39:19 PM CET 
 //
 
 
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * <pre>
  * &lt;complexType name="Relationship">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.polito.it/schemas/nfvInfo}Hyperlink">
+ *     &lt;extension base="{http://www.polito.it/schemas/nfv}Hyperlink">
  *       &lt;attribute name="src" use="required" type="{http://www.w3.org/2001/XMLSchema}token" />
  *       &lt;attribute name="dst" use="required" type="{http://www.w3.org/2001/XMLSchema}token" />
  *     &lt;/extension>

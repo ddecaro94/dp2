@@ -33,7 +33,7 @@ public class HostResource {
 		return this.deployer.getHostByName(name);
 	}
 	
-	@Path("connections")
+	@Path(NfvDeployer.connectionsPath)
 	public ConnectionsCollection getConnections(@PathParam("name") String hostName) {
 		return new ConnectionsCollection(hostName);
 	}

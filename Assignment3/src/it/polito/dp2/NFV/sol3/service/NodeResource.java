@@ -2,6 +2,7 @@ package it.polito.dp2.NFV.sol3.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -17,10 +18,11 @@ public class NodeResource {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private String name;
+	private String graphName;
 	
-	public NodeResource(String nodeName) {
-		// TODO Auto-generated constructor stub
+	public NodeResource(String graphName, String nodeName) {
 		this.name = nodeName;
+		this.graphName = graphName;
 	}
 	
 	@GET
@@ -31,6 +33,11 @@ public class NodeResource {
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node getNode() {
 		return this.deployer.getNode(name);
+	}
+	
+	@Path(NfvDeployer.linksPath)
+	public LinksCollection getLinks() {
+		return new LinksCollection(graphName, name);
 	}
 
 }

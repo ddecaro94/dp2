@@ -36,7 +36,7 @@ public class NfvResource {
 		return this.deployer.getNfv();
 	}
 	
-	@Path("hosts")
+	@Path(NfvDeployer.hostsPath)
     @ApiOperation(value = "Get the hosts collection")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
@@ -45,7 +45,7 @@ public class NfvResource {
 		return this.hosts;
 	}
 
-	@Path("nffgs")
+	@Path(NfvDeployer.nffgsPath)
     @ApiOperation(value = "Get the nffgs collection")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
@@ -54,8 +54,7 @@ public class NfvResource {
 		return this.nffgs;
 	}
 	
-	@Path("catalog")
-
+	@Path(NfvDeployer.catalogPath)
 	public CatalogCollection getCatalog() {
 		return this.catalog;
 	}
