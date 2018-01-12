@@ -15,6 +15,7 @@
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.8" />
 	<property name="source" value="1.8" />
+	<property name="data.name" value="Neo4JSimpleXML" />
 
 	<!-- Target init	-->
 	<target name="init">
@@ -22,7 +23,7 @@
 		<mkdir dir="${gen.dir}" />
 	</target>
 
-	<target name="build-service" depends="generate-bindings">
+	<target name="build-service" depends="generate-bindings, generate-artifacts">
 		<echo>Building NfvDeployer (if needed)...</echo>
 		<javac 
 			destdir="${build.dir}"
@@ -72,6 +73,23 @@
 		<fileset dir="${ext.lib.dir}" includes="*.jar" excludes="ant-*" />
 		<fileset dir="${ext.lib.dir}" includes="javax.ws.rs-api-2.1.jar" />
 	</path>
+	
+	<taskdef name="wjc" classname="org.jvnet.ws.wadl2java.WJCTask">
+		<classpath>
+			<fileset dir="${ext.lib.dir}" includes="*.jar" />
+		</classpath>
+	</taskdef>
+	
+	<target name="generate-artifacts">
+		<mkdir dir="${src.dir}" />
+		<echo message="Compiling the descriptions..." />
+		<wjc description="${Neo4JSimpleXMLWADL}" package="it.polito.dp2.NFV.sol3.data" autoSchemaPackage="false" target="${src.dir}">
+			<customizations dir="${basedir}" includes="binding.xjc" />
+			<produces dir="${src.dir}/it/polito/dp2/NFV/sol3/data" includes="*.java" />
+			<depends dir="${basedir}" includes="build.xml" />
+			<customClassName uri="${Neo4JSimpleXMLURL}/" classname="${data.name}" />
+		</wjc>
+	</target>
 
 
 
