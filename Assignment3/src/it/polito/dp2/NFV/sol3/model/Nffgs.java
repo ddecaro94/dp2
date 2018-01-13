@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.13 alle 12:28:56 PM CET 
+// Generato il: 2018.01.13 alle 05:08:18 PM CET 
 //
 
 
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -27,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="nffg" type="{http://www.polito.it/schemas/nfv}NamedEntity" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="deployments" type="{http://www.polito.it/schemas/nfv}Hyperlink"/>
+ *         &lt;element name="undeployments" type="{http://www.polito.it/schemas/nfv}Hyperlink"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,12 +40,18 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "nffg"
+    "nffg",
+    "deployments",
+    "undeployments"
 })
 @XmlRootElement(name = "nffgs")
 public class Nffgs {
 
     protected List<NamedEntity> nffg;
+    @XmlElement(required = true)
+    protected Hyperlink deployments;
+    @XmlElement(required = true)
+    protected Hyperlink undeployments;
 
     /**
      * Gets the value of the nffg property.
@@ -71,6 +80,54 @@ public class Nffgs {
             nffg = new ArrayList<NamedEntity>();
         }
         return this.nffg;
+    }
+
+    /**
+     * Recupera il valore della proprietà deployments.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Hyperlink }
+     *     
+     */
+    public Hyperlink getDeployments() {
+        return deployments;
+    }
+
+    /**
+     * Imposta il valore della proprietà deployments.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Hyperlink }
+     *     
+     */
+    public void setDeployments(Hyperlink value) {
+        this.deployments = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà undeployments.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Hyperlink }
+     *     
+     */
+    public Hyperlink getUndeployments() {
+        return undeployments;
+    }
+
+    /**
+     * Imposta il valore della proprietà undeployments.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Hyperlink }
+     *     
+     */
+    public void setUndeployments(Hyperlink value) {
+        this.undeployments = value;
     }
 
 }

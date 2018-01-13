@@ -8,8 +8,6 @@
 
 package it.polito.dp2.NFV.sol3.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -36,18 +34,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="status" type="{http://www.polito.it/schemas/nfv}StatusType" minOccurs="0"/>
  *         &lt;element name="detail" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nffg" type="{http://www.polito.it/schemas/nfv}NamedEntity"/>
- *         &lt;element name="preferences" maxOccurs="unbounded" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="node" type="{http://www.polito.it/schemas/nfv}NamedEntity"/>
- *                   &lt;element name="host" type="{http://www.polito.it/schemas/nfv}NamedEntity"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}token" />
  *     &lt;/restriction>
@@ -62,11 +48,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "time",
     "status",
     "detail",
-    "nffg",
-    "preferences"
+    "nffg"
 })
-@XmlRootElement(name = "deployment")
-public class Deployment {
+@XmlRootElement(name = "undeployment")
+public class Undeployment {
 
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar time;
@@ -76,7 +61,6 @@ public class Deployment {
     protected String detail;
     @XmlElement(required = true)
     protected NamedEntity nffg;
-    protected List<Deployment.Preferences> preferences;
     @XmlAttribute(name = "id")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -179,35 +163,6 @@ public class Deployment {
     }
 
     /**
-     * Gets the value of the preferences property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the preferences property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getPreferences().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Deployment.Preferences }
-     * 
-     * 
-     */
-    public List<Deployment.Preferences> getPreferences() {
-        if (preferences == null) {
-            preferences = new ArrayList<Deployment.Preferences>();
-        }
-        return this.preferences;
-    }
-
-    /**
      * Recupera il valore della proprietà id.
      * 
      * @return
@@ -229,89 +184,6 @@ public class Deployment {
      */
     public void setId(String value) {
         this.id = value;
-    }
-
-
-    /**
-     * <p>Classe Java per anonymous complex type.
-     * 
-     * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element name="node" type="{http://www.polito.it/schemas/nfv}NamedEntity"/>
-     *         &lt;element name="host" type="{http://www.polito.it/schemas/nfv}NamedEntity"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "node",
-        "host"
-    })
-    public static class Preferences {
-
-        @XmlElement(required = true)
-        protected NamedEntity node;
-        @XmlElement(required = true)
-        protected NamedEntity host;
-
-        /**
-         * Recupera il valore della proprietà node.
-         * 
-         * @return
-         *     possible object is
-         *     {@link NamedEntity }
-         *     
-         */
-        public NamedEntity getNode() {
-            return node;
-        }
-
-        /**
-         * Imposta il valore della proprietà node.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link NamedEntity }
-         *     
-         */
-        public void setNode(NamedEntity value) {
-            this.node = value;
-        }
-
-        /**
-         * Recupera il valore della proprietà host.
-         * 
-         * @return
-         *     possible object is
-         *     {@link NamedEntity }
-         *     
-         */
-        public NamedEntity getHost() {
-            return host;
-        }
-
-        /**
-         * Imposta il valore della proprietà host.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link NamedEntity }
-         *     
-         */
-        public void setHost(NamedEntity value) {
-            this.host = value;
-        }
-
     }
 
 }

@@ -18,7 +18,7 @@ import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Link;
 import it.polito.dp2.NFV.sol3.model.Links;
 
-@Api(hidden = true, value = NfvDeployer.linksPath)
+@Api(hidden = true)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class LinksCollection {
@@ -26,7 +26,6 @@ public class LinksCollection {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private String nodeName;
 	private String graphName;
-	private Map<String, LinkResource> links = new HashMap<>();
 	
 	public LinksCollection(String graphName, String nodeName) {
 		this.nodeName = nodeName;
@@ -43,9 +42,15 @@ public class LinksCollection {
 		return deployer.getLinks(graphName, nodeName);
 	}
 	
+	@GET
     @Path("{linkName}")
-	public LinkResource getLink(@PathParam("linkName") String name) {
-		return links.getOrDefault(name, new LinkResource(graphName, name));
+    @ApiOperation(value = "Get link information")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Link.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Link getLink(@PathParam("linkName") String name) {
+		return deployer.getLink(graphName, name);
 	}
 	
 }

@@ -9,7 +9,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -25,6 +27,7 @@ import it.polito.dp2.NFV.sol3.model.*;
 public class HostsCollection {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private Map<String, HostResource> hostResources = new HashMap<>();
+	
 	
 	public HostsCollection() {
 		
@@ -50,8 +53,8 @@ public class HostsCollection {
 		return h;
 	}
 
-    @Path("{name}")
-	public HostResource getHost(@PathParam("name") String name) {
+    @Path("{hostName}")
+	public HostResource getHost(@PathParam("hostName") String name) {
 		return hostResources.getOrDefault(name, new HostResource(name));
 	}
 

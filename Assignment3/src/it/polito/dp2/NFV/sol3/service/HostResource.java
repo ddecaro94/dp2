@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Host;
 
 @Api(hidden = true, value = NfvDeployer.hostsPath)
@@ -20,11 +21,9 @@ public class HostResource {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private String name;
-	private ConnectionsCollection connections;
 	
 	public HostResource(String name) {
 		this.name = name;
-		this.connections = new ConnectionsCollection(name);
 	}
 	
 	@GET
@@ -37,9 +36,15 @@ public class HostResource {
 		return this.deployer.getHostByName(name);
 	}
 	
+	@GET
 	@Path(NfvDeployer.connectionsPath)
-	public ConnectionsCollection getConnections(@PathParam("name") String hostName) {
-		return connections;
+	@ApiOperation(value = "Get connections list")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Connections.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Connections getConnections() {
+		return deployer.getConnections(name);
 	}
 
 }

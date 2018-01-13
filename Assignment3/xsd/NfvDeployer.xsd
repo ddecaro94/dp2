@@ -32,6 +32,8 @@
 			<sequence>
 				<element name="nffg" maxOccurs="unbounded" minOccurs="0"
 					type="tns:NamedEntity" />
+				<element name="deployments" type="tns:Hyperlink"></element>
+				<element name="undeployments" type="tns:Hyperlink"></element>
 			</sequence>
 		</complexType>
 		<key name="graphNameKey">
@@ -70,8 +72,7 @@
 	<element name="links">
 		<complexType>
 			<sequence>
-				<element name="link" minOccurs="0" maxOccurs="unbounded"
-					type="tns:NamedRelationship" />
+				<element ref="tns:link" minOccurs="0" maxOccurs="unbounded" />
 			</sequence>
 		</complexType>
 	</element>
@@ -104,7 +105,7 @@
 						<element name="host" type="tns:NamedEntity" />
 						<element name="vnf" type="tns:NamedEntity" />
 						<element name="reachableHosts" type="tns:Hyperlink" />
-						<element name="links" type="tns:Hyperlink"></element>
+						<element name="links" type="tns:Hyperlink" />
 					</sequence>
 				</extension>
 			</complexContent>
@@ -130,8 +131,8 @@
 			<complexContent>
 				<extension base="tns:NamedEntity">
 					<sequence>
-						<element name="deployedNodes" type="tns:Hyperlink">
-						</element>
+						<element name="deployedNodes" type="tns:Hyperlink" />
+
 						<element name="connections" type="tns:Hyperlink" />
 					</sequence>
 					<attribute name="availableMemory" type="nonNegativeInteger"
@@ -225,6 +226,15 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="StatusType">
+		<restriction base="string">
+			<enumeration value="NEW" />
+			<enumeration value="IN PROGRESS" />
+			<enumeration value="SUCCESSFUL" />
+			<enumeration value="FAILED" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="nonNegativeFloat">
 		<restriction base="float">
 			<minInclusive value="0" />
@@ -234,29 +244,60 @@
 	<element name="deployment">
 		<complexType>
 			<sequence>
+				<element name="time" type="dateTime" minOccurs="0"
+					maxOccurs="1" />
+				<element name="status" type="tns:StatusType" default="NEW"
+					minOccurs="0" maxOccurs="1" />
+				<element name="detail" type="string" minOccurs="0"
+					maxOccurs="1" />
 				<element name="nffg" type="tns:NamedEntity" minOccurs="1"
-					maxOccurs="1">
-				</element>
+					maxOccurs="1" />
+
 				<element name="preferences" minOccurs="0" maxOccurs="unbounded">
 					<complexType>
 						<sequence>
-							<element name="node" type="tns:NamedEntity">
-							</element>
-							<element name="host" type="tns:NamedEntity">
-							</element>
+							<element name="node" type="tns:NamedEntity" />
+
+							<element name="host" type="tns:NamedEntity" />
+
 						</sequence>
 					</complexType>
 				</element>
 			</sequence>
-			<attribute name="id" type="token"></attribute>
+			<attribute name="id" type="token" use="optional" />
 		</complexType>
 	</element>
 
-    <element name="deployments">
-    <complexType>
-    <sequence>
-    <element ref="tns:deployment" minOccurs="0" maxOccurs="unbounded"></element>
-    </sequence>
-    </complexType>
-    </element>
+	<element name="undeployment">
+		<complexType>
+			<sequence>
+				<element name="time" type="dateTime" minOccurs="0"
+					maxOccurs="1" />
+				<element name="status" type="tns:StatusType" default="NEW"
+					minOccurs="0" maxOccurs="1" />
+				<element name="detail" type="string" minOccurs="0"
+					maxOccurs="1" />
+				<element name="nffg" type="tns:NamedEntity" minOccurs="1"
+					maxOccurs="1" />
+
+			</sequence>
+			<attribute name="id" type="token" use="optional" />
+		</complexType>
+	</element>
+
+	<element name="deployments">
+		<complexType>
+			<sequence>
+				<element ref="tns:deployment" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="undeployments">
+		<complexType>
+			<sequence>
+				<element ref="tns:undeployment" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
 </schema>

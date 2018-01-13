@@ -18,7 +18,7 @@ import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Node;
 import it.polito.dp2.NFV.sol3.model.Nodes;
 
-@Api(hidden = true, value = NfvDeployer.nodesPath)
+@Api(hidden = true)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodesCollection {

@@ -1,10 +1,13 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -13,7 +16,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.*;
 
-@Path("/")
+
+@Singleton
+@Path("")
 @Api(value = "/")
 @ApiModel(description = "A resource representing a Network Function Virtualization")
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -24,8 +29,8 @@ public class NfvResource {
 	private NffgsCollection nffgs = new NffgsCollection();
 	private CatalogCollection catalog = new CatalogCollection();
 	
+	
 	public NfvResource() {
-		
 	}
 	@GET
     @ApiOperation(value = "Get the properties for the NFV system")

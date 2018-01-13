@@ -40,6 +40,7 @@ public class NfvDeployer {
 	public static final String nodesPath = "nodes";
 	public static final String reachableHostsPath = "reachableHosts";
 	public static final String deploymentsPath = "deployments";
+	public static final String undeploymentsPath = "undeployments";
 
 	private static NfvDeployer INSTANCE;
 	static {
@@ -93,7 +94,9 @@ public class NfvDeployer {
 			this.nfv.setHosts(createHyperlink(baseUri + hostsPath));
 			this.nfv.setNffgs(createHyperlink(baseUri + nffgsPath));
 			this.nfv.setVnfCatalog(createHyperlink(baseUri + catalogPath));
-
+			this.nffgs.setDeployments(createHyperlink(baseUri + nffgsPath + "/" + deploymentsPath));
+			this.nffgs.setUndeployments(createHyperlink(baseUri + nffgsPath + "/" + undeploymentsPath));
+			
 			for (VNFTypeReader t : reader.getVNFCatalog()) {
 				createVnf(FunctionalType.fromValue(t.getFunctionalType().toString()), t.getName(),
 						baseUri + catalogPath + "/" + t.getName(), BigInteger.valueOf(t.getRequiredMemory()),
@@ -254,13 +257,7 @@ public class NfvDeployer {
 				it.polito.dp2.NFV.sol3.data.Relationship createdLink = this.dataApi
 						.nodeNodeidRelationships(this.nodeIds.get(srcNode))
 						.postXml(requestedLink, it.polito.dp2.NFV.sol3.data.Relationship.class);
-
-				NamedRelationship r = new NamedRelationship();
-				r.setName(linkName);
-				r.setHref(baseUri + nffgsPath + "/" + graphName + "/" + NfvDeployer.linksPath + "/" + linkName);
-				r.setSrc(srcNode);
-				r.setDst(dstNode);
-
+				
 				Link l = new Link();
 				l.setName(linkName);
 				l.setHref(baseUri + nffgsPath + "/" + graphName + "/" + NfvDeployer.linksPath + "/" + linkName);
@@ -269,7 +266,7 @@ public class NfvDeployer {
 				l.setRequiredLatency(BigInteger.valueOf(minLatency));
 				l.setRequiredThroughput(minThroughput);
 
-				nffgLinks.get(graphName).getLink().add(r);
+				nffgLinks.get(graphName).getLink().add(l);
 				links.put(createdLink.getId(), l);
 				linkIds.get(graphName).put(linkName, l);
 
@@ -314,7 +311,10 @@ public class NfvDeployer {
 			node.setName(nodeName);
 			node.setHref(baseUri + nffgsPath + "/" + nffg + "/" + nodesPath + "/" + nodeName);
 			node.setReachableHosts(createHyperlink(node.getHref() + "/" + reachableHostsPath));
-			node.setVnf(vnfs.get(type));
+			NamedEntity vnfRef = new NamedEntity();
+			vnfRef.setName(vnfs.get(type).getName());
+			vnfRef.setName(vnfs.get(type).getHref());
+			node.setVnf(vnfRef);
 			node.setLinks(createHyperlink(node.getHref() + "/" + linksPath));
 
 			nodeIds.put(nodeName, createdNode.getId());
@@ -533,6 +533,11 @@ public class NfvDeployer {
 			
 		} else
 			throw new NotFoundException("No node defined for name " + nodeName);
+	}
+
+	public Node deleteNode(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.13 alle 12:28:56 PM CET 
+// Generato il: 2018.01.13 alle 05:08:18 PM CET 
 //
 
 
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="link" type="{http://www.polito.it/schemas/nfv}NamedRelationship" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://www.polito.it/schemas/nfv}link" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -42,7 +43,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "links")
 public class Links {
 
-    protected List<NamedRelationship> link;
+    @XmlElement(namespace = "http://www.polito.it/schemas/nfv")
+    protected List<Link> link;
 
     /**
      * Gets the value of the link property.
@@ -62,13 +64,13 @@ public class Links {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link NamedRelationship }
+     * {@link Link }
      * 
      * 
      */
-    public List<NamedRelationship> getLink() {
+    public List<Link> getLink() {
         if (link == null) {
-            link = new ArrayList<NamedRelationship>();
+            link = new ArrayList<Link>();
         }
         return this.link;
     }

@@ -1,8 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Catalog;
+import it.polito.dp2.NFV.sol3.model.Vnf;
 
 @Api(hidden = true, value = "/"+NfvDeployer.catalogPath)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -23,8 +21,10 @@ import it.polito.dp2.NFV.sol3.model.Catalog;
 public class CatalogCollection {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
-	private Map<String, VnfResource> vnfResources = new HashMap<>();
 	
+	public CatalogCollection () {
+		System.out.println("CATALOG");
+	}
 	@GET
     @ApiOperation(value = "Get the vnf catalog")
     @ApiResponses(value = {
@@ -34,9 +34,15 @@ public class CatalogCollection {
 		return deployer.getCatalog();
 	}
 	
-	@Path("{name}")
-	public VnfResource getVnfByName(@PathParam("name") String name) {
-		return vnfResources.getOrDefault(name, new VnfResource(name));
+	@GET
+	@Path("{vnfName}")
+	@ApiOperation(value = "Get vnf info")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Vnf.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Vnf getVnf(@PathParam("vnfName") String vnfName) {
+		return this.deployer.getVnfByName(vnfName);
 	}
 
 }

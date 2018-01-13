@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.13 alle 12:28:56 PM CET 
+// Generato il: 2018.01.13 alle 05:08:18 PM CET 
 //
 
 
@@ -61,6 +61,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Hyperlink }
+     * 
+     */
+    public Hyperlink createHyperlink() {
+        return new Hyperlink();
+    }
+
+    /**
      * Create an instance of {@link Catalog }
      * 
      */
@@ -77,19 +85,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hyperlink }
-     * 
-     */
-    public Hyperlink createHyperlink() {
-        return new Hyperlink();
-    }
-
-    /**
      * Create an instance of {@link Hosts }
      * 
      */
     public Hosts createHosts() {
         return new Hosts();
+    }
+
+    /**
+     * Create an instance of {@link Undeployments }
+     * 
+     */
+    public Undeployments createUndeployments() {
+        return new Undeployments();
+    }
+
+    /**
+     * Create an instance of {@link Undeployment }
+     * 
+     */
+    public Undeployment createUndeployment() {
+        return new Undeployment();
     }
 
     /**
