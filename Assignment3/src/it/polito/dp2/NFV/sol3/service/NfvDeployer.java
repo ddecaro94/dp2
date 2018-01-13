@@ -449,8 +449,10 @@ public class NfvDeployer {
 		else {
 			Nffgs set = new Nffgs();
 			for (NamedEntity n : nffgs.getNffg()) {
-				if (nffgMap.get(n.getName()).getDeployTime().toGregorianCalendar().getTime().compareTo(from) >= 0) {
-					set.getNffg().add(n);
+				if (nffgMap.get(n.getName()).getDeployTime() != null) {
+					if (nffgMap.get(n.getName()).getDeployTime().toGregorianCalendar().getTime().compareTo(from) >= 0) {
+						set.getNffg().add(n);
+					}
 				}
 			}
 
