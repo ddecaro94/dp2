@@ -5,15 +5,17 @@ import java.net.URI;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
+
 import javax.ws.rs.WebApplicationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import com.sun.jersey.api.client.ClientResponse;
-
+import it.polito.dp2.NFV.sol3.service.NotDefinedException;
 import it.polito.dp2.NFV.FactoryConfigurationError;
 import it.polito.dp2.NFV.HostReader;
 import it.polito.dp2.NFV.LinkReader;
@@ -136,10 +138,13 @@ public class NfvDeployer {
 				for (NodeReader node : graph.getNodes()) {
 					try {
 						// create node
-						createNode(graph.getName(), node.getName(), node.getFuncType().getName());
+						createNode(graph.getName(), node.getName(), node.getFuncType().getName(), false);
 
 					} catch (AlreadyLoadedException e) {
 						// continue, the node is already loaded but nodes are system-wide
+					} catch (NotDefinedException e) {
+						e.printStackTrace();
+						throw new InternalServerErrorException(e);
 					}
 				}
 				// create NF-FGs links
@@ -149,7 +154,7 @@ public class NfvDeployer {
 						// create links having the node as source
 						try {
 							createLink(graph.getName(), link.getName(), link.getSourceNode().getName(),
-									link.getDestinationNode().getName(), link.getLatency(), link.getThroughput());
+									link.getDestinationNode().getName(), link.getLatency(), link.getThroughput(), false);
 						} catch (AlreadyLoadedException e) {
 							throw new InternalServerErrorException(e);
 						}
@@ -245,10 +250,12 @@ public class NfvDeployer {
 	}
 
 	public Link createLink(String graphName, String linkName, String srcNode, String dstNode, int minLatency,
-			float minThroughput) throws AlreadyLoadedException, NotFoundException {
+			float minThroughput, boolean replace) throws AlreadyLoadedException, NotFoundException {
 		// TODO
 		if (linkIds.containsKey(graphName)) {
-			if (!linkIds.get(graphName).containsKey(linkName)) {
+			boolean exists = linkIds.get(graphName).containsKey(linkName);
+			if (exists && !replace) throw new AlreadyLoadedException("Link " + linkName + " already loaded");
+			
 				it.polito.dp2.NFV.sol3.data.Relationship requestedLink = new it.polito.dp2.NFV.sol3.data.Relationship();
 
 				requestedLink.setDstNode(this.nodeIds.get(dstNode));
@@ -266,24 +273,41 @@ public class NfvDeployer {
 				l.setRequiredLatency(BigInteger.valueOf(minLatency));
 				l.setRequiredThroughput(minThroughput);
 
-				nffgLinks.get(graphName).getLink().add(l);
-				links.put(createdLink.getId(), l);
-				linkIds.get(graphName).put(linkName, l);
+				if (exists) {
+					if (replace) {
+						List<Link> list = nffgLinks.get(graphName).getLink();
+						for (int i = 0; i < list.size(); i++) {
+							if (list.get(i).getName().equals(l.getName())) {
+								list.remove(i);
+								list.add(l);
+							}
+						}
+						links.put(createdLink.getId(), l);
+						linkIds.get(graphName).put(linkName, l);
+					} else {
+						//should not happen
+						throw new AlreadyLoadedException("Link " + linkName + " already loaded");
+					}
+				} else {
+					nffgLinks.get(graphName).getLink().add(l);
+					links.put(createdLink.getId(), l);
+					linkIds.get(graphName).put(linkName, l);
+				}
 
 				return l;
 
-			}
-			throw new AlreadyLoadedException("Link " + linkName + " already loaded");
 		}
 		throw new NotFoundException("NF-FG " + graphName + " not found");
 
 	}
 
-	public String createNode(String nffg, String nodeName, String type) throws AlreadyLoadedException {
+	public Node createNode(String nffg, String nodeName, String type, boolean replace) throws AlreadyLoadedException, NotDefinedException {
+		boolean exists = this.nodeIds.containsKey(nodeName);
+		
+		if (exists && !replace) throw new AlreadyLoadedException("Node " + nodeName + " already loaded");
+		// the node has not already been created, nodes are unique system-wide
 
-		if (!this.nodeIds.containsKey(nodeName)) {
-			// the node has not already been created, nodes are unique system-wide
-
+			
 			it.polito.dp2.NFV.sol3.data.Node requestedNode = new it.polito.dp2.NFV.sol3.data.Node();
 			Labels labels = new Labels();
 			labels.getLabel().add("Node");
@@ -307,26 +331,45 @@ public class NfvDeployer {
 			if (r.getStatus() >= 400)
 				throw new WebApplicationException("Unable to create labels for node with id " + createdNode.getId());
 
+		
 			Node node = new Node();
 			node.setName(nodeName);
 			node.setHref(baseUri + nffgsPath + "/" + nffg + "/" + nodesPath + "/" + nodeName);
 			node.setReachableHosts(createHyperlink(node.getHref() + "/" + reachableHostsPath));
 			NamedEntity vnfRef = new NamedEntity();
+			
+			if (!vnfs.containsKey(type)) throw new NotDefinedException("Unable to create labels for node with id " + createdNode.getId());
 			vnfRef.setName(vnfs.get(type).getName());
-			vnfRef.setName(vnfs.get(type).getHref());
+			vnfRef.setHref(vnfs.get(type).getHref());
 			node.setVnf(vnfRef);
 			node.setLinks(createHyperlink(node.getHref() + "/" + linksPath));
 
-			nodeIds.put(nodeName, createdNode.getId());
-			this.nodeMap.put(createdNode.getId(), node);
+			if (exists) {
+				if (replace) {
+					List<NamedEntity> list = this.nffgNodes.get(nffg).getNode();
+					for (int i = 0; i < list.size(); i++) {
+						if (list.get(i).getName().equals(nodeName)) {
+							list.remove(i);
+							list.add(createNamedRef(nodeName, node.getHref()));
+						}
+					}
+					
+					nodeIds.put(nodeName, createdNode.getId());
+					this.nodeMap.put(createdNode.getId(), node);
+				} else {
+					//should not happen
+					throw new AlreadyLoadedException("Node " + nodeName + " already loaded");
+				}
+			} else {
+				nodeIds.put(nodeName, createdNode.getId());
+				this.nodeMap.put(createdNode.getId(), node);
 
-			this.nffgNodes.get(nffg).getNode().add(createNamedRef(nodeName, node.getHref()));
+				this.nffgNodes.get(nffg).getNode().add(createNamedRef(nodeName, node.getHref()));
+			}
 
-			return createdNode.getId();
+			return node;
 
-		} else {
-			throw new AlreadyLoadedException("Node " + nodeName + " already loaded");
-		}
+
 
 	}
 
@@ -536,6 +579,11 @@ public class NfvDeployer {
 	}
 
 	public Node deleteNode(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Link replaceLink(Link link) {
 		// TODO Auto-generated method stub
 		return null;
 	}

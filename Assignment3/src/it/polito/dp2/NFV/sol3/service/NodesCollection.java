@@ -3,8 +3,10 @@ package it.polito.dp2.NFV.sol3.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,7 +16,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Node;
 import it.polito.dp2.NFV.sol3.model.Nodes;
 
@@ -39,6 +40,27 @@ public class NodesCollection {
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nodes getNodes() {
 		return deployer.getNodes(graph);
+	}
+	
+	@POST
+	@ApiOperation(value = "Create node inside deployed NF-FG")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Nodes.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 422, message = "Unprocessable Entity"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Node postNode(Node node) {
+		if (deployer.getNffgByName(graph).getDeployTime() != null) {
+			
+		} else throw new NotDeployedException("NF-FG "+graph+" not deployed", 422);
+		
+		try {
+			return deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
+		} catch (AlreadyLoadedException e) {
+			throw new ClientErrorException(e.getMessage(), 422);
+		} catch (NotDefinedException e) {
+			throw new ClientErrorException(e.getMessage(), 422);
+		}
 	}
 	
 	@Path("{nodeName}")
