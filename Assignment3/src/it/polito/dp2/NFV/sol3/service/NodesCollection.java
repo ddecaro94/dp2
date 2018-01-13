@@ -1,5 +1,8 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,6 +22,7 @@ public class NodesCollection {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private String graph;
+	private Map<String, NodeResource> nodeResources = new HashMap<>();
 	
 	public NodesCollection(String name) {
 		this.graph = name;
@@ -36,7 +40,7 @@ public class NodesCollection {
 	
 	@Path("{nodeName}")
 	public NodeResource getNode(@PathParam("nodeName") String nodeName) {
-		return new NodeResource(graph, nodeName);
+		return nodeResources.getOrDefault(nodeName, new NodeResource(graph, nodeName));
 	}
 
 }

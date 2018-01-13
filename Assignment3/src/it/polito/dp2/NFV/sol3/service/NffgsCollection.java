@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -27,16 +29,15 @@ import it.polito.dp2.NFV.sol3.model.Nffgs;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NffgsCollection {
 
-	
-	
 	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private Map<String, NffgResource> nffgResources = new HashMap<>();
+	private DeploymentsCollection deployments = new DeploymentsCollection();
 	
 	@GET
 	@ApiOperation(value = "Get the list of deployed nffgs")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	
 	public Nffgs getNffgs(@QueryParam("deployTime") String date) {
 		if (date == null) return deployer.getNffgs(null);
 		try {
@@ -49,7 +50,12 @@ public class NffgsCollection {
 	
     @Path("{name}")
 	public NffgResource getNffg(@PathParam("name") String name) {
-		return new NffgResource(name);
+		return nffgResources.getOrDefault(name, new NffgResource(name));
+	}
+    
+	@Path(NfvDeployer.deploymentsPath)
+	public DeploymentsCollection deployments() {
+		return deployments;
 	}
 
 }

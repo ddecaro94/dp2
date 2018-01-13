@@ -1,5 +1,8 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,6 +20,7 @@ import it.polito.dp2.NFV.sol3.model.Catalog;
 public class CatalogCollection {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private Map<String, VnfResource> vnfResources = new HashMap<>();
 	
 	@GET
     @ApiOperation(value = "Get the vnf catalog")
@@ -29,7 +33,7 @@ public class CatalogCollection {
 	
 	@Path("{name}")
 	public VnfResource getVnfByName(@PathParam("name") String name) {
-		return new VnfResource(name);
+		return vnfResources.getOrDefault(name, new VnfResource(name));
 	}
 
 }

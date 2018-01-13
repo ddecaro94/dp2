@@ -1,7 +1,11 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +23,7 @@ import it.polito.dp2.NFV.sol3.model.*;
 @ApiModel(description = "A resource representing a set of hosts")
 public class HostsCollection {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private Map<String, HostResource> hostResources = new HashMap<>();
 	
 	public HostsCollection() {
 		
@@ -33,10 +38,20 @@ public class HostsCollection {
 	public Hosts getHosts() {
 		return deployer.getHosts();
 	}
+	
+	@POST
+    @ApiOperation(value = "Create a host")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Host postHosts(Host h) {
+		return h;
+	}
 
     @Path("{name}")
 	public HostResource getHost(@PathParam("name") String name) {
-		return new HostResource(name);
+		return hostResources.getOrDefault(name, new HostResource(name));
 	}
 
 }

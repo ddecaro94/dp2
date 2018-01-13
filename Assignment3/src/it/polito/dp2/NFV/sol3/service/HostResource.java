@@ -18,9 +18,11 @@ public class HostResource {
 
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private String name;
+	private ConnectionsCollection connections;
 	
 	public HostResource(String name) {
 		this.name = name;
+		this.connections = new ConnectionsCollection(name);
 	}
 	
 	@GET
@@ -35,7 +37,7 @@ public class HostResource {
 	
 	@Path(NfvDeployer.connectionsPath)
 	public ConnectionsCollection getConnections(@PathParam("name") String hostName) {
-		return new ConnectionsCollection(hostName);
+		return connections;
 	}
 
 }

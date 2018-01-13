@@ -19,10 +19,14 @@ public class NodeResource {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private String name;
 	private String graphName;
+	private ReachableHostsCollection reachableHosts;
+	private LinksCollection links;
 	
 	public NodeResource(String graphName, String nodeName) {
 		this.name = nodeName;
 		this.graphName = graphName;
+		this.reachableHosts = new ReachableHostsCollection(name);
+		this.links = new LinksCollection(graphName, name);
 	}
 	
 	@GET
@@ -37,12 +41,12 @@ public class NodeResource {
 	
 	@Path(NfvDeployer.linksPath)
 	public LinksCollection getLinks() {
-		return new LinksCollection(graphName, name);
+		return links;
 	}
 	
 	@Path(NfvDeployer.reachableHostsPath)
 	public ReachableHostsCollection getReachableHosts() {
-		return new ReachableHostsCollection(name);
+		return this.reachableHosts;
 	}
 
 }

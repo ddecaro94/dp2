@@ -39,6 +39,7 @@ public class NfvDeployer {
 	public static final String nffgsPath = "nffgs";
 	public static final String nodesPath = "nodes";
 	public static final String reachableHostsPath = "reachableHosts";
+	public static final String deploymentsPath = "deployments";
 
 	private static NfvDeployer INSTANCE;
 	static {
@@ -77,6 +78,7 @@ public class NfvDeployer {
 
 	private NfvDeployer() throws DatatypeConfigurationException, NfvReaderException, FactoryConfigurationError,
 			InternalServerErrorException {
+		System.out.println("Starting up...");
 		try {
 			System.setProperty("it.polito.dp2.NFV.NfvReaderFactory", "it.polito.dp2.NFV.Random.NfvReaderFactoryImpl");
 			System.setProperty("it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL",
@@ -193,7 +195,7 @@ public class NfvDeployer {
 			h.setMaxVNFs(BigInteger.valueOf(maxVnfs));
 			h.setAllocatedMemory(BigInteger.valueOf(0));
 			h.setAllocatedStorage(BigInteger.valueOf(0));
-			h.setConnections(createHyperlink(baseUri + hostsPath + "/" + connectionsPath));
+			h.setConnections(createHyperlink(baseUri + hostsPath + "/" + hostName+ "/"+ connectionsPath));
 
 			this.hostIds.put(hostName, createdHost.getId());
 			this.hostMap.put(createdHost.getId(), h);
@@ -336,6 +338,7 @@ public class NfvDeployer {
 		vnf.setRequiredMemory(reqMemory);
 		vnf.setRequiredStorage(reqStorage);
 		this.catalog.getVnf().add(vnf);
+		this.vnfs.put(name, vnf);
 
 		return vnf;
 	}

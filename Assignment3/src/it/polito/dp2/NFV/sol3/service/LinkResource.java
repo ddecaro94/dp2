@@ -24,7 +24,7 @@ public class LinkResource {
 	}
 	
 	@GET
-    @ApiOperation(value = "Get the forward relationships")
+    @ApiOperation(value = "Get the forward relationship")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
     		@ApiResponse(code = 404, message = "Not Found"),
