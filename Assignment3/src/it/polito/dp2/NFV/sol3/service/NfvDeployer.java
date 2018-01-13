@@ -73,6 +73,7 @@ public class NfvDeployer {
 	private Map<String, Node> nodeMap = new HashMap<>(); // nodeId, node
 	private Map<String, Links> nffgLinks = new HashMap<>(); // nffg, links
 	private Map<String, Link> links = new HashMap<>(); //(relationshipID, Link)
+	private Map<String, Map<String, Link>> linkIds = new HashMap<>(); //(nffg, (linkame, Link))
 
 	private NfvDeployer() throws DatatypeConfigurationException, NfvReaderException, FactoryConfigurationError,
 			InternalServerErrorException {
@@ -124,6 +125,7 @@ public class NfvDeployer {
 
 			// create NF-FGs but NOT deployed
 			for (NffgReader graph : reader.getNffgs(null)) {
+				this.linkIds.put(graph.getName(), new HashMap<>());
 				this.nffgMap.put(graph.getName(),
 						createNffg(graph.getName(), baseUri + nffgsPath + "/" + graph.getName()));
 				for (NodeReader node : graph.getNodes()) {
@@ -238,12 +240,8 @@ public class NfvDeployer {
 	public Link createLink(String graphName, String linkName, String srcNode, String dstNode, int minLatency,
 			float minThroughput) throws AlreadyLoadedException, NotFoundException {
 		// TODO
-		if (nffgLinks.containsKey(graphName)) {
-			boolean loaded = false;
-			for(Link l : nffgLinks.get(graphName).getLink()) {
-				if(l.getName().equals(linkName)) loaded = true;
-			}
-			if (!loaded) {
+		if (linkIds.containsKey(graphName)) {
+			if (!linkIds.get(graphName).containsKey(linkName)) {
 				it.polito.dp2.NFV.sol3.data.Relationship requestedLink = new it.polito.dp2.NFV.sol3.data.Relationship();
 
 				requestedLink.setDstNode(this.nodeIds.get(dstNode));
@@ -252,9 +250,13 @@ public class NfvDeployer {
 				it.polito.dp2.NFV.sol3.data.Relationship createdLink = this.dataApi
 						.nodeNodeidRelationships(this.nodeIds.get(srcNode))
 						.postXml(requestedLink, it.polito.dp2.NFV.sol3.data.Relationship.class);
-
 				
-
+				NamedRelationship r = new NamedRelationship();
+				r.setName(linkName);
+				r.setHref(baseUri + nffgsPath + "/" + graphName + "/" + NfvDeployer.linksPath + "/" + linkName);
+				r.setSrc(srcNode);
+				r.setDst(dstNode);
+				
 				Link l = new Link();
 				l.setName(linkName);
 				l.setHref(baseUri + nffgsPath + "/" + graphName + "/" + NfvDeployer.linksPath + "/" + linkName);
@@ -263,8 +265,9 @@ public class NfvDeployer {
 				l.setRequiredLatency(BigInteger.valueOf(minLatency));
 				l.setRequiredThroughput(minThroughput);
 
-				nffgLinks.get(graphName).getLink().add(l);
+				nffgLinks.get(graphName).getLink().add(r);
 				links.put(createdLink.getId(), l);
+				linkIds.get(graphName).put(linkName, l);
 				
 				return l;
 
@@ -421,7 +424,7 @@ public class NfvDeployer {
 				}
 				return outLinks;
 				
-			} else throw new NotFoundException("No node defined with name " + graph);
+			} else throw new NotFoundException("No node defined with name " + node);
 		} else throw new NotFoundException("No NF-FG defined with name " + graph);
 	}
 
@@ -483,6 +486,14 @@ public class NfvDeployer {
 			return vnfs.get(name);
 		else
 			throw new NotFoundException("No VNF defined with the name " + name);
+	}
+
+	public Link getLink(String graphName, String linkName) {
+		if (linkIds.containsKey(graphName)) {
+			if (linkIds.get(graphName).containsKey(linkName)) {
+				return linkIds.get(graphName).get(linkName);
+			} throw new NotFoundException("No link defined with name " + linkName+" in NF-FG "+graphName);
+		} else throw new NotFoundException("No NF-FG defined with name " + graphName);
 	}
 
 }

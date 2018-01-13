@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.polito.it/schemas/nfv" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.polito.it/schemas/nfv">
+<schema targetNamespace="http://www.polito.it/schemas/nfv" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.polito.it/schemas/nfv">
 
 	<element name="nfv">
 		<complexType>
@@ -70,8 +71,19 @@
 		<complexType>
 			<sequence>
 				<element name="link" minOccurs="0" maxOccurs="unbounded"
-					type="tns:Link" />
+					type="tns:NamedRelationship" />
 			</sequence>
+		</complexType>
+	</element>
+
+	<element name="link">
+		<complexType>
+			<complexContent>
+				<extension base="tns:NamedRelationship">
+					<attribute name="requiredLatency" type="nonNegativeInteger" />
+					<attribute name="requiredThroughput" type="tns:nonNegativeFloat" />
+				</extension>
+			</complexContent>
 		</complexType>
 	</element>
 
@@ -91,8 +103,7 @@
 					<sequence>
 						<element name="host" type="tns:NamedEntity" />
 						<element name="vnf" type="tns:NamedEntity" />
-						<element name="reachableHosts"
-							type="tns:Hyperlink" />
+						<element name="reachableHosts" type="tns:Hyperlink" />
 						<element name="links" type="tns:Hyperlink"></element>
 					</sequence>
 				</extension>
@@ -119,17 +130,19 @@
 			<complexContent>
 				<extension base="tns:NamedEntity">
 					<sequence>
-						<element name="deployedNodes"
-							type="tns:Hyperlink">
+						<element name="deployedNodes" type="tns:Hyperlink">
 						</element>
-						<element name="connections"
-							type="tns:Hyperlink" />
+						<element name="connections" type="tns:Hyperlink" />
 					</sequence>
-					<attribute name="availableMemory" type="nonNegativeInteger" use="required" />
-					<attribute name="availableStorage" type="nonNegativeInteger" use="required" />
-					<attribute name="allocatedMemory" type="nonNegativeInteger" use="required" />
-					<attribute name="allocatedStorage" type="nonNegativeInteger" use="required" />
-					<attribute name="maxVNFs" type="nonNegativeInteger" use="required" />
+					<attribute name="availableMemory" type="nonNegativeInteger"
+						use="required" />
+					<attribute name="availableStorage" type="nonNegativeInteger"
+						use="required" />
+					<attribute name="allocatedMemory" type="nonNegativeInteger"
+						use="required" />
+					<attribute name="allocatedStorage" type="nonNegativeInteger"
+						use="required" />
+					<attribute name="maxVNFs" type="nonNegativeInteger" use="required" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -164,16 +177,7 @@
 				<attribute name="latency" type="nonNegativeInteger" use="required" />
 				<attribute name="throughput" type="tns:nonNegativeFloat"
 					use="required" />
-				
-			</extension>
-		</complexContent>
-	</complexType>
 
-	<complexType name="Link">
-		<complexContent>
-			<extension base="tns:NamedRelationship">
-				<attribute name="requiredLatency" type="nonNegativeInteger" />
-				<attribute name="requiredThroughput" type="tns:nonNegativeFloat" />
 			</extension>
 		</complexContent>
 	</complexType>
@@ -227,19 +231,20 @@
 		</restriction>
 	</simpleType>
 
-    <element name="deployment">
-	    <complexType>
-		    <sequence>
-		    	<element name="graphName" type="tns:NamedEntity" minOccurs="1" maxOccurs="1"></element>
-		    	<element name="preferences" minOccurs="0" maxOccurs="unbounded">
-		    		<complexType>
-		    			<sequence>
-		    				<element name="node" type="tns:NamedEntity"></element>
-		    				<element name="host" type="tns:NamedEntity"></element>
-		    			</sequence>
-		    		</complexType>
-		    	</element>
-		    </sequence>
-	    </complexType>
-    </element>
+	<element name="deployment">
+		<complexType>
+			<sequence>
+				<element name="graphName" type="tns:NamedEntity" minOccurs="1"
+					maxOccurs="1"></element>
+				<element name="preferences" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="node" type="tns:NamedEntity"></element>
+							<element name="host" type="tns:NamedEntity"></element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
 </schema>

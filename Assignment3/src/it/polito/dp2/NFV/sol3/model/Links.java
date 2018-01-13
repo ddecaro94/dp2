@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.12 alle 03:39:19 PM CET 
+// Generato il: 2018.01.13 alle 01:16:31 AM CET 
 //
 
 
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="link" type="{http://www.polito.it/schemas/nfv}Link" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="link" type="{http://www.polito.it/schemas/nfv}NamedRelationship" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "links")
 public class Links {
 
-    protected List<Link> link;
+    protected List<NamedRelationship> link;
 
     /**
      * Gets the value of the link property.
@@ -62,13 +62,13 @@ public class Links {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Link }
+     * {@link NamedRelationship }
      * 
      * 
      */
-    public List<Link> getLink() {
+    public List<NamedRelationship> getLink() {
         if (link == null) {
-            link = new ArrayList<Link>();
+            link = new ArrayList<NamedRelationship>();
         }
         return this.link;
     }
