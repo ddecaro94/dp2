@@ -5,11 +5,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Link;
 
+@Api(hidden = true, value = NfvDeployer.linksPath)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class LinkResource {
@@ -26,7 +29,7 @@ public class LinkResource {
 	@GET
     @ApiOperation(value = "Get the forward relationship")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 200, message = "OK", response = Link.class),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link getLink() {

@@ -30,26 +30,18 @@ public class NfvResource {
 	@GET
     @ApiOperation(value = "Get the properties for the NFV system")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 200, message = "OK", response = Nfv.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nfv getNfv() {
 		return this.deployer.getNfv();
 	}
 	
 	@Path(NfvDeployer.hostsPath)
-    @ApiOperation(value = "Get the hosts collection")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public HostsCollection getHostsCollection() {
 		return this.hosts;
 	}
 
 	@Path(NfvDeployer.nffgsPath)
-    @ApiOperation(value = "Get the nffgs collection")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public NffgsCollection getNffgs() {
 		return this.nffgs;
 	}

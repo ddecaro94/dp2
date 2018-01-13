@@ -18,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,6 +26,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Nffgs;
 
+@Api(value = NfvDeployer.nffgsPath, hidden=true)
+@ApiModel(description = "A resource representing a Network Function Virtualization")
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NffgsCollection {
@@ -36,7 +39,7 @@ public class NffgsCollection {
 	@GET
 	@ApiOperation(value = "Get the list of deployed nffgs")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nffgs getNffgs(@QueryParam("deployTime") String date) {
 		if (date == null) return deployer.getNffgs(null);

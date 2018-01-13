@@ -234,17 +234,29 @@
 	<element name="deployment">
 		<complexType>
 			<sequence>
-				<element name="graphName" type="tns:NamedEntity" minOccurs="1"
-					maxOccurs="1"></element>
+				<element name="nffg" type="tns:NamedEntity" minOccurs="1"
+					maxOccurs="1">
+				</element>
 				<element name="preferences" minOccurs="0" maxOccurs="unbounded">
 					<complexType>
 						<sequence>
-							<element name="node" type="tns:NamedEntity"></element>
-							<element name="host" type="tns:NamedEntity"></element>
+							<element name="node" type="tns:NamedEntity">
+							</element>
+							<element name="host" type="tns:NamedEntity">
+							</element>
 						</sequence>
 					</complexType>
 				</element>
 			</sequence>
+			<attribute name="id" type="token"></attribute>
 		</complexType>
 	</element>
+
+    <element name="deployments">
+    <complexType>
+    <sequence>
+    <element ref="tns:deployment" minOccurs="0" maxOccurs="unbounded"></element>
+    </sequence>
+    </complexType>
+    </element>
 </schema>

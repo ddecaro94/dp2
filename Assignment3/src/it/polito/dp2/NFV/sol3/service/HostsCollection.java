@@ -20,6 +20,7 @@ import it.polito.dp2.NFV.sol3.model.*;
 
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+@Api(hidden = true, value = NfvDeployer.hostsPath)
 @ApiModel(description = "A resource representing a set of hosts")
 public class HostsCollection {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
@@ -32,7 +33,7 @@ public class HostsCollection {
 	@GET
     @ApiOperation(value = "Get the host list")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 200, message = "OK", response = Hosts.class),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Hosts getHosts() {
@@ -42,7 +43,7 @@ public class HostsCollection {
 	@POST
     @ApiOperation(value = "Create a host")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 200, message = "OK", response = Host.class),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Host postHosts(Host h) {

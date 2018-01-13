@@ -10,11 +10,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Catalog;
 
+@Api(hidden = true, value = "/"+NfvDeployer.catalogPath)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class CatalogCollection {
@@ -25,7 +28,7 @@ public class CatalogCollection {
 	@GET
     @ApiOperation(value = "Get the vnf catalog")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 200, message = "OK", response = Catalog.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Catalog getCatalog() {
 		return deployer.getCatalog();
