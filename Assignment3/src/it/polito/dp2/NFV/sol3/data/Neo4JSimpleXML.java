@@ -18,7 +18,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 
 @Generated(value = {
     "wadl|http://localhost:8080/Neo4JSimpleXML/webapi/application.wadl"
-}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-13T01:37:33.023+01:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-13T01:54:18.631+01:00")
 public class Neo4JSimpleXML {
 
     /**
@@ -166,26 +166,6 @@ public class Neo4JSimpleXML {
             return new Neo4JSimpleXML.Data.NodeNodeid(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
         }
 
-        public Neo4JSimpleXML.Data.NodeNodeidLabelsLabel nodeNodeidLabelsLabel(String nodeid, String label) {
-            return new Neo4JSimpleXML.Data.NodeNodeidLabelsLabel(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid, label);
-        }
-
-        public Neo4JSimpleXML.Data.NodeNodeidRelationships nodeNodeidRelationships(String nodeid) {
-            return new Neo4JSimpleXML.Data.NodeNodeidRelationships(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
-        }
-
-        public Neo4JSimpleXML.Data.Node node() {
-            return new Neo4JSimpleXML.Data.Node(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-        }
-
-        public Neo4JSimpleXML.Data.NodeNodeidLabels nodeNodeidLabels(String nodeid) {
-            return new Neo4JSimpleXML.Data.NodeNodeidLabels(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
-        }
-
-        public Neo4JSimpleXML.Data.RelationshipRelationshipid relationshipRelationshipid(String relationshipid) {
-            return new Neo4JSimpleXML.Data.RelationshipRelationshipid(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), relationshipid);
-        }
-
         public Neo4JSimpleXML.Data.NodeNodeidRelationshipsAll nodeNodeidRelationshipsAll(String nodeid) {
             return new Neo4JSimpleXML.Data.NodeNodeidRelationshipsAll(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
         }
@@ -198,8 +178,28 @@ public class Neo4JSimpleXML {
             return new Neo4JSimpleXML.Data.NodeNodeidRelationshipsOut(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
         }
 
+        public Neo4JSimpleXML.Data.RelationshipRelationshipid relationshipRelationshipid(String relationshipid) {
+            return new Neo4JSimpleXML.Data.RelationshipRelationshipid(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), relationshipid);
+        }
+
         public Neo4JSimpleXML.Data.NodeNodeidReachableNodes nodeNodeidReachableNodes(String nodeid) {
             return new Neo4JSimpleXML.Data.NodeNodeidReachableNodes(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
+        }
+
+        public Neo4JSimpleXML.Data.NodeNodeidLabels nodeNodeidLabels(String nodeid) {
+            return new Neo4JSimpleXML.Data.NodeNodeidLabels(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
+        }
+
+        public Neo4JSimpleXML.Data.Node node() {
+            return new Neo4JSimpleXML.Data.Node(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        }
+
+        public Neo4JSimpleXML.Data.NodeNodeidLabelsLabel nodeNodeidLabelsLabel(String nodeid, String label) {
+            return new Neo4JSimpleXML.Data.NodeNodeidLabelsLabel(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid, label);
+        }
+
+        public Neo4JSimpleXML.Data.NodeNodeidRelationships nodeNodeidRelationships(String nodeid) {
+            return new Neo4JSimpleXML.Data.NodeNodeidRelationships(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodeid);
         }
 
         public Neo4JSimpleXML.Data.CurrentNodes currentNodes() {
@@ -1938,12 +1938,12 @@ public class Neo4JSimpleXML {
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
-        public Neo4JSimpleXML.Resource.NumberOfPUTRequests numberOfPUTRequests() {
-            return new Neo4JSimpleXML.Resource.NumberOfPUTRequests(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-        }
-
         public Neo4JSimpleXML.Resource.NumberOfGETRequests numberOfGETRequests() {
             return new Neo4JSimpleXML.Resource.NumberOfGETRequests(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        }
+
+        public Neo4JSimpleXML.Resource.NumberOfPUTRequests numberOfPUTRequests() {
+            return new Neo4JSimpleXML.Resource.NumberOfPUTRequests(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
         public Neo4JSimpleXML.Resource.NumberOfDELETERequests numberOfDELETERequests() {
@@ -2169,6 +2169,38 @@ public class Neo4JSimpleXML {
                 _templateAndMatrixParameterValues = new HashMap<String, Object>();
             }
 
+            public<T >T getAsTextPlain(GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("text/plain");
+                ClientResponse response;
+                response = resourceBuilder.method("GET", ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Neo4JSimpleXML.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T getAsTextPlain(Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("text/plain");
+                ClientResponse response;
+                response = resourceBuilder.method("GET", ClientResponse.class);
+                if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new Neo4JSimpleXML.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
             public ClientResponse post() {
                 UriBuilder localUriBuilder = _uriBuilder.clone();
                 WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
@@ -2196,38 +2228,6 @@ public class Neo4JSimpleXML {
                 com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
                 ClientResponse response;
                 response = resourceBuilder.method("POST", ClientResponse.class);
-                if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                    if (response.getStatus()>= 400) {
-                        throw new Neo4JSimpleXML.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                    }
-                }
-                if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                    return response.getEntity(returnType);
-                } else {
-                    return returnType.cast(response);
-                }
-            }
-
-            public<T >T getAsTextPlain(GenericType<T> returnType) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("text/plain");
-                ClientResponse response;
-                response = resourceBuilder.method("GET", ClientResponse.class);
-                if (response.getStatus()>= 400) {
-                    throw new Neo4JSimpleXML.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                }
-                return response.getEntity(returnType);
-            }
-
-            public<T >T getAsTextPlain(Class<T> returnType) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("text/plain");
-                ClientResponse response;
-                response = resourceBuilder.method("GET", ClientResponse.class);
                 if (!ClientResponse.class.isAssignableFrom(returnType)) {
                     if (response.getStatus()>= 400) {
                         throw new Neo4JSimpleXML.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
@@ -2363,12 +2363,12 @@ public class Neo4JSimpleXML {
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
-        public Neo4JSimpleXML.Root.SwaggerJson swaggerJson() {
-            return new Neo4JSimpleXML.Root.SwaggerJson(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-        }
-
         public Neo4JSimpleXML.Root.SwaggerYaml swaggerYaml() {
             return new Neo4JSimpleXML.Root.SwaggerYaml(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        }
+
+        public Neo4JSimpleXML.Root.SwaggerJson swaggerJson() {
+            return new Neo4JSimpleXML.Root.SwaggerJson(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
         public static class SwaggerJson {

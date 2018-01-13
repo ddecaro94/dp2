@@ -72,8 +72,8 @@ public class NfvDeployer {
 	private Map<String, String> nodeIds = new HashMap<>(); // nodename, nodeId
 	private Map<String, Node> nodeMap = new HashMap<>(); // nodeId, node
 	private Map<String, Links> nffgLinks = new HashMap<>(); // nffg, links
-	private Map<String, Link> links = new HashMap<>(); //(relationshipID, Link)
-	private Map<String, Map<String, Link>> linkIds = new HashMap<>(); //(nffg, (linkame, Link))
+	private Map<String, Link> links = new HashMap<>(); // (relationshipID, Link)
+	private Map<String, Map<String, Link>> linkIds = new HashMap<>(); // (nffg, (linkame, Link))
 
 	private NfvDeployer() throws DatatypeConfigurationException, NfvReaderException, FactoryConfigurationError,
 			InternalServerErrorException {
@@ -118,7 +118,7 @@ public class NfvDeployer {
 					cij.setHref(baseUri + hostsPath + "/" + hosti.getName() + "/" + connectionsPath);
 					cij.setLatency(BigInteger.valueOf(reader.getConnectionPerformance(hosti, hostj).getLatency()));
 					cij.setThroughput(Float.valueOf(reader.getConnectionPerformance(hosti, hostj).getThroughput()));
-					
+
 					this.connections.get(this.hostIds.get(hosti.getName())).getConnection().add(cij);
 				}
 			}
@@ -191,6 +191,8 @@ public class NfvDeployer {
 			h.setAvailableMemory(BigInteger.valueOf(availableMemory));
 			h.setAvailableStorage(BigInteger.valueOf(availableStorage));
 			h.setMaxVNFs(BigInteger.valueOf(maxVnfs));
+			h.setAllocatedMemory(BigInteger.valueOf(0));
+			h.setAllocatedStorage(BigInteger.valueOf(0));
 			h.setConnections(createHyperlink(baseUri + hostsPath + "/" + connectionsPath));
 
 			this.hostIds.put(hostName, createdHost.getId());
@@ -250,13 +252,13 @@ public class NfvDeployer {
 				it.polito.dp2.NFV.sol3.data.Relationship createdLink = this.dataApi
 						.nodeNodeidRelationships(this.nodeIds.get(srcNode))
 						.postXml(requestedLink, it.polito.dp2.NFV.sol3.data.Relationship.class);
-				
+
 				NamedRelationship r = new NamedRelationship();
 				r.setName(linkName);
 				r.setHref(baseUri + nffgsPath + "/" + graphName + "/" + NfvDeployer.linksPath + "/" + linkName);
 				r.setSrc(srcNode);
 				r.setDst(dstNode);
-				
+
 				Link l = new Link();
 				l.setName(linkName);
 				l.setHref(baseUri + nffgsPath + "/" + graphName + "/" + NfvDeployer.linksPath + "/" + linkName);
@@ -268,7 +270,7 @@ public class NfvDeployer {
 				nffgLinks.get(graphName).getLink().add(r);
 				links.put(createdLink.getId(), l);
 				linkIds.get(graphName).put(linkName, l);
-				
+
 				return l;
 
 			}
@@ -308,7 +310,7 @@ public class NfvDeployer {
 
 			Node node = new Node();
 			node.setName(nodeName);
-			node.setHref(baseUri + nffgsPath+"/"+nffg+"/"+ nodesPath + "/" + nodeName);
+			node.setHref(baseUri + nffgsPath + "/" + nffg + "/" + nodesPath + "/" + nodeName);
 			node.setReachableHosts(createHyperlink(node.getHref() + "/" + reachableHostsPath));
 			node.setVnf(vnfs.get(type));
 			node.setLinks(createHyperlink(node.getHref() + "/" + linksPath));
@@ -361,7 +363,7 @@ public class NfvDeployer {
 
 	private void allocateNode(String nodeName, String preferenceHost) throws WebApplicationException {
 		// TODO Auto-generated method stub
-		
+
 		if (nodeIds.containsKey(nodeName)) {
 			// if the node is deployed link the node to the host
 			if (nodeMap.get(nodeIds.get(nodeName)).getHost() != null) {
@@ -413,19 +415,23 @@ public class NfvDeployer {
 	public Links getLinks(String graph, String node) {
 		// TODO Auto-generated method stub
 		if (nffgNodes.containsKey(graph)) {
-			if (node == null) return this.nffgLinks.get(graph);
-			
+			if (node == null)
+				return this.nffgLinks.get(graph);
+
 			if (nodeIds.containsKey(node)) {
-				
-				it.polito.dp2.NFV.sol3.data.Relationships linksFromNode = this.dataApi.nodeNodeidRelationshipsOut(nodeIds.get(node)).getAsRelationships();
+
+				it.polito.dp2.NFV.sol3.data.Relationships linksFromNode = this.dataApi
+						.nodeNodeidRelationshipsOut(nodeIds.get(node)).getAsRelationships();
 				Links outLinks = new Links();
 				for (Relationship r : linksFromNode.getRelationship()) {
 					outLinks.getLink().add(links.get(r.getId()));
 				}
 				return outLinks;
-				
-			} else throw new NotFoundException("No node defined with name " + node);
-		} else throw new NotFoundException("No NF-FG defined with name " + graph);
+
+			} else
+				throw new NotFoundException("No node defined with name " + node);
+		} else
+			throw new NotFoundException("No NF-FG defined with name " + graph);
 	}
 
 	public Nffg getNffgByName(String name) {
@@ -492,8 +498,36 @@ public class NfvDeployer {
 		if (linkIds.containsKey(graphName)) {
 			if (linkIds.get(graphName).containsKey(linkName)) {
 				return linkIds.get(graphName).get(linkName);
-			} throw new NotFoundException("No link defined with name " + linkName+" in NF-FG "+graphName);
-		} else throw new NotFoundException("No NF-FG defined with name " + graphName);
+			}
+			throw new NotFoundException("No link defined with name " + linkName + " in NF-FG " + graphName);
+		} else
+			throw new NotFoundException("No NF-FG defined with name " + graphName);
+	}
+
+	public Hosts getReachableHosts(String nodeName) {
+		if (nodeIds.containsKey(nodeName)) {
+
+			Hosts result = new Hosts();
+
+			// call reachablenodes api
+			it.polito.dp2.NFV.sol3.data.Nodes reachableHosts = dataApi.nodeNodeidReachableNodes(nodeIds.get(nodeName)).getAsNodes(null,
+					"Host");
+			for (it.polito.dp2.NFV.sol3.data.Nodes.Node n : reachableHosts.getNode()) {
+				String hostName = null;
+				for (Property p : n.getProperties().getProperty()) {
+					if (p.getName().equals("name"))
+						hostName = p.getValue();
+				}
+				if (hostName == null)
+					throw new InternalServerErrorException("Node " + n.getId() + " has no property 'name'");
+
+				result.getHost().add(this.hostMap.get(hostName));
+			}
+			
+			return result;
+			
+		} else
+			throw new NotFoundException("No node defined for name " + nodeName);
 	}
 
 }

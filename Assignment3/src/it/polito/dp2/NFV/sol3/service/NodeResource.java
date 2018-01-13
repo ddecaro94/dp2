@@ -39,5 +39,10 @@ public class NodeResource {
 	public LinksCollection getLinks() {
 		return new LinksCollection(graphName, name);
 	}
+	
+	@Path(NfvDeployer.reachableHostsPath)
+	public ReachableHostsCollection getReachableHosts() {
+		return new ReachableHostsCollection(name);
+	}
 
 }
