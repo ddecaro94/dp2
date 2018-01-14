@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.13 alle 05:08:18 PM CET 
+// Generato il: 2018.01.14 alle 02:50:43 AM CET 
 //
 
 
@@ -37,11 +37,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Deployment }
+     * Create an instance of {@link NewNffg }
      * 
      */
-    public Deployment createDeployment() {
-        return new Deployment();
+    public NewNffg createNewNffg() {
+        return new NewNffg();
+    }
+
+    /**
+     * Create an instance of {@link NewNffg.Links }
+     * 
+     */
+    public NewNffg.Links createNewNffgLinks() {
+        return new NewNffg.Links();
+    }
+
+    /**
+     * Create an instance of {@link NewNffg.Nodes }
+     * 
+     */
+    public NewNffg.Nodes createNewNffgNodes() {
+        return new NewNffg.Nodes();
     }
 
     /**
@@ -61,14 +77,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hyperlink }
-     * 
-     */
-    public Hyperlink createHyperlink() {
-        return new Hyperlink();
-    }
-
-    /**
      * Create an instance of {@link Catalog }
      * 
      */
@@ -85,6 +93,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Hyperlink }
+     * 
+     */
+    public Hyperlink createHyperlink() {
+        return new Hyperlink();
+    }
+
+    /**
      * Create an instance of {@link Hosts }
      * 
      */
@@ -93,27 +109,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Undeployments }
+     * Create an instance of {@link it.polito.dp2.NFV.sol3.model.Link }
      * 
      */
-    public Undeployments createUndeployments() {
-        return new Undeployments();
-    }
-
-    /**
-     * Create an instance of {@link Undeployment }
-     * 
-     */
-    public Undeployment createUndeployment() {
-        return new Undeployment();
-    }
-
-    /**
-     * Create an instance of {@link Link }
-     * 
-     */
-    public Link createLink() {
-        return new Link();
+    public it.polito.dp2.NFV.sol3.model.Link createLink() {
+        return new it.polito.dp2.NFV.sol3.model.Link();
     }
 
     /**
@@ -141,35 +141,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Node }
+     * Create an instance of {@link it.polito.dp2.NFV.sol3.model.Node }
      * 
      */
-    public Node createNode() {
-        return new Node();
+    public it.polito.dp2.NFV.sol3.model.Node createNode() {
+        return new it.polito.dp2.NFV.sol3.model.Node();
     }
 
     /**
-     * Create an instance of {@link Deployments }
+     * Create an instance of {@link it.polito.dp2.NFV.sol3.model.Nodes }
      * 
      */
-    public Deployments createDeployments() {
-        return new Deployments();
-    }
-
-    /**
-     * Create an instance of {@link Deployment.Preferences }
-     * 
-     */
-    public Deployment.Preferences createDeploymentPreferences() {
-        return new Deployment.Preferences();
-    }
-
-    /**
-     * Create an instance of {@link Nodes }
-     * 
-     */
-    public Nodes createNodes() {
-        return new Nodes();
+    public it.polito.dp2.NFV.sol3.model.Nodes createNodes() {
+        return new it.polito.dp2.NFV.sol3.model.Nodes();
     }
 
     /**
@@ -181,11 +165,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Links }
+     * Create an instance of {@link it.polito.dp2.NFV.sol3.model.Links }
      * 
      */
-    public Links createLinks() {
-        return new Links();
+    public it.polito.dp2.NFV.sol3.model.Links createLinks() {
+        return new it.polito.dp2.NFV.sol3.model.Links();
     }
 
     /**
@@ -210,6 +194,22 @@ public class ObjectFactory {
      */
     public Nfv createNfv() {
         return new Nfv();
+    }
+
+    /**
+     * Create an instance of {@link NewNffg.Links.Link }
+     * 
+     */
+    public NewNffg.Links.Link createNewNffgLinksLink() {
+        return new NewNffg.Links.Link();
+    }
+
+    /**
+     * Create an instance of {@link NewNffg.Nodes.Node }
+     * 
+     */
+    public NewNffg.Nodes.Node createNewNffgNodesNode() {
+        return new NewNffg.Nodes.Node();
     }
 
 }

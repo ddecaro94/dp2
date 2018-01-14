@@ -3,7 +3,6 @@ package it.polito.dp2.NFV.sol3.service;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -14,7 +13,7 @@ import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Host;
 
-@Api(hidden = true, value = NfvDeployer.hostsPath)
+@Api(hidden = true, tags = {NfvDeployer.hostsPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class HostResource {
@@ -27,16 +26,6 @@ public class HostResource {
 	}
 	
 	@GET
-	@ApiOperation(value = "Get host info")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Host.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Host getHost() {
-		return this.deployer.getHostByName(name);
-	}
-	
-	@GET
 	@Path(NfvDeployer.connectionsPath)
 	@ApiOperation(value = "Get connections list")
     @ApiResponses(value = {
@@ -45,6 +34,16 @@ public class HostResource {
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Connections getConnections() {
 		return deployer.getConnections(name);
+	}
+	
+	@GET
+	@ApiOperation(value = "Get host info")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Host.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Host getHost() {
+		return this.deployer.getHostByName(name);
 	}
 
 }

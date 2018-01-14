@@ -5,17 +5,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.*;
-
 
 @Singleton
 @Path("")
@@ -32,13 +28,9 @@ public class NfvResource {
 	
 	public NfvResource() {
 	}
-	@GET
-    @ApiOperation(value = "Get the properties for the NFV system")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Nfv.class),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Nfv getNfv() {
-		return this.deployer.getNfv();
+	@Path(NfvDeployer.catalogPath)
+	public CatalogCollection getCatalog() {
+		return this.catalog;
 	}
 	
 	@Path(NfvDeployer.hostsPath)
@@ -51,9 +43,13 @@ public class NfvResource {
 		return this.nffgs;
 	}
 	
-	@Path(NfvDeployer.catalogPath)
-	public CatalogCollection getCatalog() {
-		return this.catalog;
+	@GET
+    @ApiOperation(value = "Get the properties for the NFV system")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Nfv.class),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Nfv getNfv() {
+		return this.deployer.getNfv();
 	}
 	
 

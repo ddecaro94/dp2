@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tns:catalog xmlns:tns="http://www.polito.it/schemas/nfvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.polito.it/schemas/nfvInfo NfvDeployer.xsd ">
-	<vnf href="/VNF1" name="VNF1" functionalType="SPAM" requiredMemory="0" requiredStorage="0"/>
-	<vnf href="/VNF2" name="VNF2" functionalType="SPAM" requiredMemory="0" requiredStorage="0"/>
-</tns:catalog>

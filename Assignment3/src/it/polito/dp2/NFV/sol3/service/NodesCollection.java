@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Node;
 import it.polito.dp2.NFV.sol3.model.Nodes;
 
-@Api(hidden = true)
+@Api(hidden = true, tags = {NfvDeployer.nffgsPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodesCollection {
@@ -30,6 +29,11 @@ public class NodesCollection {
 	
 	public NodesCollection(String name) {
 		this.graph = name;
+	}
+	
+	@Path("{nodeName}")
+	public NodeResource getNode(@PathParam("nodeName") String nodeName) {
+		return nodeResources.getOrDefault(nodeName, new NodeResource(graph, nodeName));
 	}
 	
 	@GET
@@ -57,15 +61,10 @@ public class NodesCollection {
 		try {
 			return deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
 		} catch (AlreadyLoadedException e) {
-			throw new ClientErrorException(e.getMessage(), 422);
+			throw new ConflictException();
 		} catch (NotDefinedException e) {
 			throw new ClientErrorException(e.getMessage(), 422);
 		}
-	}
-	
-	@Path("{nodeName}")
-	public NodeResource getNode(@PathParam("nodeName") String nodeName) {
-		return nodeResources.getOrDefault(nodeName, new NodeResource(graph, nodeName));
 	}
 
 }

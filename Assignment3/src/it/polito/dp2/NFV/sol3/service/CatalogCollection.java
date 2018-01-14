@@ -8,14 +8,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Catalog;
 import it.polito.dp2.NFV.sol3.model.Vnf;
 
-@Api(hidden = true, value = "/"+NfvDeployer.catalogPath)
+@Api(hidden = true, tags = {NfvDeployer.catalogPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class CatalogCollection {
@@ -23,7 +22,6 @@ public class CatalogCollection {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	
 	public CatalogCollection () {
-		System.out.println("CATALOG");
 	}
 	@GET
     @ApiOperation(value = "Get the vnf catalog")

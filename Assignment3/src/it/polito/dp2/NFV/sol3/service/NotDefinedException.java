@@ -1,9 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 public class NotDefinedException extends Exception {
 
 	/**
@@ -15,8 +11,8 @@ public class NotDefinedException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NotDefinedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
+	public NotDefinedException(String message) {
+		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -25,8 +21,8 @@ public class NotDefinedException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NotDefinedException(String message) {
-		super(message);
+	public NotDefinedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 

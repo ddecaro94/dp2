@@ -1,9 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -20,11 +16,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Connections;
 import it.polito.dp2.NFV.sol3.model.Link;
 import it.polito.dp2.NFV.sol3.model.Links;
 
-@Api(hidden = true)
+@Api(hidden = true, tags = {NfvDeployer.nffgsPath, NfvDeployer.nodesPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class LinksCollection {
@@ -36,6 +31,17 @@ public class LinksCollection {
 	public LinksCollection(String graphName, String nodeName) {
 		this.nodeName = nodeName;
 		this.graphName = graphName;
+	}
+	
+	@GET
+    @Path("{linkName}")
+    @ApiOperation(value = "Get link information")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK", response = Link.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Link getLink(@PathParam("linkName") String name) {
+		return deployer.getLink(graphName, name);
 	}
 	
 	@GET
@@ -60,7 +66,7 @@ public class LinksCollection {
 		} catch (NotFoundException e) {
 			throw e;
 		} catch (AlreadyLoadedException e) {
-			throw new ClientErrorException(422, e);
+			throw new ConflictException();
 		}
 	}
 	
@@ -71,26 +77,15 @@ public class LinksCollection {
     		@ApiResponse(code = 200, message = "OK", response = Links.class),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Link putLink(Link link) {
+	public Link putLink(Link link, @PathParam("linkName") String id) {
 		try {
+			if (link.getName() != id) throw new ClientErrorException("Link name and link resource identifier cannot be different", 422);
 			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), link.getRequiredLatency().intValue(), link.getRequiredThroughput(), true);
 		} catch (NotFoundException e) {
 			throw e;
 		} catch (AlreadyLoadedException e) {
-			e.printStackTrace();
 			throw new InternalServerErrorException(e);
 		}
-	}
-	
-	@GET
-    @Path("{linkName}")
-    @ApiOperation(value = "Get link information")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Link.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Link getLink(@PathParam("linkName") String name) {
-		return deployer.getLink(graphName, name);
 	}
 	
 }
