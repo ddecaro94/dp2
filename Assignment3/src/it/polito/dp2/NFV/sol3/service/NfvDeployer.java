@@ -32,6 +32,7 @@ import it.polito.dp2.NFV.NfvReaderFactory;
 import it.polito.dp2.NFV.NodeReader;
 import it.polito.dp2.NFV.VNFTypeReader;
 import it.polito.dp2.NFV.sol3.model.*;
+import it.polito.dp2.NFV.sol3.model.Host.DeployedNodes;
 import it.polito.dp2.NFV.sol3.data.Labels;
 import it.polito.dp2.NFV.sol3.data.Neo4JSimpleXML;
 import it.polito.dp2.NFV.sol3.data.Neo4JSimpleXML.Data;
@@ -222,6 +223,7 @@ public class NfvDeployer {
 						allocatedOn.setType("AllocatedOn");
 						h.setAllocatedMemory(h.getAllocatedMemory().add(v.getRequiredMemory()));
 						h.setAllocatedStorage(h.getAllocatedStorage().add(v.getRequiredStorage()));
+						h.getDeployedNodes().getNode().add(createNamedRef(nodeName, n.getHref()));
 						// create relationship
 						return this.dataApi.nodeNodeidRelationships(this.nodeIds.get(nodeName)).postXml(allocatedOn,
 								it.polito.dp2.NFV.sol3.data.Relationship.class).getId();
@@ -232,7 +234,7 @@ public class NfvDeployer {
 								allocatedOn.setType("AllocatedOn");
 								hnew.setAllocatedMemory(hnew.getAllocatedMemory().add(v.getRequiredMemory()));
 								hnew.setAllocatedStorage(hnew.getAllocatedStorage().add(v.getRequiredStorage()));
-								
+								hnew.getDeployedNodes().getNode().add(createNamedRef(nodeName, n.getHref()));
 								// create relationship
 								return this.dataApi.nodeNodeidRelationships(this.nodeIds.get(nodeName)).postXml(allocatedOn,
 										it.polito.dp2.NFV.sol3.data.Relationship.class).getId();
@@ -284,7 +286,8 @@ public class NfvDeployer {
 			h.setAllocatedMemory(BigInteger.valueOf(0));
 			h.setAllocatedStorage(BigInteger.valueOf(0));
 			h.setConnections(createHyperlink(baseUri + hostsPath + "/" + hostName+ "/"+ connectionsPath));
-
+			h.setDeployedNodes(new DeployedNodes());
+			
 			this.hostIds.put(hostName, createdHost.getId());
 			this.hostMap.put(createdHost.getId(), h);
 			this.hosts.getHost().add(createNamedRef(hostName, baseUri + hostsPath + "/" + hostName));

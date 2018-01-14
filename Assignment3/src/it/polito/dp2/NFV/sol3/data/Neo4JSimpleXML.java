@@ -18,7 +18,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 
 @Generated(value = {
     "wadl|http://localhost:8080/Neo4JSimpleXML/webapi/application.wadl"
-}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-14T04:24:15.597+01:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-14T04:36:15.073+01:00")
 public class Neo4JSimpleXML {
 
     /**
