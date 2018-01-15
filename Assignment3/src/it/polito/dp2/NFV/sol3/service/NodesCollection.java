@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Node;
 import it.polito.dp2.NFV.sol3.model.Nodes;
 
-@Api(hidden = true, tags = {NfvDeployer.nffgsPath})
+@Api(hidden = true, tags = {NfvDeployer.nodesPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodesCollection {
@@ -51,18 +51,22 @@ public class NodesCollection {
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Nodes.class),
     		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 409, message = "Conflict"),
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Node postNode(Node node) {
+	public Node postNode(Node node) throws NotDefinedException {
 		if (deployer.getNffgByName(graph).getDeployTime() != null) {
 			
 		} else throw new NotDeployedException("NF-FG "+graph+" not deployed", 422);
 		
+		if (node.getVnf() == null) throw new NotDefinedException("VNF type non defined");
 		try {
 			return deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
 		} catch (AlreadyLoadedException e) {
+			e.printStackTrace();
 			throw new ConflictException();
 		} catch (NotDefinedException e) {
+			e.printStackTrace();
 			throw new ClientErrorException(e.getMessage(), 422);
 		}
 	}

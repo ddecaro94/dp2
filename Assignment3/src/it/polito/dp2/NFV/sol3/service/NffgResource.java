@@ -1,6 +1,8 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.model.Nffg;
+import it.polito.dp2.NFV.sol3.model.Nffgs;
 
 @Api(hidden = true, tags = {NfvDeployer.nffgsPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -37,10 +40,22 @@ public class NffgResource {
 	@ApiOperation(value = "Get nffg info")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Nffg.class),
+    		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nffg getNffg() {
 		return this.deployer.getNffgByName(name);
 	}
+	
+	@DELETE
+	@ApiOperation(value = "Undeploy a nffg")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
+	public void deleteNffg() {
+		deployer.undeployNffg(name);
+	}
+
 	
 	@Path(NfvDeployer.nodesPath)
 	public NodesCollection getNodes() {

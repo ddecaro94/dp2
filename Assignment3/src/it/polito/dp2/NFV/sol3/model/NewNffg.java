@@ -2,7 +2,7 @@
 // Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
 // Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.14 alle 04:32:49 AM CET 
+// Generato il: 2018.01.14 alle 05:15:02 PM CET 
 //
 
 
@@ -69,8 +69,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *                             &lt;element name="destinationNode" type="{http://www.w3.org/2001/XMLSchema}token"/>
  *                           &lt;/sequence>
  *                           &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}token" />
- *                           &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
- *                           &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" />
+ *                           &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" default="0" />
+ *                           &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" default="0" />
  *                         &lt;/restriction>
  *                       &lt;/complexContent>
  *                     &lt;/complexType>
@@ -196,8 +196,8 @@ public class NewNffg {
      *                   &lt;element name="destinationNode" type="{http://www.w3.org/2001/XMLSchema}token"/>
      *                 &lt;/sequence>
      *                 &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}token" />
-     *                 &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
-     *                 &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" />
+     *                 &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" default="0" />
+     *                 &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" default="0" />
      *               &lt;/restriction>
      *             &lt;/complexContent>
      *           &lt;/complexType>
@@ -262,8 +262,8 @@ public class NewNffg {
          *         &lt;element name="destinationNode" type="{http://www.w3.org/2001/XMLSchema}token"/>
          *       &lt;/sequence>
          *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}token" />
-         *       &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
-         *       &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" />
+         *       &lt;attribute name="requiredLatency" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" default="0" />
+         *       &lt;attribute name="requiredThroughput" type="{http://www.polito.it/schemas/nfv}nonNegativeFloat" default="0" />
          *     &lt;/restriction>
          *   &lt;/complexContent>
          * &lt;/complexType>
@@ -377,7 +377,11 @@ public class NewNffg {
              *     
              */
             public BigInteger getRequiredLatency() {
-                return requiredLatency;
+                if (requiredLatency == null) {
+                    return new BigInteger("0");
+                } else {
+                    return requiredLatency;
+                }
             }
 
             /**
@@ -400,8 +404,12 @@ public class NewNffg {
              *     {@link Float }
              *     
              */
-            public Float getRequiredThroughput() {
-                return requiredThroughput;
+            public float getRequiredThroughput() {
+                if (requiredThroughput == null) {
+                    return  0.0F;
+                } else {
+                    return requiredThroughput;
+                }
             }
 
             /**

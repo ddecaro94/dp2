@@ -10,7 +10,9 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -53,6 +55,7 @@ public class NffgsCollection {
 	@GET
 	@ApiOperation(value = "Get the list of deployed nffgs")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = Nffgs.class),
+			@ApiResponse(code = 400, message = "Bad Request"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public Nffgs getNffgs(@QueryParam("deployTime") String date) {
 		if (date == null || date.equals(""))
@@ -67,10 +70,23 @@ public class NffgsCollection {
 	
 	@POST
 	@ApiOperation(value = "Deploy a new nffg")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = Nffgs.class),
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
+			@ApiResponse(code = 409, message = "Conflict"),
+			@ApiResponse(code = 422, message = "Unprocessable Entity"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public Nffg deployNffg(NewNffg nffg) {
-		return null;
+		try {
+			return deployer.deployNffg(nffg);
+		} catch (AlreadyLoadedException e) {
+			e.printStackTrace();
+			throw new ConflictException(409, e);
+		} catch (NotDefinedException e) {
+			e.printStackTrace();
+			throw new ClientErrorException(422, e);
+		}
+
 	}
+	
 
 }

@@ -284,9 +284,9 @@
 										type="token" use="required">
 									</attribute>
 									<attribute name="requiredLatency"
-										type="nonNegativeInteger" use="optional" />
+										type="nonNegativeInteger" use="optional" default="0"/>
 									<attribute name="requiredThroughput"
-										type="tns:nonNegativeFloat" use="optional" />
+										type="tns:nonNegativeFloat" use="optional" default="0"/>
 								</complexType>
 							</element>
 						</sequence>

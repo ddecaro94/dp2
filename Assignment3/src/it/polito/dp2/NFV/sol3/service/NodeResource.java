@@ -5,6 +5,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,7 +19,7 @@ import it.polito.dp2.NFV.sol3.model.Hosts;
 import it.polito.dp2.NFV.sol3.model.Node;
 import it.polito.dp2.NFV.sol3.model.Nodes;
 
-@Api(hidden = true, tags = {NfvDeployer.nffgsPath})
+@Api(hidden = true, tags = {NfvDeployer.nodesPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodeResource {
@@ -41,8 +42,16 @@ public class NodeResource {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Node deleteNode() {
-		return this.deployer.deleteNode(name);
+	public void deleteNode() {
+		boolean res;
+		try {
+			res = this.deployer.deleteNode(graphName, name);
+		} catch (NotDefinedException e) {
+			e.printStackTrace();
+			throw new InternalServerErrorException(e);
+		}
+		if (!res) throw new NotFoundException(); 
+		return;
 	}
 	
 	@Path(NfvDeployer.linksPath)
@@ -75,7 +84,7 @@ public class NodeResource {
 	@ApiOperation(value = "Create node inside deployed NF-FG")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Nodes.class),
-    		@ApiResponse(code = 401, message = "Conflict"),
+    		@ApiResponse(code = 409, message = "Conflict"),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
