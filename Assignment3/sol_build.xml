@@ -9,21 +9,24 @@
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="schema.dir" value="${basedir}/xsd" />
 	<property name="src.dir" value="${basedir}/src" />
-	<property name="model.dir" value="${src.dir}/it/polito/dp2/NFV/sol3/model" />
+	<property name="model.dir" value="${src.dir}/it/polito/dp2/NFV/sol3/service/model" />
 	<property name="build.dir" location="${basedir}/build" />
 	<property name="debug" value="true" />
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.8" />
 	<property name="source" value="1.8" />
 	<property name="data.name" value="Neo4JSimpleXML" />
+	<property name="serviceWADL" value="${URL}/application.wadl"/>
+	<property name="service.name" value="NfvDeployer" />
 
 	<!-- Target init	-->
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${gen.dir}" />
+		<mkdir dir="${model.dir}" />
 	</target>
 
-	<target name="build-service" depends="generate-bindings, generate-artifacts">
+	<target name="build-service" depends="generate-service-bindings, generate-service-artifacts">
 		<echo>Building NfvDeployer (if needed)...</echo>
 		<javac 
 			destdir="${build.dir}"
@@ -33,7 +36,7 @@
 			target="${target}"
 			includeantruntime="false">
 				<src path="${src.dir}" />
-				<include name="it/polito/dp2/NFV/sol3/**" />
+				<include name="it/polito/dp2/NFV/sol3/service/**" />
 				<classpath>
 					<path refid="sol.classpath" />
 				</classpath>
@@ -54,12 +57,12 @@
 	</target>
 
 	<!-- Target generate-bindings -->
-	<target name="generate-bindings" unless="generate-bindings.notRequired" depends="-chk-bindings" description="Generate bindings from schema">
+	<target name="generate-service-bindings" unless="generate-bindings.notRequired" depends="-chk-bindings, init" description="Generate bindings from schema">
 		<exec executable="xjc" failonerror="true" >
 			<arg value="-d" />
 			<arg value="${src.dir}" />
 			<arg value="-p" />
-			<arg value="it.polito.dp2.NFV.sol3.model" />
+			<arg value="it.polito.dp2.NFV.sol3.service.model" />
 			<arg value="-encoding" />
 			<arg value="utf8" />
 			<arg value="${schema.dir}/NfvDeployer.xsd" />
@@ -80,15 +83,44 @@
 		</classpath>
 	</taskdef>
 	
-	<target name="generate-artifacts">
+	<target name="generate-service-artifacts">
 		<mkdir dir="${src.dir}" />
 		<echo message="Compiling the descriptions..." />
-		<wjc description="${Neo4JSimpleXMLWADL}" package="it.polito.dp2.NFV.sol3.data" autoSchemaPackage="false" target="${src.dir}">
+		<wjc description="${Neo4JSimpleXMLWADL}" package="it.polito.dp2.NFV.sol3.service.data" autoSchemaPackage="false" target="${src.dir}">
 			<customizations dir="${basedir}" includes="binding.xjc" />
-			<produces dir="${src.dir}/it/polito/dp2/NFV/sol3/data" includes="*.java" />
+			<produces dir="${src.dir}/it/polito/dp2/NFV/sol3/service/data" includes="*.java" />
 			<depends dir="${basedir}" includes="build.xml" />
 			<customClassName uri="${Neo4JSimpleXMLURL}/" classname="${data.name}" />
 		</wjc>
+	</target>
+	
+	<target name="generate-client-artifacts">
+		<mkdir dir="${src.dir}" />
+		<echo message="Compiling the descriptions..." />
+		<wjc description="${serviceWADL}" package="it.polito.dp2.NFV.sol3.client1.data" autoSchemaPackage="false" target="${src.dir}">
+			<customizations dir="${basedir}" includes="binding.xjc" />
+			<produces dir="${src.dir}/it/polito/dp2/NFV/sol3/client1/data" includes="*.java" />
+			<depends dir="${basedir}" includes="build.xml" />
+			<customClassName uri="${URL}/" classname="${service.name}" />
+		</wjc>
+	</target>
+	
+	<target name="build-client" depends="generate-client-artifacts">
+		<echo>Building NfvDeployer (if needed)...</echo>
+		<javac 
+			destdir="${build.dir}"
+			debug="${debug}"
+			debuglevel="${debuglevel}"
+			source="${source}"
+			target="${target}"
+			includeantruntime="false">
+				<src path="${src.dir}" />
+				<include name="it/polito/dp2/NFV/sol3/client1/**" />
+				<classpath>
+					<path refid="sol.classpath" />
+				</classpath>
+		</javac>
+		<echo>Done.</echo>
 	</target>
 
 

@@ -11,8 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Catalog;
-import it.polito.dp2.NFV.sol3.model.Vnf;
+import it.polito.dp2.NFV.sol3.service.model.Catalog;
+import it.polito.dp2.NFV.sol3.service.model.Vnf;
 
 @Api(hidden = true, tags = {NfvDeployer.catalogPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})

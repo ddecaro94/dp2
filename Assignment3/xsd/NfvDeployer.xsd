@@ -100,10 +100,12 @@
 			<complexContent>
 				<extension base="tns:NamedEntity">
 					<sequence>
-						<element name="host" type="tns:NamedEntity" maxOccurs="1"
-							minOccurs="0" />
+						<element name="host" type="tns:NamedEntity"
+							maxOccurs="1" minOccurs="0" />
 						<element name="vnf" type="tns:NamedEntity" />
-						<element name="reachableHosts" type="tns:Hyperlink" />
+						<element name="nffg" type="tns:NamedEntity"></element>
+						<element name="reachableHosts"
+							type="tns:Hyperlink" />
 						<element name="links" type="tns:Hyperlink" />
 					</sequence>
 				</extension>
@@ -253,19 +255,23 @@
 								<complexType>
 									<sequence>
 										<element name="vnf"
-											type="token">
+											type="token" maxOccurs="1" minOccurs="1">
 										</element>
 										<element name="preferredHost"
-											type="token">
+											type="token" maxOccurs="1" minOccurs="0">
 										</element>
 									</sequence>
 									<attribute name="name"
-										type="token">
+										type="token" use="required">
 									</attribute>
 								</complexType>
 							</element>
 						</sequence>
 					</complexType>
+					<key name="newNffgNodeNameKey">
+						<selector xpath="node" />
+						<field xpath="@name" />
+					</key>
 				</element>
 				<element name="links">
 					<complexType>
@@ -274,10 +280,10 @@
 								<complexType>
 									<sequence>
 										<element name="sourceNode"
-											type="token">
+											type="token" maxOccurs="1" minOccurs="1">
 										</element>
 										<element name="destinationNode"
-											type="token">
+											type="token" maxOccurs="1" minOccurs="1">
 										</element>
 									</sequence>
 									<attribute name="name"
@@ -290,11 +296,15 @@
 								</complexType>
 							</element>
 						</sequence>
-
 					</complexType>
-				</element>
+					<key name="newNffgLinkNameKey">
+						<selector xpath="link" />
+						<field xpath="@name" />
+					</key>
+				</element>
 			</sequence>
 			<attribute name="name" type="string"></attribute>
 		</complexType>
+
 	</element>
 </schema>

@@ -1,5 +1,7 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import javax.validation.Valid;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,9 +17,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Hosts;
-import it.polito.dp2.NFV.sol3.model.Node;
-import it.polito.dp2.NFV.sol3.model.Nodes;
+import it.polito.dp2.NFV.lab3.AllocationException;
+import it.polito.dp2.NFV.sol3.service.model.Hosts;
+import it.polito.dp2.NFV.sol3.service.model.Node;
+import it.polito.dp2.NFV.sol3.service.model.Nodes;
 
 @Api(hidden = true, tags = {NfvDeployer.nodesPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -38,7 +41,7 @@ public class NodeResource {
 	@DELETE
 	@ApiOperation(value = "Delete node from deployed NF-FG")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Node.class),
+    		@ApiResponse(code = 200, message = "OK"),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
@@ -83,7 +86,7 @@ public class NodeResource {
 	@PUT
 	@ApiOperation(value = "Create node inside deployed NF-FG")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Nodes.class),
+    		@ApiResponse(code = 200, message = "OK", response = Node.class),
     		@ApiResponse(code = 409, message = "Conflict"),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
@@ -92,8 +95,20 @@ public class NodeResource {
 		if (deployer.getNffgByName(graphName).getDeployTime() != null) {
 			
 		} else throw new NotDeployedException("NF-FG "+graphName+" not deployed", 422);
+		if (node == null) throw new BadRequestException();
 		try {
-			return deployer.createNode(graphName, node.getName(), node.getVnf().getName(), true);
+			String host;
+			deployer.createNode(graphName, node.getName(), node.getVnf().getName(), true);
+			if (node.getHost() == null) host = null;
+			else host = node.getHost().getName();
+			try {
+				deployer.allocateNode(node.getName(), host);
+			} catch (Exception e) {
+				deployer.deleteNode(graphName, node.getName());
+				throw new ClientErrorException(e.getMessage(), 422);
+			}
+			
+			return deployer.getNode(graphName, node.getName());
 		} catch (AlreadyLoadedException e) {
 			throw new InternalServerErrorException(e);
 		} catch (NotDefinedException e) {

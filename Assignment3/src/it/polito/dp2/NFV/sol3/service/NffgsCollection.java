@@ -5,16 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.validation.Valid;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,13 +22,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Deployment;
-import it.polito.dp2.NFV.sol3.model.Deployments;
-import it.polito.dp2.NFV.sol3.model.NewNffg;
-import it.polito.dp2.NFV.sol3.model.Nffg;
-import it.polito.dp2.NFV.sol3.model.Nffgs;
-import it.polito.dp2.NFV.sol3.model.Undeployment;
-import it.polito.dp2.NFV.sol3.model.Undeployments;
+import it.polito.dp2.NFV.sol3.service.model.NewNffg;
+import it.polito.dp2.NFV.sol3.service.model.Nffg;
+import it.polito.dp2.NFV.sol3.service.model.Nffgs;
 
 @Api(hidden = true, tags = { NfvDeployer.nffgsPath })
 @ApiModel(description = "A resource representing a Network Function Virtualization")
@@ -47,11 +39,32 @@ public class NffgsCollection {
 
 	}
 
+	@POST
+	@ApiOperation(value = "Deploy a new nffg")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "OK", response = Nffg.class),
+			@ApiResponse(code = 409, message = "Conflict"),
+			@ApiResponse(code = 422, message = "Unprocessable Entity"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
+	public Nffg deployNffg(NewNffg nffg) {
+		try {
+			if (nffg == null) throw new BadRequestException();
+			return deployer.deployNffg(nffg);
+		} catch (AlreadyLoadedException e) {
+			e.printStackTrace();
+			throw new ConflictException(409, e);
+		} catch (NotDefinedException e) {
+			e.printStackTrace();
+			throw new ClientErrorException(422, e);
+		}
+
+	}
+
 	@Path("{nffgName}")
 	public NffgResource getNffg(@PathParam("nffgName") String name) {
 		return nffgResources.getOrDefault(name, new NffgResource(name));
 	}
-
+	
 	@GET
 	@ApiOperation(value = "Get the list of deployed nffgs")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = Nffgs.class),
@@ -66,26 +79,6 @@ public class NffgsCollection {
 		} catch (ParseException e) {
 			throw new BadRequestException("Provided date is not in a valid format, the correct format is 'YYYYMMDD'");
 		}
-	}
-	
-	@POST
-	@ApiOperation(value = "Deploy a new nffg")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
-			@ApiResponse(code = 409, message = "Conflict"),
-			@ApiResponse(code = 422, message = "Unprocessable Entity"),
-			@ApiResponse(code = 500, message = "Internal Server Error") })
-	public Nffg deployNffg(NewNffg nffg) {
-		try {
-			return deployer.deployNffg(nffg);
-		} catch (AlreadyLoadedException e) {
-			e.printStackTrace();
-			throw new ConflictException(409, e);
-		} catch (NotDefinedException e) {
-			e.printStackTrace();
-			throw new ClientErrorException(422, e);
-		}
-
 	}
 	
 

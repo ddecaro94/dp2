@@ -1,5 +1,7 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import javax.validation.Valid;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,9 +20,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Link;
-import it.polito.dp2.NFV.sol3.model.Links;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import it.polito.dp2.NFV.sol3.service.model.Link;
+import it.polito.dp2.NFV.sol3.service.model.Links;
 
 @Api(hidden = true, tags = {NfvDeployer.nffgsPath, NfvDeployer.nodesPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -34,6 +35,18 @@ public class LinksCollection {
 	public LinksCollection(String graphName, String nodeName) {
 		this.nodeName = nodeName;
 		this.graphName = graphName;
+	}
+	
+	@DELETE
+	@Path("{linkName}")
+    @ApiOperation(value = "Delete link")
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "OK"),
+    		@ApiResponse(code = 409, message = "Conflict"),
+    		@ApiResponse(code = 422, message = "Unprocessable Entity"),
+    		@ApiResponse(code = 500, message = "Internal Server Error")})
+	public Link deleteLink(@PathParam("linkName") String id) {
+		throw new ServerErrorException(501);
 	}
 	
 	@GET
@@ -60,11 +73,12 @@ public class LinksCollection {
 	@POST
     @ApiOperation(value = "Create new link between nodes")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Links.class),
+    		@ApiResponse(code = 200, message = "OK", response = Link.class),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link postLink(Link link) {
 		try {
+			if (link == null) throw new BadRequestException();
 			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), link.getRequiredLatency().intValue(), link.getRequiredThroughput(), false);
 		} catch (NotFoundException e) {
 			throw e;
@@ -77,11 +91,12 @@ public class LinksCollection {
 	@Path("{linkName}")
     @ApiOperation(value = "Create or replace link")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK", response = Links.class),
+    		@ApiResponse(code = 200, message = "OK", response = Link.class),
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link putLink(Link link, @PathParam("linkName") String id) {
 		try {
+			if (link == null) throw new BadRequestException();
 			if (link.getName() != id) throw new ClientErrorException("Link name and link resource identifier cannot be different", 422);
 			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), link.getRequiredLatency().intValue(), link.getRequiredThroughput(), true);
 		} catch (NotFoundException e) {
@@ -89,18 +104,6 @@ public class LinksCollection {
 		} catch (AlreadyLoadedException e) {
 			throw new InternalServerErrorException(e);
 		}
-	}
-	
-	@DELETE
-	@Path("{linkName}")
-    @ApiOperation(value = "Delete link")
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
-    		@ApiResponse(code = 409, message = "Conflict"),
-    		@ApiResponse(code = 422, message = "Unprocessable Entity"),
-    		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Link deleteLink(@PathParam("linkName") String id) {
-		throw new ServerErrorException(501);
 	}
 	
 }

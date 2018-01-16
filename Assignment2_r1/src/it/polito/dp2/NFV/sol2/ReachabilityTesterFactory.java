@@ -5,10 +5,6 @@ import it.polito.dp2.NFV.lab2.ReachabilityTesterException;
 
 public class ReachabilityTesterFactory extends it.polito.dp2.NFV.lab2.ReachabilityTesterFactory {
 
-	public ReachabilityTesterFactory() {
-		
-	}
-
 	@Override
 	public ReachabilityTester newReachabilityTester() throws ReachabilityTesterException {
 		return new it.polito.dp2.NFV.sol2.ReachabilityTester();

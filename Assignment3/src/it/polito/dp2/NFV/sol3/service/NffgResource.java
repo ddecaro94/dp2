@@ -1,6 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,8 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.sol3.model.Nffg;
-import it.polito.dp2.NFV.sol3.model.Nffgs;
+import it.polito.dp2.NFV.sol3.service.model.Nffg;
+import it.polito.dp2.NFV.sol3.service.model.Nffgs;
 
 @Api(hidden = true, tags = {NfvDeployer.nffgsPath})
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
@@ -31,6 +30,16 @@ public class NffgResource {
 		this.links = new LinksCollection(name, null);
 	}
 	
+	@DELETE
+	@ApiOperation(value = "Undeploy a nffg")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
+	public void deleteNffg() {
+		deployer.undeployNffg(name);
+	}
+	
 	@Path(NfvDeployer.linksPath)
 	public LinksCollection getLinks() {
 		return links;
@@ -44,16 +53,6 @@ public class NffgResource {
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nffg getNffg() {
 		return this.deployer.getNffgByName(name);
-	}
-	
-	@DELETE
-	@ApiOperation(value = "Undeploy a nffg")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
-			@ApiResponse(code = 404, message = "Not Found"),
-			@ApiResponse(code = 500, message = "Internal Server Error") })
-	public void deleteNffg() {
-		deployer.undeployNffg(name);
 	}
 
 	
