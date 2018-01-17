@@ -14,7 +14,7 @@ import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.client1.data.Nffg;
 import it.polito.dp2.NFV.sol3.client2.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Index.Nffgs.NffgName.Nodes;
+import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Root.Nffgs.NffgName.Nodes;
 
 public class NffgReader implements it.polito.dp2.NFV.NffgReader {
 
@@ -25,7 +25,7 @@ public class NffgReader implements it.polito.dp2.NFV.NffgReader {
 		try {
 			nffg = NfvDeployer.createClient().resource(uri).get(Nffg.class);
 			this.nodes = new HashMap<>();
-			it.polito.dp2.NFV.sol3.client2.data.Nodes nodes = new NfvDeployer.Index.Nffgs.NffgName.Nodes(NfvDeployer.createClient(), uri).getAsNodesXml();
+			it.polito.dp2.NFV.sol3.client2.data.Nodes nodes = new Nodes(NfvDeployer.createClient(), uri).getAsNodesXml();
 			for (NamedEntity n : nodes.getNode()) {
 				this.nodes.put(n.getName(), new it.polito.dp2.NFV.sol3.client2.NodeReader(URI.create(n.getHref())));
 			}

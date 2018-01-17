@@ -133,25 +133,26 @@
 				<extension base="tns:NamedEntity">
 					<sequence>
 						<element name="deployedNodes">
-						<complexType>
-						<sequence>
-						<element name="node" minOccurs="0" maxOccurs="unbounded" type="tns:NamedEntity">
-						</element>
-						</sequence>
-						</complexType>
+							<complexType>
+								<sequence>
+									<element name="node" minOccurs="0"
+										maxOccurs="unbounded" type="tns:NamedEntity">
+									</element>
+								</sequence>
+							</complexType>
 						</element>
 
-						<element name="connections" type="tns:Hyperlink" />
+						<element name="connections"
+							type="tns:Hyperlink" />
 					</sequence>
-					<attribute name="availableMemory" type="nonNegativeInteger"
-						use="required" />
-					<attribute name="availableStorage" type="nonNegativeInteger"
-						use="required" />
-					<attribute name="allocatedMemory" type="nonNegativeInteger"
-						use="required" />
-					<attribute name="allocatedStorage" type="nonNegativeInteger"
-						use="required" />
-					<attribute name="maxVNFs" type="nonNegativeInteger" use="required" />
+					<attribute name="availableMemory"
+						type="nonNegativeInteger" use="required" />
+					<attribute name="availableStorage"
+						type="nonNegativeInteger" use="required" />
+
+
+					<attribute name="maxVNFs" type="nonNegativeInteger"
+						use="required" />
 				</extension>
 			</complexContent>
 		</complexType>

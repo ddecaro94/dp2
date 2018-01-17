@@ -92,7 +92,7 @@ public class LinksCollection {
 		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
 		
 		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
-		float reqThr = link.getRequiredThroughput();
+		float reqThr = (link.getRequiredThroughput() == null) ? 0 : link.getRequiredThroughput();
 		try {
 			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), reqLatency, reqThr, false);
 		} catch (AlreadyLoadedException e) {
@@ -116,13 +116,13 @@ public class LinksCollection {
 	public Link putLink(Link link, @PathParam("linkName") String id) {
 		if (link == null) throw new BadRequestException("No link defined");
 		if (link.getName() == null) throw new UnprocessableEntityException("Link name cannot be empty");
-		if (link.getName() != id) throw new UnprocessableEntityException("Link name and link resource identifier cannot be different");
+		if (!link.getName().equals(id)) throw new UnprocessableEntityException("Link name and link resource identifier cannot be different, identifier: "+id+", link name: "+link.getName());
 		if (link.getSrc() == null) throw new UnprocessableEntityException("Source node not defined");
 		if (link.getDst() == null) throw new UnprocessableEntityException("Destination node not defined");
 		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
 		
 		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
-		float reqThr = link.getRequiredThroughput();
+		float reqThr = (link.getRequiredThroughput() == null) ? 0 : link.getRequiredThroughput();
 		
 		try {
 			

@@ -12,7 +12,6 @@ import it.polito.dp2.NFV.NffgReader;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.client2.data.Links;
 import it.polito.dp2.NFV.sol3.client2.VNFTypeReader;
-import it.polito.dp2.NFV.sol3.client2.data.Link;
 import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer;
 import it.polito.dp2.NFV.sol3.client2.data.Node;
 

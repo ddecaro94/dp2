@@ -9,7 +9,7 @@ import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer;
 import it.polito.dp2.NFV.sol3.client2.data.Connection;
 import it.polito.dp2.NFV.sol3.client2.data.NamedEntity;
-import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Index.Hosts;
+import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Root.Hosts;
 import it.polito.dp2.NFV.sol3.client2.data.Connections;
 
 public class ConnectionPerformanceReader implements it.polito.dp2.NFV.ConnectionPerformanceReader {

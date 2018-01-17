@@ -14,30 +14,24 @@ import it.polito.dp2.NFV.VNFTypeReader;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.client2.data.Catalog;
-import it.polito.dp2.NFV.sol3.client2.data.Host;
 import it.polito.dp2.NFV.sol3.client2.data.Hosts;
 import it.polito.dp2.NFV.sol3.client2.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client2.data.Nffgs;
-import it.polito.dp2.NFV.sol3.client2.data.Nfv;
 import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Index;
+import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Root;
 import it.polito.dp2.NFV.sol3.client2.data.Vnf;
 
 public class NfvReader implements it.polito.dp2.NFV.NfvReader {
 
-	private URI baseUri;
-	private Index nfvService;
-	private Hosts hostsService;
-	private Nffgs nffgsService;
-	private Catalog catalogService;
+	private Root nfvService;
+
 	private Set<HostReader> hosts;
 	private Set<NffgReader> nffgs;
 	private Set<VNFTypeReader> catalog;
 	private Map<String, Map<String, ConnectionPerformanceReader>> connections;
 	
 	public NfvReader(URI baseUri) throws UnknownEntityException, ServiceException {
-		this.baseUri = baseUri;
-		this.nfvService = new Index(NfvDeployer.createClient(), baseUri);
+		this.nfvService = new Root(NfvDeployer.createClient(), baseUri);
 		Catalog c = nfvService.catalog().getAsCatalogXml();
 		Hosts h = nfvService.hosts().getAsHostsXml();
 		Nffgs n = nfvService.nffgs().getAsNffgsXml();

@@ -18,14 +18,8 @@ import javax.xml.datatype.DatatypeFactory;
 import com.sun.jersey.api.client.ClientResponse;
 
 import it.polito.dp2.NFV.FactoryConfigurationError;
-import it.polito.dp2.NFV.HostReader;
-import it.polito.dp2.NFV.LinkReader;
-import it.polito.dp2.NFV.NffgReader;
 import it.polito.dp2.NFV.NfvReader;
 import it.polito.dp2.NFV.NfvReaderException;
-import it.polito.dp2.NFV.NfvReaderFactory;
-import it.polito.dp2.NFV.NodeReader;
-import it.polito.dp2.NFV.VNFTypeReader;
 import it.polito.dp2.NFV.lab3.AllocationException;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.lab3.UnknownEntityException;
@@ -197,8 +191,8 @@ public class NfvDeployer {
 			
 			if (requiredMemory < availableMemory && requiredStorage < availableStorage && deployedVnfs < maxVnfs) {
 				//allocate node
-				hostMap.get(hostIds.get(preferenceHost)).setAvailableMemory(BigInteger.valueOf(availableMemory - requiredMemory));
-				hostMap.get(hostIds.get(preferenceHost)).setAvailableStorage(BigInteger.valueOf(availableStorage - requiredStorage));
+				//hostMap.get(hostIds.get(preferenceHost)).setAllocatedMemory(BigInteger.valueOf(allocatedMemory + requiredMemory));
+				//hostMap.get(hostIds.get(preferenceHost)).setAllocatedStorage(BigInteger.valueOf(allocatedStorage + requiredStorage));
 				hostMap.get(hostIds.get(preferenceHost)).getDeployedNodes().getNode().add(createNamedRef(nodeName, n.getHref()));
 				
 				// create relationship
@@ -222,8 +216,8 @@ public class NfvDeployer {
 			
 			if (requiredMemory < availableMemory && requiredStorage < availableStorage && deployedVnfs < maxVnfs) {
 				//allocate node
-				hostMap.get(hostIds.get(h.getName())).setAvailableMemory(BigInteger.valueOf(availableMemory - requiredMemory));
-				hostMap.get(hostIds.get(h.getName())).setAvailableStorage(BigInteger.valueOf(availableStorage - requiredStorage));
+				//hostMap.get(hostIds.get(h.getName())).setAllocatedMemory(BigInteger.valueOf(availableMemory - requiredMemory));
+				//hostMap.get(hostIds.get(h.getName())).setAllocatedStorage(BigInteger.valueOf(availableStorage - requiredStorage));
 				hostMap.get(hostIds.get(h.getName())).getDeployedNodes().getNode().add(createNamedRef(nodeName, n.getHref()));
 				
 				//create relationship
@@ -294,8 +288,6 @@ public class NfvDeployer {
 			h.setAvailableMemory(BigInteger.valueOf(availableMemory));
 			h.setAvailableStorage(BigInteger.valueOf(availableStorage));
 			h.setMaxVNFs(BigInteger.valueOf(maxVnfs));
-			h.setAllocatedMemory(BigInteger.valueOf(0));
-			h.setAllocatedStorage(BigInteger.valueOf(0));
 			h.setConnections(createHyperlink(baseUri + hostsPath + "/" + hostName + "/" + connectionsPath));
 			h.setDeployedNodes(new DeployedNodes());
 	
@@ -328,7 +320,7 @@ public class NfvDeployer {
 		//can be created even if graph not deployed, resource should check deployed status
 		if (!nffgMap.containsKey(graphName)) throw new UnknownEntityException("NF-FG " + graphName + " not found");
 
-		boolean exists = isExistingLink(graphName, linkName);
+		boolean exists = isExistingLink(graphName, linkName) || isDuplicateLink(graphName, srcNode, dstNode);
 		
 		if (exists && !replace) throw new AlreadyLoadedException("Link " + linkName + " already loaded");
 		if (!isExistingNode(dstNode)) throw new UnknownEntityException("Destination node does not exist");	
@@ -389,6 +381,24 @@ public class NfvDeployer {
 
 	}
 
+	private boolean isDuplicateLink(String graph, String srcNode, String dstNode) {
+		// TODO Auto-generated method stub
+		if (srcNode == null || dstNode == null) return false;
+		if (!nffgMap.containsKey(graph)) return false;
+		if (!isExistingNode(srcNode) || !isExistingNode(dstNode)) return false;
+		if (!linkNames.containsKey(graph)) return false;
+		if (!linkNames.get(graph).containsKey(srcNode)) return false;
+		
+		it.polito.dp2.NFV.sol3.service.data.Relationships linksFromNode = this.dataApi
+				.nodeNodeidRelationshipsOut(nodeIds.get(srcNode)).getAsRelationships();
+		
+		for (Relationship r : linksFromNode.getRelationship()) {
+			if (links.get(r.getId()).getName().equals(dstNode)) return true;
+		}
+		
+		return false;
+	}
+
 	private NamedEntity createNamedRef(String name, String ref) {
 		NamedEntity e = new NamedEntity();
 		e.setHref(ref);
@@ -413,9 +423,13 @@ public class NfvDeployer {
 	}
 
 	public synchronized Node createNode(String nffg, String nodeName, String type, boolean replace)
-			throws AlreadyLoadedException, UnknownEntityException, ServiceException {
+			throws AlreadyLoadedException, UnknownEntityException, ServiceException, InvalidEntityException {
 		
 		//a node can be created even if the nffg is not completely deployed, graph should be checked by invoker class
+		if (nffg == null) throw new InvalidEntityException("NF-FG name not provided");
+		if (nodeName == null) throw new InvalidEntityException("Node name not provided");
+		if (type == null) throw new InvalidEntityException("VNF type not provided");
+		
 		if (!nffgMap.containsKey(nffg)) throw new UnknownEntityException("NF-FG " + nffg + " does not exist");
 		if (!isExistingType(type)) throw new UnknownEntityException("VNF type " + type + " does not exist");		
 		
@@ -500,17 +514,27 @@ public class NfvDeployer {
 		
 		nodeMap.get(nodeIds.get(nodeName)).setHost(null);  //delete allocation info from node
 		
-		if (n.getHost() != null)  //node was not allocated
-		if (isExistingHost(n.getHost().getName())) {
-			//delete info from host
-			String id = hostIds.get(n.getHost().getName());
-			Host h = hostMap.get(id);
-			hostMap.get(id).setAllocatedMemory(
-					h.getAllocatedMemory().subtract(vnfs.get(n.getVnf().getName()).getRequiredMemory()));
-			hostMap.get(id).setAllocatedStorage(
-					h.getAllocatedStorage().subtract(vnfs.get(n.getVnf().getName()).getRequiredStorage()));
-			hostMap.get(id).getDeployedNodes().getNode().removeIf(t->t.getName().equals(nodeName));
-
+		if (n.getHost() != null) { //node has been allocated on host
+		
+			if (isExistingHost(n.getHost().getName())) {
+				//delete info from host
+				String id = hostIds.get(n.getHost().getName());
+				/*
+				Host h = hostMap.get(id);
+				
+				Vnf v = vnfs.get(n.getVnf().getName());
+				
+				int requiredMemory = (v.getRequiredMemory() != null) ? v.getRequiredMemory().intValue() : 0;
+				int requiredStorage = (v.getRequiredStorage() != null) ? v.getRequiredStorage().intValue() : 0;
+				int availableMemory = (h.getAvailableMemory() != null) ? h.getAvailableMemory().intValue() : 0;
+				int availableStorage = (h.getAvailableStorage() != null) ? h.getAvailableStorage().intValue() : 0;
+				
+				hostMap.get(id).setAvailableMemory(BigInteger.valueOf(availableMemory - requiredMemory));
+				hostMap.get(id).setAvailableStorage(BigInteger.valueOf(availableStorage - requiredStorage));
+				*/
+				hostMap.get(id).getDeployedNodes().getNode().removeIf(t->t.getName().equals(nodeName));
+	
+			}
 		}
 		
 		try {
@@ -596,7 +620,7 @@ public class NfvDeployer {
 	// only a thread at a time will be able to perform deployment
 	public synchronized Nffg deployNffg(NewNffg nffg)
 			throws AlreadyLoadedException, UnknownEntityException, AllocationException, InvalidEntityException, DatatypeConfigurationException, ServiceException {
-		// TODO Auto-generated method stub
+
 		boolean success = false;
 		
 		if (nffgMap.containsKey(nffg.getName())) throw new AlreadyLoadedException("NF-FG " + nffg.getName() + " already exists");
@@ -666,7 +690,6 @@ public class NfvDeployer {
 	}
 
 	public Connections getConnections(String hostName) throws UnknownEntityException {
-		// TODO
 		if (!hostIds.containsKey(hostName)) throw new UnknownEntityException("No connections defined for hostname " + hostName);
 			
 		String id = hostIds.get(hostName);
@@ -704,7 +727,7 @@ public class NfvDeployer {
 	}
 
 	public Links getLinks(String graph, String node) throws UnknownEntityException {
-		// TODO Auto-generated method stub
+		
 		if (!isDeployed(graph)) throw new UnknownEntityException("No NF-FG defined with name " + graph);
 		
 		if (node == null)

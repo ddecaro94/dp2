@@ -45,9 +45,9 @@ public class LinkReader implements it.polito.dp2.NFV.LinkReader {
 	@Override
 	public NodeReader getSourceNode() {
 		Nodes nodes = nodesService.get(Nodes.class);
-		String dst = linkService.get(Link.class).getSrc();
+		String src = linkService.get(Link.class).getSrc();
 		for (NamedEntity node : nodes.getNode()) {
-			if (node.getName().equals(dst)) {
+			if (node.getName().equals(src)) {
 				return new it.polito.dp2.NFV.sol3.client1.NodeReader(URI.create(node.getHref()));
 			}
 		}

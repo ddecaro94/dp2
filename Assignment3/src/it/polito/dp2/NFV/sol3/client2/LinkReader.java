@@ -40,7 +40,7 @@ public class LinkReader implements it.polito.dp2.NFV.LinkReader {
 	@Override
 	public NodeReader getDestinationNode() {
 		try {
-			return new it.polito.dp2.NFV.sol3.client2.NodeReader(source);
+			return new it.polito.dp2.NFV.sol3.client2.NodeReader(dest);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			return null;
@@ -55,7 +55,7 @@ public class LinkReader implements it.polito.dp2.NFV.LinkReader {
 	@Override
 	public NodeReader getSourceNode() {
 		try {
-			return new it.polito.dp2.NFV.sol3.client2.NodeReader(dest);
+			return new it.polito.dp2.NFV.sol3.client2.NodeReader(source);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			return null;

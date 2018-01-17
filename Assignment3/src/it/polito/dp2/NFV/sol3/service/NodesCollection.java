@@ -3,9 +3,7 @@ package it.polito.dp2.NFV.sol3.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
@@ -66,44 +64,62 @@ public class NodesCollection {
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node postNode(Node node) {
+		if (node == null) throw new BadRequestException("Node descriptor not provided");
+		if (!deployer.isDeployed(graph)) throw new ConflictException("NF-FG "+graph+" not deployed");
+		if (node.getVnf() == null) throw new UnprocessableEntityException("VNF type not defined");
+		if (node.getName() == null) throw new UnprocessableEntityException("Node name not defined");
+		String host = (node.getHost() != null) ? node.getHost().getName() : null;
+		
 		try {
-			if (deployer.getNffgByName(graph).getDeployTime() != null) {
-				
-			} else throw new ConflictException("NF-FG "+graph+" not deployed");
-		} catch (UnknownEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		if (node == null) throw new BadRequestException();
-		if (node.getVnf() == null) throw new ClientErrorException("VNF type non defined", 422);
-		try {
-			String host;
-			deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
-			if (node.getHost() == null) host = null;
-			else host = node.getHost().getName();
-			try {
-				deployer.allocateNode(node.getName(), host);
-			} catch (Exception e) {
-				try {
-					deployer.deleteNode(graph, node.getName());
-				} catch (ServiceException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				throw new UnprocessableEntityException(e);
-			}
-			
-			return deployer.getNode(graph, node.getName());
+			Node n = deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
+
 		} catch (AlreadyLoadedException e) {
-			e.printStackTrace();
 			throw new ConflictException(e);
 		} catch (UnknownEntityException e) {
-			e.printStackTrace();
 			throw new UnprocessableEntityException(e);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			try {
+				deployer.deleteNode(graph, node.getName());
+			} catch (UnknownEntityException e1) {
+				throw new InternalServerErrorException(e1);
+			} catch (ServiceException e1) {
+				throw new InternalServerErrorException(e1);
+			}
+			throw new InternalServerErrorException(e);
+		} catch (InvalidEntityException e) {
+			throw new UnprocessableEntityException(e);
+		}
+		
+		try {
+			deployer.allocateNode(node.getName(), host);
+
+		} catch (AllocationException e) {
+			try {
+				deployer.deleteNode(graph, node.getName());
+			} catch (UnknownEntityException e1) {
+				throw new InternalServerErrorException(e1);
+			} catch (ServiceException e1) {
+				throw new InternalServerErrorException(e1);
+			}
+			throw new ConflictException(e);
+		} catch (UnknownEntityException e) {
+			try {
+				deployer.deleteNode(graph, node.getName());
+			} catch (UnknownEntityException e1) {
+				throw new InternalServerErrorException(e1);
+			} catch (ServiceException e1) {
+				throw new InternalServerErrorException(e1);
+			}
+			throw new UnprocessableEntityException(e);
+		}
+		
+		
+		try {
+			return deployer.getNode(graph, node.getName());
+		} catch (UnknownEntityException e) {
 			throw new InternalServerErrorException(e);
 		}
+
 	}
 
 }

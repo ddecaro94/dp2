@@ -38,8 +38,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="availableMemory" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
  *       &lt;attribute name="availableStorage" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
- *       &lt;attribute name="allocatedMemory" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
- *       &lt;attribute name="allocatedStorage" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
  *       &lt;attribute name="maxVNFs" use="required" type="{http://www.w3.org/2001/XMLSchema}nonNegativeInteger" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -68,12 +66,6 @@ public class Host
     @XmlAttribute(name = "availableStorage", required = true)
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger availableStorage;
-    @XmlAttribute(name = "allocatedMemory", required = true)
-    @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger allocatedMemory;
-    @XmlAttribute(name = "allocatedStorage", required = true)
-    @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger allocatedStorage;
     @XmlAttribute(name = "maxVNFs", required = true)
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger maxVNFs;
@@ -172,54 +164,6 @@ public class Host
      */
     public void setAvailableStorage(BigInteger value) {
         this.availableStorage = value;
-    }
-
-    /**
-     * Gets the value of the allocatedMemory property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getAllocatedMemory() {
-        return allocatedMemory;
-    }
-
-    /**
-     * Sets the value of the allocatedMemory property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setAllocatedMemory(BigInteger value) {
-        this.allocatedMemory = value;
-    }
-
-    /**
-     * Gets the value of the allocatedStorage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getAllocatedStorage() {
-        return allocatedStorage;
-    }
-
-    /**
-     * Sets the value of the allocatedStorage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setAllocatedStorage(BigInteger value) {
-        this.allocatedStorage = value;
     }
 
     /**
