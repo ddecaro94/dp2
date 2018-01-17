@@ -2,6 +2,7 @@ package it.polito.dp2.NFV.sol3.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -11,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Catalog;
 import it.polito.dp2.NFV.sol3.service.model.Vnf;
 
@@ -40,7 +42,11 @@ public class CatalogCollection {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Vnf getVnf(@PathParam("vnfName") String vnfName) {
-		return this.deployer.getVnfByName(vnfName);
+		try {
+			return this.deployer.getVnfByName(vnfName);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 
 }

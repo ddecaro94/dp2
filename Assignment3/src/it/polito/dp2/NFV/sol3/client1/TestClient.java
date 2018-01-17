@@ -22,11 +22,8 @@ public class TestClient {
 	public static void main(String[] args) {
 		NfvClient client;
 		try {
-			client = new NfvClientFactory().newNfvClient();
-			
-			DeployedNffg graph = client.getDeployedNffg("Nffg0");
-			
-			System.out.println(graph.getReader().getNodes());
+	        System.setProperty("it.polito.dp2.NFV.NfvReaderFactory", "it.polito.dp2.NFV.sol3.client2.NfvReaderFactory");
+	        NfvReader initialTestNfvReader = NfvReaderFactory.newInstance().newNfvReader();
 		
 		
 		} catch (Exception e) {

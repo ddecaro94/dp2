@@ -1,8 +1,6 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import javax.validation.Valid;
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,6 +18,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.polito.dp2.NFV.lab3.ServiceException;
+import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Link;
 import it.polito.dp2.NFV.sol3.service.model.Links;
 
@@ -57,7 +57,11 @@ public class LinksCollection {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link getLink(@PathParam("linkName") String name) {
-		return deployer.getLink(graphName, name);
+		try {
+			return deployer.getLink(graphName, name);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 	
 	@GET
@@ -67,7 +71,11 @@ public class LinksCollection {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Links getLinks() {
-		return deployer.getLinks(graphName, nodeName);
+		try {
+			return deployer.getLinks(graphName, nodeName);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 	
 	@POST
@@ -77,13 +85,24 @@ public class LinksCollection {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link postLink(Link link) {
+		if (link == null) throw new BadRequestException("No link defined");
+		if (link.getName() == null) throw new UnprocessableEntityException("Link name cannot be empty");
+		if (link.getSrc() == null) throw new UnprocessableEntityException("Source node not defined");
+		if (link.getDst() == null) throw new UnprocessableEntityException("Destination node not defined");
+		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
+		
+		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
+		float reqThr = link.getRequiredThroughput();
 		try {
-			if (link == null) throw new BadRequestException();
-			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), link.getRequiredLatency().intValue(), link.getRequiredThroughput(), false);
-		} catch (NotFoundException e) {
-			throw e;
+			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), reqLatency, reqThr, false);
 		} catch (AlreadyLoadedException e) {
-			throw new ConflictException();
+			throw new ConflictException(e);
+		} catch (UnknownEntityException e) {
+			throw new ConflictException(e);
+		} catch (ServiceException e) {
+			throw new InternalServerErrorException(e);
+		} catch (InvalidEntityException e) {
+			throw new UnprocessableEntityException(e);
 		}
 	}
 	
@@ -95,14 +114,27 @@ public class LinksCollection {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link putLink(Link link, @PathParam("linkName") String id) {
+		if (link == null) throw new BadRequestException("No link defined");
+		if (link.getName() == null) throw new UnprocessableEntityException("Link name cannot be empty");
+		if (link.getName() != id) throw new UnprocessableEntityException("Link name and link resource identifier cannot be different");
+		if (link.getSrc() == null) throw new UnprocessableEntityException("Source node not defined");
+		if (link.getDst() == null) throw new UnprocessableEntityException("Destination node not defined");
+		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
+		
+		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
+		float reqThr = link.getRequiredThroughput();
+		
 		try {
-			if (link == null) throw new BadRequestException();
-			if (link.getName() != id) throw new ClientErrorException("Link name and link resource identifier cannot be different", 422);
-			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), link.getRequiredLatency().intValue(), link.getRequiredThroughput(), true);
-		} catch (NotFoundException e) {
-			throw e;
+			
+			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), reqLatency, reqThr, true);
 		} catch (AlreadyLoadedException e) {
 			throw new InternalServerErrorException(e);
+		} catch (UnknownEntityException e) {
+			throw new UnprocessableEntityException(e);
+		} catch (ServiceException e) {
+			throw new InternalServerErrorException(e);
+		} catch (InvalidEntityException e) {
+			throw new UnprocessableEntityException(e);
 		}
 	}
 	

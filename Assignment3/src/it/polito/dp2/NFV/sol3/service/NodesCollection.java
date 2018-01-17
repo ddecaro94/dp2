@@ -9,6 +9,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,6 +20,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.lab3.AllocationException;
+import it.polito.dp2.NFV.lab3.ServiceException;
+import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Node;
 import it.polito.dp2.NFV.sol3.service.model.Nodes;
 
@@ -47,7 +50,11 @@ public class NodesCollection {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nodes getNodes() {
-		return deployer.getNodes(graph);
+		try {
+			return deployer.getNodes(graph);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 	
 	@POST
@@ -58,10 +65,15 @@ public class NodesCollection {
     		@ApiResponse(code = 409, message = "Conflict"),
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Node postNode(Node node) throws NotDefinedException, AllocationException {
-		if (deployer.getNffgByName(graph).getDeployTime() != null) {
-			
-		} else throw new NotDeployedException("NF-FG "+graph+" not deployed", 422);
+	public Node postNode(Node node) {
+		try {
+			if (deployer.getNffgByName(graph).getDeployTime() != null) {
+				
+			} else throw new ConflictException("NF-FG "+graph+" not deployed");
+		} catch (UnknownEntityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if (node == null) throw new BadRequestException();
 		if (node.getVnf() == null) throw new ClientErrorException("VNF type non defined", 422);
 		try {
@@ -72,17 +84,25 @@ public class NodesCollection {
 			try {
 				deployer.allocateNode(node.getName(), host);
 			} catch (Exception e) {
-				deployer.deleteNode(graph, node.getName());
-				throw new ClientErrorException(e.getMessage(), 422);
+				try {
+					deployer.deleteNode(graph, node.getName());
+				} catch (ServiceException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				throw new UnprocessableEntityException(e);
 			}
 			
 			return deployer.getNode(graph, node.getName());
 		} catch (AlreadyLoadedException e) {
 			e.printStackTrace();
-			throw new ConflictException();
-		} catch (NotDefinedException e) {
+			throw new ConflictException(e);
+		} catch (UnknownEntityException e) {
 			e.printStackTrace();
-			throw new ClientErrorException(e.getMessage(), 422);
+			throw new UnprocessableEntityException(e);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			throw new InternalServerErrorException(e);
 		}
 	}
 

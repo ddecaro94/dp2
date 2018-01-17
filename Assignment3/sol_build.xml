@@ -103,6 +103,12 @@
 			<depends dir="${basedir}" includes="build.xml" />
 			<customClassName uri="${URL}/" classname="${service.name}" />
 		</wjc>
+		<wjc description="${serviceWADL}" package="it.polito.dp2.NFV.sol3.client2.data" autoSchemaPackage="false" target="${src.dir}">
+			<customizations dir="${basedir}" includes="binding.xjc" />
+			<produces dir="${src.dir}/it/polito/dp2/NFV/sol3/client2/data" includes="*.java" />
+			<depends dir="${basedir}" includes="build.xml" />
+			<customClassName uri="${URL}/" classname="${service.name}" />
+		</wjc>
 	</target>
 	
 	<target name="build-client" depends="generate-client-artifacts">
@@ -116,6 +122,7 @@
 			includeantruntime="false">
 				<src path="${src.dir}" />
 				<include name="it/polito/dp2/NFV/sol3/client1/**" />
+				<include name="it/polito/dp2/NFV/sol3/client2/**" />
 				<classpath>
 					<path refid="sol.classpath" />
 				</classpath>

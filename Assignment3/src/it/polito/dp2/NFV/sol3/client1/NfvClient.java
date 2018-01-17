@@ -24,6 +24,7 @@ import it.polito.dp2.NFV.lab3.UnknownEntityException;
 
 public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 	private NfvDeployer.Index.Nffgs serviceApi;
+	private Map<NodeDescriptor, String> nodeNames;
 	public NfvClient() {
 		String baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
 		serviceApi = new Nffgs(NfvDeployer.createClient(), URI.create(baseUri));
@@ -32,7 +33,7 @@ public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 	@Override
 	public DeployedNffg deployNffg(NffgDescriptor nffg) throws AllocationException, ServiceException {
 		
-		Map<NodeDescriptor, String> nodeNames = new HashMap<>();
+		nodeNames = new HashMap<>();
 		
 		NewNffg newGraph = new NewNffg();
 		newGraph.setName("Nffg"+RandomUtils.nextInt());

@@ -1,6 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import javax.validation.Valid;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
@@ -18,6 +17,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.lab3.AllocationException;
+import it.polito.dp2.NFV.lab3.ServiceException;
+import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Hosts;
 import it.polito.dp2.NFV.sol3.service.model.Node;
 import it.polito.dp2.NFV.sol3.service.model.Nodes;
@@ -49,7 +50,10 @@ public class NodeResource {
 		boolean res;
 		try {
 			res = this.deployer.deleteNode(graphName, name);
-		} catch (NotDefinedException e) {
+		} catch (UnknownEntityException e) {
+			e.printStackTrace();
+			throw new InternalServerErrorException(e);
+		} catch (ServiceException e) {
 			e.printStackTrace();
 			throw new InternalServerErrorException(e);
 		}
@@ -69,7 +73,11 @@ public class NodeResource {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node getNode() {
-		return this.deployer.getNode(graphName, name);
+		try {
+			return this.deployer.getNode(graphName, name);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 	
 	@GET
@@ -80,7 +88,14 @@ public class NodeResource {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Hosts getReachableHosts() {
-		return deployer.getReachableHosts(graphName, name);
+		try {
+			return deployer.getReachableHosts(graphName, name);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			throw new InternalServerErrorException(e);
+		}
 	}
 	
 	@PUT
@@ -92,9 +107,13 @@ public class NodeResource {
     		@ApiResponse(code = 422, message = "Unprocessable Entity"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node putNode(Node node) {
-		if (deployer.getNffgByName(graphName).getDeployTime() != null) {
-			
-		} else throw new NotDeployedException("NF-FG "+graphName+" not deployed", 422);
+		try {
+			if (deployer.getNffgByName(graphName).getDeployTime() != null) {
+				
+			} else throw new ConflictException("NF-FG "+graphName+" not deployed");
+		} catch (UnknownEntityException e3) {
+			throw new NotFoundException(e3);
+		}
 		if (node == null) throw new BadRequestException();
 		try {
 			String host;
@@ -103,16 +122,24 @@ public class NodeResource {
 			else host = node.getHost().getName();
 			try {
 				deployer.allocateNode(node.getName(), host);
-			} catch (Exception e) {
-				deployer.deleteNode(graphName, node.getName());
-				throw new ClientErrorException(e.getMessage(), 422);
+			} catch (AllocationException e) {
+				try {
+					deployer.deleteNode(graphName, node.getName());
+				} catch (ServiceException e1) {
+					e1.printStackTrace();
+					throw new InternalServerErrorException(e1);
+				}
+				throw new UnprocessableEntityException(e);
 			}
 			
 			return deployer.getNode(graphName, node.getName());
 		} catch (AlreadyLoadedException e) {
 			throw new InternalServerErrorException(e);
-		} catch (NotDefinedException e) {
-			throw new ClientErrorException(e.getMessage(), 422);
+		} catch (UnknownEntityException e) {
+			throw new UnprocessableEntityException(e);
+		} catch (ServiceException e2) {
+			e2.printStackTrace();
+			throw new InternalServerErrorException(e2);
 		}
 	}
 

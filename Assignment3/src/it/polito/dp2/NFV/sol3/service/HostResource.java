@@ -2,6 +2,7 @@ package it.polito.dp2.NFV.sol3.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -10,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Connections;
 import it.polito.dp2.NFV.sol3.service.model.Host;
 
@@ -33,7 +35,11 @@ public class HostResource {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Connections getConnections() {
-		return deployer.getConnections(name);
+		try {
+			return deployer.getConnections(name);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 	
 	@GET
@@ -43,7 +49,11 @@ public class HostResource {
     		@ApiResponse(code = 404, message = "Not Found"),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Host getHost() {
-		return this.deployer.getHostByName(name);
+		try {
+			return this.deployer.getHostByName(name);
+		} catch (UnknownEntityException e) {
+			throw new NotFoundException(e);
+		}
 	}
 
 }

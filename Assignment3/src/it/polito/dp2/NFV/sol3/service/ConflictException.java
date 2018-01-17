@@ -15,63 +15,19 @@ public class ConflictException extends ClientErrorException{
         super(Response.Status.CONFLICT); // 409
     }
 
-	public ConflictException(int status) {
-		super(status);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(int status, Throwable cause) {
-		super(status, cause);
-		// TODO Auto-generated constructor stub
+	public ConflictException(Throwable cause) {
+		super(Response.Status.CONFLICT, cause);
 	}
 
 	public ConflictException(Response response) {
 		super(response);
-		// TODO Auto-generated constructor stub
 	}
 
 	public ConflictException(Response response, Throwable cause) {
 		super(response, cause);
-		// TODO Auto-generated constructor stub
 	}
 
-	public ConflictException(Status status) {
-		super(status);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(Status status, Throwable cause) {
-		super(status, cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(String message, int status) {
-		super(message, status);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(String message, int status, Throwable cause) {
-		super(message, status, cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(String message, Response response) {
-		super(message, response);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(String message, Response response, Throwable cause) {
-		super(message, response, cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(String message, Status status) {
-		super(message, status);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConflictException(String message, Status status, Throwable cause) {
-		super(message, status, cause);
-		// TODO Auto-generated constructor stub
+	public ConflictException(String message) {
+		super(message, Response.Status.CONFLICT);
 	}
 }

@@ -23,6 +23,7 @@ import it.polito.dp2.NFV.sol3.client1.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client1.data.Nffg;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs.NffgName;
+import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs.NffgName.Links;
 import it.polito.dp2.NFV.sol3.client1.data.Node;
 
 public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
@@ -31,7 +32,7 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 	private URI linksUri;
 	private URI nodesUri;
 	private WebResource nodesService;
-	private WebResource linksService;
+	private Links linksService;
 	
 	
 	public DeployedNffg(Nffg graph) {
@@ -39,7 +40,7 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 		this.linksUri = URI.create(graph.getLinks().getHref());
 		this.nodesUri = URI.create(graph.getNodes().getHref());
 		nodesService = NfvDeployer.createClient().resource(nodesUri);
-		linksService = NfvDeployer.createClient().resource(linksUri);
+		linksService = new NffgName.Links(NfvDeployer.createClient(), graphUri);
 	}
 
 
@@ -77,12 +78,12 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 		Link createdLink;
 		
 		if (overwrite) {
-			createdLink = new NffgName.Links.LinkName(NfvDeployer.createClient(), linksUri, l.getName()).putXmlAsLink(l);
+			createdLink = linksService.linkName(l.getName()).putXmlAsLink(l);
 		} else {
-			createdLink = linksService.post(Link.class, l);
+			createdLink = linksService.postXmlAsLink(l);
 		}
 		
-		return new it.polito.dp2.NFV.sol3.client1.LinkReader(URI.create(l.getHref()), nodesUri);
+		return new it.polito.dp2.NFV.sol3.client1.LinkReader(URI.create(createdLink.getHref()), nodesUri);
 	}
 
 	@Override

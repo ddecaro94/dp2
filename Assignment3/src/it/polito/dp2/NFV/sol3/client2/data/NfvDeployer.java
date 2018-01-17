@@ -1,5 +1,5 @@
 
-package it.polito.dp2.NFV.sol3.client1.data;
+package it.polito.dp2.NFV.sol3.client2.data;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 
 @Generated(value = {
     "wadl|http://localhost:8080/NfvDeployer/rest/application.wadl"
-}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-16T23:24:58.080+01:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-16T23:24:58.662+01:00")
 public class NfvDeployer {
 
     /**
@@ -154,7 +154,7 @@ public class NfvDeployer {
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Catalog getAsCatalogXml() {
+        public it.polito.dp2.NFV.sol3.client2.data.Catalog getAsCatalogXml() {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -164,7 +164,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Catalog.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Catalog.class);
         }
 
         public<T >T getAsXml(GenericType<T> returnType) {
@@ -199,7 +199,7 @@ public class NfvDeployer {
             }
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Catalog getAsCatalogTextXml() {
+        public it.polito.dp2.NFV.sol3.client2.data.Catalog getAsCatalogTextXml() {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -209,7 +209,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Catalog.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Catalog.class);
         }
 
         public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -429,7 +429,7 @@ public class NfvDeployer {
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Hosts getAsHostsXml() {
+        public it.polito.dp2.NFV.sol3.client2.data.Hosts getAsHostsXml() {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -439,7 +439,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Hosts.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Hosts.class);
         }
 
         public<T >T getAsXml(GenericType<T> returnType) {
@@ -474,7 +474,7 @@ public class NfvDeployer {
             }
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Hosts getAsHostsTextXml() {
+        public it.polito.dp2.NFV.sol3.client2.data.Hosts getAsHostsTextXml() {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -484,7 +484,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Hosts.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Hosts.class);
         }
 
         public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -704,7 +704,7 @@ public class NfvDeployer {
                     _templateAndMatrixParameterValues = new HashMap<String, Object>();
                 }
 
-                public it.polito.dp2.NFV.sol3.client1.data.Connections getAsConnectionsXml() {
+                public it.polito.dp2.NFV.sol3.client2.data.Connections getAsConnectionsXml() {
                     UriBuilder localUriBuilder = _uriBuilder.clone();
                     WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                     com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -714,7 +714,7 @@ public class NfvDeployer {
                     if (response.getStatus()>= 400) {
                         throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                     }
-                    return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Connections.class);
+                    return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Connections.class);
                 }
 
                 public<T >T getAsXml(GenericType<T> returnType) {
@@ -749,7 +749,7 @@ public class NfvDeployer {
                     }
                 }
 
-                public it.polito.dp2.NFV.sol3.client1.data.Connections getAsConnectionsTextXml() {
+                public it.polito.dp2.NFV.sol3.client2.data.Connections getAsConnectionsTextXml() {
                     UriBuilder localUriBuilder = _uriBuilder.clone();
                     WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                     com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -759,7 +759,7 @@ public class NfvDeployer {
                     if (response.getStatus()>= 400) {
                         throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                     }
-                    return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Connections.class);
+                    return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Connections.class);
                 }
 
                 public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -823,7 +823,7 @@ public class NfvDeployer {
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Nffgs getAsNffgsXml() {
+        public it.polito.dp2.NFV.sol3.client2.data.Nffgs getAsNffgsXml() {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -833,7 +833,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Nffgs.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nffgs.class);
         }
 
         public<T >T getAsXml(GenericType<T> returnType) {
@@ -868,7 +868,7 @@ public class NfvDeployer {
             }
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Nffgs getAsNffgsXml(String deploytime) {
+        public it.polito.dp2.NFV.sol3.client2.data.Nffgs getAsNffgsXml(String deploytime) {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             if (deploytime == null) {
             }
@@ -885,7 +885,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Nffgs.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nffgs.class);
         }
 
         public<T >T getAsXml(String deploytime, GenericType<T> returnType) {
@@ -934,7 +934,7 @@ public class NfvDeployer {
             }
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Nffgs getAsNffgsTextXml() {
+        public it.polito.dp2.NFV.sol3.client2.data.Nffgs getAsNffgsTextXml() {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -944,7 +944,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Nffgs.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nffgs.class);
         }
 
         public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -979,7 +979,7 @@ public class NfvDeployer {
             }
         }
 
-        public it.polito.dp2.NFV.sol3.client1.data.Nffgs getAsNffgsTextXml(String deploytime) {
+        public it.polito.dp2.NFV.sol3.client2.data.Nffgs getAsNffgsTextXml(String deploytime) {
             UriBuilder localUriBuilder = _uriBuilder.clone();
             if (deploytime == null) {
             }
@@ -996,7 +996,7 @@ public class NfvDeployer {
             if (response.getStatus()>= 400) {
                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
             }
-            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Nffgs.class);
+            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nffgs.class);
         }
 
         public<T >T getAsTextXml(String deploytime, GenericType<T> returnType) {
@@ -1465,7 +1465,7 @@ public class NfvDeployer {
                     }
                 }
 
-                public it.polito.dp2.NFV.sol3.client1.data.Links getAsLinksXml() {
+                public it.polito.dp2.NFV.sol3.client2.data.Links getAsLinksXml() {
                     UriBuilder localUriBuilder = _uriBuilder.clone();
                     WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                     com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -1475,7 +1475,7 @@ public class NfvDeployer {
                     if (response.getStatus()>= 400) {
                         throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                     }
-                    return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Links.class);
+                    return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Links.class);
                 }
 
                 public<T >T getAsXml(GenericType<T> returnType) {
@@ -1510,7 +1510,7 @@ public class NfvDeployer {
                     }
                 }
 
-                public it.polito.dp2.NFV.sol3.client1.data.Links getAsLinksTextXml() {
+                public it.polito.dp2.NFV.sol3.client2.data.Links getAsLinksTextXml() {
                     UriBuilder localUriBuilder = _uriBuilder.clone();
                     WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                     com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -1520,7 +1520,7 @@ public class NfvDeployer {
                     if (response.getStatus()>= 400) {
                         throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                     }
-                    return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Links.class);
+                    return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Links.class);
                 }
 
                 public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -2022,7 +2022,7 @@ public class NfvDeployer {
                     }
                 }
 
-                public it.polito.dp2.NFV.sol3.client1.data.Nodes getAsNodesXml() {
+                public it.polito.dp2.NFV.sol3.client2.data.Nodes getAsNodesXml() {
                     UriBuilder localUriBuilder = _uriBuilder.clone();
                     WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                     com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -2032,7 +2032,7 @@ public class NfvDeployer {
                     if (response.getStatus()>= 400) {
                         throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                     }
-                    return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Nodes.class);
+                    return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nodes.class);
                 }
 
                 public<T >T getAsXml(GenericType<T> returnType) {
@@ -2067,7 +2067,7 @@ public class NfvDeployer {
                     }
                 }
 
-                public it.polito.dp2.NFV.sol3.client1.data.Nodes getAsNodesTextXml() {
+                public it.polito.dp2.NFV.sol3.client2.data.Nodes getAsNodesTextXml() {
                     UriBuilder localUriBuilder = _uriBuilder.clone();
                     WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                     com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -2077,7 +2077,7 @@ public class NfvDeployer {
                     if (response.getStatus()>= 400) {
                         throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                     }
-                    return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Nodes.class);
+                    return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nodes.class);
                 }
 
                 public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -2532,7 +2532,7 @@ public class NfvDeployer {
                             }
                         }
 
-                        public it.polito.dp2.NFV.sol3.client1.data.Links getAsLinksXml() {
+                        public it.polito.dp2.NFV.sol3.client2.data.Links getAsLinksXml() {
                             UriBuilder localUriBuilder = _uriBuilder.clone();
                             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -2542,7 +2542,7 @@ public class NfvDeployer {
                             if (response.getStatus()>= 400) {
                                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                             }
-                            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Links.class);
+                            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Links.class);
                         }
 
                         public<T >T getAsXml(GenericType<T> returnType) {
@@ -2577,7 +2577,7 @@ public class NfvDeployer {
                             }
                         }
 
-                        public it.polito.dp2.NFV.sol3.client1.data.Links getAsLinksTextXml() {
+                        public it.polito.dp2.NFV.sol3.client2.data.Links getAsLinksTextXml() {
                             UriBuilder localUriBuilder = _uriBuilder.clone();
                             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -2587,7 +2587,7 @@ public class NfvDeployer {
                             if (response.getStatus()>= 400) {
                                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                             }
-                            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Links.class);
+                            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Links.class);
                         }
 
                         public<T >T getAsTextXml(GenericType<T> returnType) {
@@ -2993,7 +2993,7 @@ public class NfvDeployer {
                             _templateAndMatrixParameterValues = new HashMap<String, Object>();
                         }
 
-                        public it.polito.dp2.NFV.sol3.client1.data.Hosts getAsHostsXml() {
+                        public it.polito.dp2.NFV.sol3.client2.data.Hosts getAsHostsXml() {
                             UriBuilder localUriBuilder = _uriBuilder.clone();
                             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -3003,7 +3003,7 @@ public class NfvDeployer {
                             if (response.getStatus()>= 400) {
                                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                             }
-                            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Hosts.class);
+                            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Hosts.class);
                         }
 
                         public<T >T getAsXml(GenericType<T> returnType) {
@@ -3038,7 +3038,7 @@ public class NfvDeployer {
                             }
                         }
 
-                        public it.polito.dp2.NFV.sol3.client1.data.Hosts getAsHostsTextXml() {
+                        public it.polito.dp2.NFV.sol3.client2.data.Hosts getAsHostsTextXml() {
                             UriBuilder localUriBuilder = _uriBuilder.clone();
                             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                             com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -3048,7 +3048,7 @@ public class NfvDeployer {
                             if (response.getStatus()>= 400) {
                                 throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
                             }
-                            return response.getEntity(it.polito.dp2.NFV.sol3.client1.data.Hosts.class);
+                            return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Hosts.class);
                         }
 
                         public<T >T getAsTextXml(GenericType<T> returnType) {
