@@ -237,6 +237,15 @@
 			</sequence>
 		</complexType>
 		
+		<key name="internalNodesKey">
+			<selector xpath="tns:node" />
+			<field xpath="@name" />
+		</key>
+		<keyref name="linkToInternalNodes" refer="tns:internalNodesKey">
+			<selector xpath="tns:node/tns:link" />
+			<field xpath="@destination" />
+		</keyref>
+		
 	</element>
 	<element name="destination" type="IDREF"></element>
 </schema>

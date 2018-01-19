@@ -21,14 +21,14 @@ import it.polito.dp2.NFV.sol3.client1.data.NewNffg.Nodes;
 import it.polito.dp2.NFV.sol3.client1.data.NewNffg.Nodes.Node;
 import it.polito.dp2.NFV.sol3.client1.data.Nffg;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Root.Nffgs;
+import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs;
 import it.polito.dp2.NFV.lab3.NffgDescriptor;
 import it.polito.dp2.NFV.lab3.NodeDescriptor;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.lab3.UnknownEntityException;
 
 public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
-	private NfvDeployer.Root.Nffgs serviceApi;
+	private NfvDeployer.Index.Nffgs serviceApi;
 	private Map<NodeDescriptor, String> nodeNames;
 	public NfvClient() {
 		String baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
@@ -97,7 +97,6 @@ public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 
 	@Override
 	public DeployedNffg getDeployedNffg(String name) throws UnknownEntityException, ServiceException {
-		// TODO Auto-generated method stub
 		ClientResponse resp = serviceApi.nffgName(name).getAsXml(ClientResponse.class);
 		
 		if (resp.getStatus() >= 500) throw new ServiceException();

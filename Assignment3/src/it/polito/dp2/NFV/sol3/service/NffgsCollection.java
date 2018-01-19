@@ -31,8 +31,7 @@ import it.polito.dp2.NFV.sol3.service.model.Nffg;
 import it.polito.dp2.NFV.sol3.service.model.Nffgs;
 
 @Api(hidden = true, tags = { NfvDeployer.nffgsPath })
-@ApiModel(description = "A resource representing a Network Function Virtualization")
-@Consumes({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+@Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 public class NffgsCollection {
 

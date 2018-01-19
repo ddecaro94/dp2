@@ -11,7 +11,7 @@ import it.polito.dp2.NFV.NffgReader;
 import it.polito.dp2.NFV.VNFTypeReader;
 import it.polito.dp2.NFV.sol3.client1.data.Link;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links;
+import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links;
 import it.polito.dp2.NFV.sol3.client1.data.Node;
 
 public class NodeReader implements it.polito.dp2.NFV.NodeReader {

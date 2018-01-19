@@ -14,7 +14,7 @@ import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.client1.data.Nffg;
 import it.polito.dp2.NFV.sol3.client2.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Root.Nffgs.NffgName.Nodes;
+import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Index.Nffgs.NffgName.Nodes;
 
 public class NffgReader implements it.polito.dp2.NFV.NffgReader {
 

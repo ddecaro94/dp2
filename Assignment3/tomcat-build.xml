@@ -42,6 +42,8 @@
 			<jvmarg value="-Dit.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL=${Neo4JSimpleXMLURL}" />
 			<!--jvmarg value="-Dit.polito.dp2.NFV.Random.seed=${seed}" /-->
 			<jvmarg value="-Dit.polito.dp2.NFV.NfvReaderFactory=${NfvInfo.NfvReaderFactory}" />
+			<jvmarg value="-Xdebug"/>
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=5000,server=y,suspend=n"/>
 		</java>
 	</target>
 

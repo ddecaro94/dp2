@@ -103,10 +103,10 @@
 						<element name="host" type="tns:NamedEntity"
 							maxOccurs="1" minOccurs="0" />
 						<element name="vnf" type="tns:NamedEntity" />
-						<element name="nffg" type="tns:NamedEntity"></element>
+						<element name="nffg" type="tns:NamedEntity" maxOccurs="1" minOccurs="0"></element>
 						<element name="reachableHosts"
-							type="tns:Hyperlink" />
-						<element name="links" type="tns:Hyperlink" />
+							type="tns:Hyperlink" maxOccurs="1" minOccurs="0"/>
+						<element name="links" type="tns:Hyperlink" maxOccurs="1" minOccurs="0"/>
 					</sequence>
 				</extension>
 			</complexContent>
@@ -217,7 +217,7 @@
 	</complexType>
 
 	<complexType name="Hyperlink">
-		<attribute name="href" type="anyURI" use="required" />
+		<attribute name="href" type="anyURI" use="optional" />
 	</complexType>
 
 	<simpleType name="FunctionalType">

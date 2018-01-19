@@ -12,6 +12,10 @@ xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>io.swagger.jaxrs.listing, it.polito.dp2.NFV.sol3.service</param-value>
       </init-param>
+      <init-param>
+        <param-name>jersey.config.workers.legacyOrdering</param-name>
+        <param-value>true</param-value>
+      </init-param>
       <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet>

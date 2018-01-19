@@ -15,7 +15,6 @@ public class ExceptionLogger implements ExtendedExceptionMapper<Throwable> {
 
     @Override
     public boolean isMappable(Throwable thro) {
-        /* Primarily, we don't want to log client errors (i.e. 400's) as an error. */
         if (isServerError(thro)) thro.printStackTrace(System.out);
         if (isClientMappedError(thro)) return true;
         return false;
@@ -48,11 +47,21 @@ public class ExceptionLogger implements ExtendedExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable t) {
+    	String plainTextMessage = null;
+    	if (t.getCause() != null) { 
+    		plainTextMessage = t.getCause().getMessage();
+	    	if (t.getMessage() != null) {
+	    		plainTextMessage = t.getMessage();
+	    	} else {
+	    		plainTextMessage = t.toString();
+	    	}
+    	}
     	
-    	if (t instanceof NotFoundException) return Response.status(404).entity(t.getCause().getMessage()).type("text/plain").build();
-    	if (t instanceof UnprocessableEntityException) return Response.status(422).entity(t.getCause().getMessage()).type("text/plain").build();
-    	if (t instanceof ConflictException) return Response.status(409).entity(t.getCause().getMessage()).type("text/plain").build();	
-    	if (t instanceof BadRequestException) return Response.status(400).entity(t.getCause().getMessage()).type("text/plain").build();
+    	
+    	if (t instanceof NotFoundException) return Response.status(404).entity(plainTextMessage).type("text/plain").build();
+    	if (t instanceof UnprocessableEntityException) return Response.status(422).entity(plainTextMessage).type("text/plain").build();
+    	if (t instanceof ConflictException) return Response.status(409).entity(plainTextMessage).type("text/plain").build();	
+    	if (t instanceof BadRequestException) return Response.status(400).entity(plainTextMessage).type("text/plain").build();
     	
         throw new InternalServerErrorException(t);
     }

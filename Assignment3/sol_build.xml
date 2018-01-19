@@ -22,7 +22,6 @@
 	<!-- Target init	-->
 	<target name="init">
 		<mkdir dir="${build.dir}" />
-		<mkdir dir="${gen.dir}" />
 		<mkdir dir="${model.dir}" />
 	</target>
 
@@ -41,6 +40,8 @@
 					<path refid="sol.classpath" />
 				</classpath>
 		</javac>
+		<copy file="${schema.dir}/NfvDeployer.xsd" toDir="${build.dir}" overwrite="yes">
+        </copy>
 		<echo>Done.</echo>
 	</target>
 

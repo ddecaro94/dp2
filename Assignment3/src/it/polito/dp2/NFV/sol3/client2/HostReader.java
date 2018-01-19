@@ -46,7 +46,6 @@ public class HostReader implements it.polito.dp2.NFV.HostReader {
 
 	@Override
 	public int getMaxVNFs() {
-		// TODO Auto-generated method stub
 		return (host.getMaxVNFs() != null) ? host.getMaxVNFs().intValue() : 0;
 	}
 

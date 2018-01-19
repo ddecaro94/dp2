@@ -23,8 +23,9 @@ public class ExtendedNodeReader implements it.polito.dp2.NFV.lab2.ExtendedNodeRe
 	private NfvReader nfv;
 	private Data dataApi;
 	private Map<String, NffgReader> loadedGraphs;
-	
-	public ExtendedNodeReader(String id, String nodeName, String nffgName, NfvReader nfv, Map<String, NffgReader> loadedGraphs, Data dataApi) {
+
+	public ExtendedNodeReader(String id, String nodeName, String nffgName, NfvReader nfv,
+			Map<String, NffgReader> loadedGraphs, Data dataApi) {
 		this.id = id;
 		this.name = nffgName;
 		this.nfv = nfv;
@@ -60,22 +61,25 @@ public class ExtendedNodeReader implements it.polito.dp2.NFV.lab2.ExtendedNodeRe
 
 	@Override
 	public Set<HostReader> getReachableHosts() throws NoGraphException, ServiceException {
-		if (!loadedGraphs.containsKey(name)) throw new NoGraphException("NF-FG "+name+" has not been loaded");
-		
+		if (!loadedGraphs.containsKey(name))
+			throw new NoGraphException("NF-FG " + name + " has not been loaded");
+
 		Set<HostReader> resultSet = new HashSet<HostReader>();
-		
-		//call reachablenodes api
+
+		// call reachablenodes api
 		Nodes reachableHosts = dataApi.nodeNodeidReachableNodes(id).getAsNodes(null, "Host");
 		for (Node n : reachableHosts.getNode()) {
 			String hostName = null;
 			for (Property p : n.getProperties().getProperty()) {
-				if (p.getName().equals("name")) hostName = p.getValue();
+				if (p.getName().equals("name"))
+					hostName = p.getValue();
 			}
-			if (hostName == null) throw new ServiceException("Node "+n.getId()+" has no property 'name'");
-			
+			if (hostName == null)
+				throw new ServiceException("Node " + n.getId() + " has no property 'name'");
+
 			resultSet.add(this.nfv.getHost(hostName));
 		}
-		
+
 		return resultSet;
 	}
 

@@ -34,9 +34,8 @@ import it.polito.dp2.NFV.sol3.service.data.Neo4JSimpleXML.Data;
 import it.polito.dp2.NFV.sol3.service.model.*;
 
 @Singleton
-@Path("/")
-@Api(value = "/")
-@ApiModel(description = "A resource representing a Network Function Virtualization")
+@Path("")
+@Api(value = "")
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NfvResource {
@@ -55,18 +54,13 @@ public class NfvResource {
 	private NffgsCollection nffgs = new NffgsCollection();
 	private HostsCollection hosts = new HostsCollection();
 	
-	private Data dataApi;
 	private NfvReader reader;
 	private String baseUri;
-	private String dataUri;
 	
 	public NfvResource() throws NfvReaderException, FactoryConfigurationError, AlreadyLoadedException, UnknownEntityException, AllocationException, InvalidEntityException, DatatypeConfigurationException, ServiceException {
 		baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
-		dataUri = System.getProperty("it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL",
-				"http://localhost:8080/Neo4JSimpleXML/rest");
 
 		reader = NfvReaderFactory.newInstance().newNfvReader();
-		dataApi = Neo4JSimpleXML.data(Neo4JSimpleXML.createClient(), URI.create(dataUri));
 
 		this.nfv.setHosts(createHyperlink(baseUri + hostsPath));
 		this.nfv.setNffgs(createHyperlink(baseUri + nffgsPath));

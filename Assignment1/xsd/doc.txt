@@ -29,4 +29,6 @@ The presence of the attribute 'name' in the link element is enforced by a key co
 Keyref constraints make sure that names referencing entities refer to existing ones, such as the vnf type of each host, the destination (host or node) inside connection elements, and the name of deployed nodes on each host.
 
 On purpose no constraints have been set to ensure that the destination name of each connection does not refer to the element itself: this to model the possibility to have a loopback interface, or multiple network interfaces, such as wired and wireless.
-Another constraint could be set in order to keep the links between nffg nodes referencing only nodes internal to the same nffg, but being the nodes unique at the NFV model level, it is assumed that is possible to reference a node belonging to a different nffg.
+Another constraint has been set in order to keep the links between nffg nodes referencing only nodes internal to the same nffg, because being the nodes unique at the NFV model level, it is assumed that it could have been possible to reference a node belonging to a different nffg.
+
+

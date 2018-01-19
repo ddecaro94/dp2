@@ -12,22 +12,18 @@ public class UnprocessableEntityException extends ClientErrorException {
 
 	public UnprocessableEntityException() {
 		super(422);
-		// TODO Auto-generated constructor stub
 	}
 
 	public UnprocessableEntityException(Response response) {
 		super(response);
-		// TODO Auto-generated constructor stub
 	}
 
 	public UnprocessableEntityException(String message, Response response) {
 		super(message, response);
-		// TODO Auto-generated constructor stub
 	}
 
 	public UnprocessableEntityException(Throwable cause) {
 		super(422, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	public UnprocessableEntityException(String message) {

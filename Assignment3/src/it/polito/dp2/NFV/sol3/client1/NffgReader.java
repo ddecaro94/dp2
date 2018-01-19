@@ -9,12 +9,12 @@ import it.polito.dp2.NFV.NodeReader;
 import it.polito.dp2.NFV.sol3.client1.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client1.data.Nffg;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Root.Nffgs.NffgName.Nodes;
+import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs.NffgName.Nodes;
 
 public class NffgReader implements it.polito.dp2.NFV.NffgReader {
 
 	private URI graphUri;
-	private NfvDeployer.Root.Nffgs.NffgName.Nodes nodesService;
+	private NfvDeployer.Index.Nffgs.NffgName.Nodes nodesService;
 	
 	public NffgReader(URI graphUri) {
 		this.graphUri = graphUri;

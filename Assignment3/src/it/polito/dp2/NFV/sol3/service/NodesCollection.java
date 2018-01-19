@@ -82,8 +82,6 @@ public class NodesCollection {
 				deployer.deleteNode(graph, node.getName());
 			} catch (UnknownEntityException e1) {
 				throw new InternalServerErrorException(e1);
-			} catch (ServiceException e1) {
-				throw new InternalServerErrorException(e1);
 			}
 			throw new InternalServerErrorException(e);
 		} catch (InvalidEntityException e) {
@@ -98,16 +96,12 @@ public class NodesCollection {
 				deployer.deleteNode(graph, node.getName());
 			} catch (UnknownEntityException e1) {
 				throw new InternalServerErrorException(e1);
-			} catch (ServiceException e1) {
-				throw new InternalServerErrorException(e1);
 			}
 			throw new ConflictException(e);
 		} catch (UnknownEntityException e) {
 			try {
 				deployer.deleteNode(graph, node.getName());
 			} catch (UnknownEntityException e1) {
-				throw new InternalServerErrorException(e1);
-			} catch (ServiceException e1) {
 				throw new InternalServerErrorException(e1);
 			}
 			throw new UnprocessableEntityException(e);

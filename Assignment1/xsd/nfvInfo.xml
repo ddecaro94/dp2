@@ -70,7 +70,7 @@
 			<deployTime>2001-12-31T12:00:00</deployTime>
 			<nodes>
 				<node name="node2" vnf="spam1">
-					<link name="link1" destination="node3">
+					<link name="link1" destination="node1">
 						<performance>
 							<latency>1</latency>
 							<throughput>0.01</throughput>
@@ -78,7 +78,7 @@
 					</link>
 				</node>
 				<node name="node1" vnf="www1">
-					<link name="link2" destination="node1">
+					<link name="link2" destination="node2">
 					</link>
 				</node>
 			</nodes>
@@ -94,7 +94,7 @@
 					</link>
 				</node>
 				<node name="node4" vnf="spam1">
-					<link name="link2" destination="node1">
+					<link name="link2" destination="node3">
 						<performance>
 							<latency>1</latency>
 							<throughput>0.01</throughput>

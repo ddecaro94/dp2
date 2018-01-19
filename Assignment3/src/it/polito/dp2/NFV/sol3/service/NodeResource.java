@@ -51,8 +51,6 @@ public class NodeResource {
 			this.deployer.deleteNode(graphName, name);
 		} catch (UnknownEntityException e) {
 			throw new UnprocessableEntityException(e);
-		} catch (ServiceException e) {
-			throw new InternalServerErrorException(e);
 		}
 		return;
 	}
@@ -120,8 +118,6 @@ public class NodeResource {
 				deployer.deleteNode(graphName, node.getName());
 			} catch (UnknownEntityException e1) {
 				throw new InternalServerErrorException(e1);
-			} catch (ServiceException e1) {
-				throw new InternalServerErrorException(e1);
 			}
 			throw new InternalServerErrorException(e);
 		} catch (InvalidEntityException e) {
@@ -136,8 +132,6 @@ public class NodeResource {
 				deployer.deleteNode(graphName, node.getName());
 			} catch (UnknownEntityException e1) {
 				throw new InternalServerErrorException(e1);
-			} catch (ServiceException e1) {
-				throw new InternalServerErrorException(e1);
 			}
 			throw new ConflictException(e);
 		} catch (UnknownEntityException e) {
@@ -145,13 +139,10 @@ public class NodeResource {
 				deployer.deleteNode(graphName, node.getName());
 			} catch (UnknownEntityException e1) {
 				throw new InternalServerErrorException(e1);
-			} catch (ServiceException e1) {
-				throw new InternalServerErrorException(e1);
 			}
 			throw new UnprocessableEntityException(e);
 		}
-		
-		
+	
 		try {
 			return deployer.getNode(graphName, node.getName());
 		} catch (UnknownEntityException e) {

@@ -23,8 +23,8 @@ import it.polito.dp2.NFV.sol3.client1.data.Link;
 import it.polito.dp2.NFV.sol3.client1.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client1.data.Nffg;
 import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Root.Nffgs.NffgName;
-import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Root.Nffgs.NffgName.Links;
+import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs.NffgName;
+import it.polito.dp2.NFV.sol3.client1.data.NfvDeployer.Index.Nffgs.NffgName.Links;
 import it.polito.dp2.NFV.sol3.client1.data.Node;
 
 public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
@@ -79,7 +79,6 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 	@Override
 	public LinkReader addLink(NodeReader source, NodeReader dest, boolean overwrite)
 			throws NoNodeException, LinkAlreadyPresentException, ServiceException {
-		// TODO Auto-generated method stub
 		Link l = new Link();
 		l.setName("Link"+source.getName()+dest.getName());
 		l.setSrc(source.getName());

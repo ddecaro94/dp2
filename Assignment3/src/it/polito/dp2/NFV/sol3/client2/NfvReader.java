@@ -18,12 +18,12 @@ import it.polito.dp2.NFV.sol3.client2.data.Hosts;
 import it.polito.dp2.NFV.sol3.client2.data.NamedEntity;
 import it.polito.dp2.NFV.sol3.client2.data.Nffgs;
 import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer;
-import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Root;
+import it.polito.dp2.NFV.sol3.client2.data.NfvDeployer.Index;
 import it.polito.dp2.NFV.sol3.client2.data.Vnf;
 
 public class NfvReader implements it.polito.dp2.NFV.NfvReader {
 
-	private Root nfvService;
+	private Index nfvService;
 
 	private Set<HostReader> hosts;
 	private Set<NffgReader> nffgs;
@@ -31,7 +31,7 @@ public class NfvReader implements it.polito.dp2.NFV.NfvReader {
 	private Map<String, Map<String, ConnectionPerformanceReader>> connections;
 	
 	public NfvReader(URI baseUri) throws UnknownEntityException, ServiceException {
-		this.nfvService = new Root(NfvDeployer.createClient(), baseUri);
+		this.nfvService = new Index(NfvDeployer.createClient(), baseUri);
 		Catalog c = nfvService.catalog().getAsCatalogXml();
 		Hosts h = nfvService.hosts().getAsHostsXml();
 		Nffgs n = nfvService.nffgs().getAsNffgsXml();

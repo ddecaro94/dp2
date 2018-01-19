@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="href" use="required" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
+ *       &lt;attribute name="href" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Hyperlink {
 
-    @XmlAttribute(name = "href", required = true)
+    @XmlAttribute(name = "href")
     @XmlSchemaType(name = "anyURI")
     protected String href;
 

@@ -18,7 +18,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 
 @Generated(value = {
     "wadl|http://localhost:8080/NfvDeployer/rest/application.wadl"
-}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-17T22:31:49.741+01:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-19T03:54:05.690+01:00")
 public class NfvDeployer {
 
     /**
@@ -58,8 +58,8 @@ public class NfvDeployer {
         BASE_URI = originalURI;
     }
 
-    public static NfvDeployer.Root root(Client client, URI baseURI) {
-        return new NfvDeployer.Root(client, baseURI);
+    public static NfvDeployer.Index index(Client client, URI baseURI) {
+        return new NfvDeployer.Index(client, baseURI);
     }
 
     /**
@@ -87,6 +87,18 @@ public class NfvDeployer {
         return createClientInstance(cc);
     }
 
+    public static NfvDeployer.Index index() {
+        return index(createClient(), BASE_URI);
+    }
+
+    public static NfvDeployer.Index index(Client client) {
+        return index(client, BASE_URI);
+    }
+
+    public static NfvDeployer.Root root(Client client, URI baseURI) {
+        return new NfvDeployer.Root(client, baseURI);
+    }
+
     public static NfvDeployer.Root root() {
         return root(createClient(), BASE_URI);
     }
@@ -95,13 +107,13 @@ public class NfvDeployer {
         return root(client, BASE_URI);
     }
 
-    public static class Root {
+    public static class Index {
 
         private Client _client;
         private UriBuilder _uriBuilder;
         private Map<String, Object> _templateAndMatrixParameterValues;
 
-        private Root(Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+        private Index(Client client, UriBuilder uriBuilder, Map<String, Object> map) {
             _client = client;
             _uriBuilder = uriBuilder.clone();
             _templateAndMatrixParameterValues = map;
@@ -111,10 +123,10 @@ public class NfvDeployer {
          * Create new instance using existing Client instance, and a base URI and any parameters
          * 
          */
-        public Root(Client client, URI baseUri) {
+        public Index(Client client, URI baseUri) {
             _client = client;
             _uriBuilder = UriBuilder.fromUri(baseUri);
-            _uriBuilder = _uriBuilder.path("/");
+            _uriBuilder = _uriBuilder.path("");
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
@@ -208,24 +220,16 @@ public class NfvDeployer {
             }
         }
 
-        public NfvDeployer.Root.Nffgs nffgs() {
-            return new NfvDeployer.Root.Nffgs(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        public NfvDeployer.Index.Nffgs nffgs() {
+            return new NfvDeployer.Index.Nffgs(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
-        public NfvDeployer.Root.Catalog catalog() {
-            return new NfvDeployer.Root.Catalog(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        public NfvDeployer.Index.Catalog catalog() {
+            return new NfvDeployer.Index.Catalog(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
-        public NfvDeployer.Root.Hosts hosts() {
-            return new NfvDeployer.Root.Hosts(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-        }
-
-        public NfvDeployer.Root.SwaggerJson swaggerJson() {
-            return new NfvDeployer.Root.SwaggerJson(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-        }
-
-        public NfvDeployer.Root.SwaggerYaml swaggerYaml() {
-            return new NfvDeployer.Root.SwaggerYaml(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        public NfvDeployer.Index.Hosts hosts() {
+            return new NfvDeployer.Index.Hosts(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
         public static class Catalog {
@@ -341,8 +345,8 @@ public class NfvDeployer {
                 }
             }
 
-            public NfvDeployer.Root.Catalog.VnfName vnfName(String vnfname) {
-                return new NfvDeployer.Root.Catalog.VnfName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), vnfname);
+            public NfvDeployer.Index.Catalog.VnfName vnfName(String vnfname) {
+                return new NfvDeployer.Index.Catalog.VnfName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), vnfname);
             }
 
             public static class VnfName {
@@ -401,12 +405,12 @@ public class NfvDeployer {
                  * Duplicate state and set vnfName
                  * 
                  */
-                public NfvDeployer.Root.Catalog.VnfName setVnfname(String vnfname) {
+                public NfvDeployer.Index.Catalog.VnfName setVnfname(String vnfname) {
                     Map<String, Object> copyMap;
                     copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
                     UriBuilder copyUriBuilder = _uriBuilder.clone();
                     copyMap.put("vnfName", vnfname);
-                    return new NfvDeployer.Root.Catalog.VnfName(_client, copyUriBuilder, copyMap);
+                    return new NfvDeployer.Index.Catalog.VnfName(_client, copyUriBuilder, copyMap);
                 }
 
                 public Vnf getAsVnfXml() {
@@ -616,8 +620,8 @@ public class NfvDeployer {
                 }
             }
 
-            public NfvDeployer.Root.Hosts.HostName hostName(String hostname) {
-                return new NfvDeployer.Root.Hosts.HostName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), hostname);
+            public NfvDeployer.Index.Hosts.HostName hostName(String hostname) {
+                return new NfvDeployer.Index.Hosts.HostName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), hostname);
             }
 
             public static class HostName {
@@ -676,12 +680,12 @@ public class NfvDeployer {
                  * Duplicate state and set hostName
                  * 
                  */
-                public NfvDeployer.Root.Hosts.HostName setHostname(String hostname) {
+                public NfvDeployer.Index.Hosts.HostName setHostname(String hostname) {
                     Map<String, Object> copyMap;
                     copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
                     UriBuilder copyUriBuilder = _uriBuilder.clone();
                     copyMap.put("hostName", hostname);
-                    return new NfvDeployer.Root.Hosts.HostName(_client, copyUriBuilder, copyMap);
+                    return new NfvDeployer.Index.Hosts.HostName(_client, copyUriBuilder, copyMap);
                 }
 
                 public Host getAsHostXml() {
@@ -774,8 +778,8 @@ public class NfvDeployer {
                     }
                 }
 
-                public NfvDeployer.Root.Hosts.HostName.Connections connections() {
-                    return new NfvDeployer.Root.Hosts.HostName.Connections(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                public NfvDeployer.Index.Hosts.HostName.Connections connections() {
+                    return new NfvDeployer.Index.Hosts.HostName.Connections(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                 }
 
                 public static class Connections {
@@ -918,6 +922,102 @@ public class NfvDeployer {
                 _uriBuilder = UriBuilder.fromUri(baseUri);
                 _uriBuilder = _uriBuilder.path("nffgs");
                 _templateAndMatrixParameterValues = new HashMap<String, Object>();
+            }
+
+            public Nffg postXmlAsNffg(NewNffg input) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                resourceBuilder = resourceBuilder.type("application/xml");
+                ClientResponse response;
+                response = resourceBuilder.method("POST", ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(Nffg.class);
+            }
+
+            public<T >T postXml(Object input, GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                resourceBuilder = resourceBuilder.type("application/xml");
+                ClientResponse response;
+                response = resourceBuilder.method("POST", ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T postXml(Object input, Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                resourceBuilder = resourceBuilder.type("application/xml");
+                ClientResponse response;
+                response = resourceBuilder.method("POST", ClientResponse.class, input);
+                if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
+            public Nffg postTextXmlAsNffg(NewNffg input) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("text/xml");
+                resourceBuilder = resourceBuilder.type("text/xml");
+                ClientResponse response;
+                response = resourceBuilder.method("POST", ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(Nffg.class);
+            }
+
+            public<T >T postTextXml(Object input, GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("text/xml");
+                resourceBuilder = resourceBuilder.type("text/xml");
+                ClientResponse response;
+                response = resourceBuilder.method("POST", ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T postTextXml(Object input, Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("text/xml");
+                resourceBuilder = resourceBuilder.type("text/xml");
+                ClientResponse response;
+                response = resourceBuilder.method("POST", ClientResponse.class, input);
+                if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
             }
 
             public it.polito.dp2.NFV.sol3.client2.data.Nffgs getAsNffgsXml() {
@@ -1142,104 +1242,8 @@ public class NfvDeployer {
                 }
             }
 
-            public Nffg postXmlAsNffg(NewNffg input) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("application/xml");
-                resourceBuilder = resourceBuilder.type("application/xml");
-                ClientResponse response;
-                response = resourceBuilder.method("POST", ClientResponse.class, input);
-                if (response.getStatus()>= 400) {
-                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                }
-                return response.getEntity(Nffg.class);
-            }
-
-            public<T >T postXml(Object input, GenericType<T> returnType) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("application/xml");
-                resourceBuilder = resourceBuilder.type("application/xml");
-                ClientResponse response;
-                response = resourceBuilder.method("POST", ClientResponse.class, input);
-                if (response.getStatus()>= 400) {
-                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                }
-                return response.getEntity(returnType);
-            }
-
-            public<T >T postXml(Object input, Class<T> returnType) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("application/xml");
-                resourceBuilder = resourceBuilder.type("application/xml");
-                ClientResponse response;
-                response = resourceBuilder.method("POST", ClientResponse.class, input);
-                if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                    if (response.getStatus()>= 400) {
-                        throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                    }
-                }
-                if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                    return response.getEntity(returnType);
-                } else {
-                    return returnType.cast(response);
-                }
-            }
-
-            public Nffg postTextXmlAsNffg(NewNffg input) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("text/xml");
-                resourceBuilder = resourceBuilder.type("text/xml");
-                ClientResponse response;
-                response = resourceBuilder.method("POST", ClientResponse.class, input);
-                if (response.getStatus()>= 400) {
-                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                }
-                return response.getEntity(Nffg.class);
-            }
-
-            public<T >T postTextXml(Object input, GenericType<T> returnType) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("text/xml");
-                resourceBuilder = resourceBuilder.type("text/xml");
-                ClientResponse response;
-                response = resourceBuilder.method("POST", ClientResponse.class, input);
-                if (response.getStatus()>= 400) {
-                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                }
-                return response.getEntity(returnType);
-            }
-
-            public<T >T postTextXml(Object input, Class<T> returnType) {
-                UriBuilder localUriBuilder = _uriBuilder.clone();
-                WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                resourceBuilder = resourceBuilder.accept("text/xml");
-                resourceBuilder = resourceBuilder.type("text/xml");
-                ClientResponse response;
-                response = resourceBuilder.method("POST", ClientResponse.class, input);
-                if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                    if (response.getStatus()>= 400) {
-                        throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                    }
-                }
-                if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                    return response.getEntity(returnType);
-                } else {
-                    return returnType.cast(response);
-                }
-            }
-
-            public NfvDeployer.Root.Nffgs.NffgName nffgName(String nffgname) {
-                return new NfvDeployer.Root.Nffgs.NffgName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nffgname);
+            public NfvDeployer.Index.Nffgs.NffgName nffgName(String nffgname) {
+                return new NfvDeployer.Index.Nffgs.NffgName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nffgname);
             }
 
             public static class NffgName {
@@ -1298,12 +1302,51 @@ public class NfvDeployer {
                  * Duplicate state and set nffgName
                  * 
                  */
-                public NfvDeployer.Root.Nffgs.NffgName setNffgname(String nffgname) {
+                public NfvDeployer.Index.Nffgs.NffgName setNffgname(String nffgname) {
                     Map<String, Object> copyMap;
                     copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
                     UriBuilder copyUriBuilder = _uriBuilder.clone();
                     copyMap.put("nffgName", nffgname);
-                    return new NfvDeployer.Root.Nffgs.NffgName(_client, copyUriBuilder, copyMap);
+                    return new NfvDeployer.Index.Nffgs.NffgName(_client, copyUriBuilder, copyMap);
+                }
+
+                public ClientResponse delete() {
+                    UriBuilder localUriBuilder = _uriBuilder.clone();
+                    WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                    com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                    ClientResponse response;
+                    response = resourceBuilder.method("DELETE", ClientResponse.class);
+                    return response;
+                }
+
+                public<T >T delete(GenericType<T> returnType) {
+                    UriBuilder localUriBuilder = _uriBuilder.clone();
+                    WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                    com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                    ClientResponse response;
+                    response = resourceBuilder.method("DELETE", ClientResponse.class);
+                    if (response.getStatus()>= 400) {
+                        throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                    return response.getEntity(returnType);
+                }
+
+                public<T >T delete(Class<T> returnType) {
+                    UriBuilder localUriBuilder = _uriBuilder.clone();
+                    WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                    com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                    ClientResponse response;
+                    response = resourceBuilder.method("DELETE", ClientResponse.class);
+                    if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                        if (response.getStatus()>= 400) {
+                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                        }
+                    }
+                    if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                        return response.getEntity(returnType);
+                    } else {
+                        return returnType.cast(response);
+                    }
                 }
 
                 public Nffg getAsNffgXml() {
@@ -1396,51 +1439,12 @@ public class NfvDeployer {
                     }
                 }
 
-                public ClientResponse delete() {
-                    UriBuilder localUriBuilder = _uriBuilder.clone();
-                    WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                    com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                    ClientResponse response;
-                    response = resourceBuilder.method("DELETE", ClientResponse.class);
-                    return response;
+                public NfvDeployer.Index.Nffgs.NffgName.Nodes nodes() {
+                    return new NfvDeployer.Index.Nffgs.NffgName.Nodes(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                 }
 
-                public<T >T delete(GenericType<T> returnType) {
-                    UriBuilder localUriBuilder = _uriBuilder.clone();
-                    WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                    com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                    ClientResponse response;
-                    response = resourceBuilder.method("DELETE", ClientResponse.class);
-                    if (response.getStatus()>= 400) {
-                        throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                    }
-                    return response.getEntity(returnType);
-                }
-
-                public<T >T delete(Class<T> returnType) {
-                    UriBuilder localUriBuilder = _uriBuilder.clone();
-                    WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                    com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                    ClientResponse response;
-                    response = resourceBuilder.method("DELETE", ClientResponse.class);
-                    if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                        if (response.getStatus()>= 400) {
-                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                        }
-                    }
-                    if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                        return response.getEntity(returnType);
-                    } else {
-                        return returnType.cast(response);
-                    }
-                }
-
-                public NfvDeployer.Root.Nffgs.NffgName.Nodes nodes() {
-                    return new NfvDeployer.Root.Nffgs.NffgName.Nodes(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                }
-
-                public NfvDeployer.Root.Nffgs.NffgName.Links links() {
-                    return new NfvDeployer.Root.Nffgs.NffgName.Links(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                public NfvDeployer.Index.Nffgs.NffgName.Links links() {
+                    return new NfvDeployer.Index.Nffgs.NffgName.Links(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                 }
 
                 public static class Links {
@@ -1652,8 +1656,8 @@ public class NfvDeployer {
                         }
                     }
 
-                    public NfvDeployer.Root.Nffgs.NffgName.Links.LinkName linkName(String linkname) {
-                        return new NfvDeployer.Root.Nffgs.NffgName.Links.LinkName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), linkname);
+                    public NfvDeployer.Index.Nffgs.NffgName.Links.LinkName linkName(String linkname) {
+                        return new NfvDeployer.Index.Nffgs.NffgName.Links.LinkName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), linkname);
                     }
 
                     public static class LinkName {
@@ -1712,12 +1716,12 @@ public class NfvDeployer {
                          * Duplicate state and set linkName
                          * 
                          */
-                        public NfvDeployer.Root.Nffgs.NffgName.Links.LinkName setLinkname(String linkname) {
+                        public NfvDeployer.Index.Nffgs.NffgName.Links.LinkName setLinkname(String linkname) {
                             Map<String, Object> copyMap;
                             copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
                             UriBuilder copyUriBuilder = _uriBuilder.clone();
                             copyMap.put("linkName", linkname);
-                            return new NfvDeployer.Root.Nffgs.NffgName.Links.LinkName(_client, copyUriBuilder, copyMap);
+                            return new NfvDeployer.Index.Nffgs.NffgName.Links.LinkName(_client, copyUriBuilder, copyMap);
                         }
 
                         public Link getAsLinkXml() {
@@ -2023,6 +2027,96 @@ public class NfvDeployer {
                         _templateAndMatrixParameterValues = new HashMap<String, Object>();
                     }
 
+                    public it.polito.dp2.NFV.sol3.client2.data.Nodes getAsNodesXml() {
+                        UriBuilder localUriBuilder = _uriBuilder.clone();
+                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                        resourceBuilder = resourceBuilder.accept("application/xml");
+                        ClientResponse response;
+                        response = resourceBuilder.method("GET", ClientResponse.class);
+                        if (response.getStatus()>= 400) {
+                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                        }
+                        return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nodes.class);
+                    }
+
+                    public<T >T getAsXml(GenericType<T> returnType) {
+                        UriBuilder localUriBuilder = _uriBuilder.clone();
+                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                        resourceBuilder = resourceBuilder.accept("application/xml");
+                        ClientResponse response;
+                        response = resourceBuilder.method("GET", ClientResponse.class);
+                        if (response.getStatus()>= 400) {
+                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                        }
+                        return response.getEntity(returnType);
+                    }
+
+                    public<T >T getAsXml(Class<T> returnType) {
+                        UriBuilder localUriBuilder = _uriBuilder.clone();
+                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                        resourceBuilder = resourceBuilder.accept("application/xml");
+                        ClientResponse response;
+                        response = resourceBuilder.method("GET", ClientResponse.class);
+                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                            if (response.getStatus()>= 400) {
+                                throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                            }
+                        }
+                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                            return response.getEntity(returnType);
+                        } else {
+                            return returnType.cast(response);
+                        }
+                    }
+
+                    public it.polito.dp2.NFV.sol3.client2.data.Nodes getAsNodesTextXml() {
+                        UriBuilder localUriBuilder = _uriBuilder.clone();
+                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                        resourceBuilder = resourceBuilder.accept("text/xml");
+                        ClientResponse response;
+                        response = resourceBuilder.method("GET", ClientResponse.class);
+                        if (response.getStatus()>= 400) {
+                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                        }
+                        return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nodes.class);
+                    }
+
+                    public<T >T getAsTextXml(GenericType<T> returnType) {
+                        UriBuilder localUriBuilder = _uriBuilder.clone();
+                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                        resourceBuilder = resourceBuilder.accept("text/xml");
+                        ClientResponse response;
+                        response = resourceBuilder.method("GET", ClientResponse.class);
+                        if (response.getStatus()>= 400) {
+                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                        }
+                        return response.getEntity(returnType);
+                    }
+
+                    public<T >T getAsTextXml(Class<T> returnType) {
+                        UriBuilder localUriBuilder = _uriBuilder.clone();
+                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                        resourceBuilder = resourceBuilder.accept("text/xml");
+                        ClientResponse response;
+                        response = resourceBuilder.method("GET", ClientResponse.class);
+                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                            if (response.getStatus()>= 400) {
+                                throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                            }
+                        }
+                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                            return response.getEntity(returnType);
+                        } else {
+                            return returnType.cast(response);
+                        }
+                    }
+
                     public Node postXmlAsNode(Node input) {
                         UriBuilder localUriBuilder = _uriBuilder.clone();
                         WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
@@ -2119,98 +2213,8 @@ public class NfvDeployer {
                         }
                     }
 
-                    public it.polito.dp2.NFV.sol3.client2.data.Nodes getAsNodesXml() {
-                        UriBuilder localUriBuilder = _uriBuilder.clone();
-                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                        resourceBuilder = resourceBuilder.accept("application/xml");
-                        ClientResponse response;
-                        response = resourceBuilder.method("GET", ClientResponse.class);
-                        if (response.getStatus()>= 400) {
-                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                        }
-                        return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nodes.class);
-                    }
-
-                    public<T >T getAsXml(GenericType<T> returnType) {
-                        UriBuilder localUriBuilder = _uriBuilder.clone();
-                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                        resourceBuilder = resourceBuilder.accept("application/xml");
-                        ClientResponse response;
-                        response = resourceBuilder.method("GET", ClientResponse.class);
-                        if (response.getStatus()>= 400) {
-                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                        }
-                        return response.getEntity(returnType);
-                    }
-
-                    public<T >T getAsXml(Class<T> returnType) {
-                        UriBuilder localUriBuilder = _uriBuilder.clone();
-                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                        resourceBuilder = resourceBuilder.accept("application/xml");
-                        ClientResponse response;
-                        response = resourceBuilder.method("GET", ClientResponse.class);
-                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                            if (response.getStatus()>= 400) {
-                                throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                            }
-                        }
-                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                            return response.getEntity(returnType);
-                        } else {
-                            return returnType.cast(response);
-                        }
-                    }
-
-                    public it.polito.dp2.NFV.sol3.client2.data.Nodes getAsNodesTextXml() {
-                        UriBuilder localUriBuilder = _uriBuilder.clone();
-                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                        resourceBuilder = resourceBuilder.accept("text/xml");
-                        ClientResponse response;
-                        response = resourceBuilder.method("GET", ClientResponse.class);
-                        if (response.getStatus()>= 400) {
-                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                        }
-                        return response.getEntity(it.polito.dp2.NFV.sol3.client2.data.Nodes.class);
-                    }
-
-                    public<T >T getAsTextXml(GenericType<T> returnType) {
-                        UriBuilder localUriBuilder = _uriBuilder.clone();
-                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                        resourceBuilder = resourceBuilder.accept("text/xml");
-                        ClientResponse response;
-                        response = resourceBuilder.method("GET", ClientResponse.class);
-                        if (response.getStatus()>= 400) {
-                            throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                        }
-                        return response.getEntity(returnType);
-                    }
-
-                    public<T >T getAsTextXml(Class<T> returnType) {
-                        UriBuilder localUriBuilder = _uriBuilder.clone();
-                        WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                        com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                        resourceBuilder = resourceBuilder.accept("text/xml");
-                        ClientResponse response;
-                        response = resourceBuilder.method("GET", ClientResponse.class);
-                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                            if (response.getStatus()>= 400) {
-                                throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                            }
-                        }
-                        if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                            return response.getEntity(returnType);
-                        } else {
-                            return returnType.cast(response);
-                        }
-                    }
-
-                    public NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName nodeName(String nodename) {
-                        return new NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodename);
+                    public NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName nodeName(String nodename) {
+                        return new NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), nodename);
                     }
 
                     public static class NodeName {
@@ -2269,12 +2273,12 @@ public class NfvDeployer {
                          * Duplicate state and set nodeName
                          * 
                          */
-                        public NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName setNodename(String nodename) {
+                        public NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName setNodename(String nodename) {
                             Map<String, Object> copyMap;
                             copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
                             UriBuilder copyUriBuilder = _uriBuilder.clone();
                             copyMap.put("nodeName", nodename);
-                            return new NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName(_client, copyUriBuilder, copyMap);
+                            return new NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName(_client, copyUriBuilder, copyMap);
                         }
 
                         public Node getAsNodeXml() {
@@ -2502,12 +2506,12 @@ public class NfvDeployer {
                             }
                         }
 
-                        public NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.ReachableHosts reachableHosts() {
-                            return new NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.ReachableHosts(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        public NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.ReachableHosts reachableHosts() {
+                            return new NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.ReachableHosts(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                         }
 
-                        public NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links links() {
-                            return new NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                        public NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links links() {
+                            return new NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
                         }
 
                         public static class Links {
@@ -2719,8 +2723,8 @@ public class NfvDeployer {
                                 }
                             }
 
-                            public NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links.LinkName linkName(String linkname) {
-                                return new NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links.LinkName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), linkname);
+                            public NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links.LinkName linkName(String linkname) {
+                                return new NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links.LinkName(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), linkname);
                             }
 
                             public static class LinkName {
@@ -2779,12 +2783,12 @@ public class NfvDeployer {
                                  * Duplicate state and set linkName
                                  * 
                                  */
-                                public NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links.LinkName setLinkname(String linkname) {
+                                public NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links.LinkName setLinkname(String linkname) {
                                     Map<String, Object> copyMap;
                                     copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
                                     UriBuilder copyUriBuilder = _uriBuilder.clone();
                                     copyMap.put("linkName", linkname);
-                                    return new NfvDeployer.Root.Nffgs.NffgName.Nodes.NodeName.Links.LinkName(_client, copyUriBuilder, copyMap);
+                                    return new NfvDeployer.Index.Nffgs.NffgName.Nodes.NodeName.Links.LinkName(_client, copyUriBuilder, copyMap);
                                 }
 
                                 public Link getAsLinkXml() {
@@ -3188,6 +3192,39 @@ public class NfvDeployer {
 
             }
 
+        }
+
+    }
+
+    public static class Root {
+
+        private Client _client;
+        private UriBuilder _uriBuilder;
+        private Map<String, Object> _templateAndMatrixParameterValues;
+
+        private Root(Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+            _client = client;
+            _uriBuilder = uriBuilder.clone();
+            _templateAndMatrixParameterValues = map;
+        }
+
+        /**
+         * Create new instance using existing Client instance, and a base URI and any parameters
+         * 
+         */
+        public Root(Client client, URI baseUri) {
+            _client = client;
+            _uriBuilder = UriBuilder.fromUri(baseUri);
+            _uriBuilder = _uriBuilder.path("/");
+            _templateAndMatrixParameterValues = new HashMap<String, Object>();
+        }
+
+        public NfvDeployer.Root.SwaggerJson swaggerJson() {
+            return new NfvDeployer.Root.SwaggerJson(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        }
+
+        public NfvDeployer.Root.SwaggerYaml swaggerYaml() {
+            return new NfvDeployer.Root.SwaggerYaml(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
         public static class SwaggerJson {

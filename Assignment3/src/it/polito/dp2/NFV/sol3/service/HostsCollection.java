@@ -16,10 +16,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.polito.dp2.NFV.sol3.service.model.*;
 
-@Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+@Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Api(hidden = true, tags = {NfvDeployer.hostsPath})
-@ApiModel(description = "A resource representing a set of hosts")
 public class HostsCollection {
 	private NfvDeployer deployer = NfvDeployer.getInstance();
 	private Map<String, HostResource> hostResources = new HashMap<>();
