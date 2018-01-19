@@ -6,6 +6,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,13 +33,13 @@ public class HostResource {
 	@ApiOperation(value = "Get connections list")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Connections.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Connections getConnections() {
 		try {
 			return deployer.getConnections(name);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 	
@@ -52,7 +53,7 @@ public class HostResource {
 		try {
 			return this.deployer.getHostByName(name);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 

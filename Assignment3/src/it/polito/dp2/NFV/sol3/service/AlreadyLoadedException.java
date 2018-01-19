@@ -5,7 +5,7 @@ public class AlreadyLoadedException extends Exception {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7979120547994749713L;
+	private static final long serialVersionUID = 1L;
 
 	public AlreadyLoadedException() {
 	}

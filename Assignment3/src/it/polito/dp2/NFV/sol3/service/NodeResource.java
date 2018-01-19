@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,9 +41,9 @@ public class NodeResource {
 	@DELETE
 	@ApiOperation(value = "Delete node from deployed NF-FG")
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "OK"),
-    		@ApiResponse(code = 404, message = "Not Found"),
-    		@ApiResponse(code = 422, message = "Unprocessable Entity"),
+    		@ApiResponse(code = 200, message = "OK", response = String.class),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
+    		@ApiResponse(code = 422, message = "Unprocessable Entity", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public void deleteNode() {
 		
@@ -64,13 +65,13 @@ public class NodeResource {
 	@ApiOperation(value = "Get node info")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Node.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node getNode() {
 		try {
 			return this.deployer.getNode(graphName, name);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 	
@@ -79,13 +80,13 @@ public class NodeResource {
     @ApiOperation(value = "Get the host list")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Hosts.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Hosts getReachableHosts() {
 		try {
 			return deployer.getReachableHosts(graphName, name);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			throw new InternalServerErrorException(e);
@@ -96,9 +97,9 @@ public class NodeResource {
 	@ApiOperation(value = "Create node inside deployed NF-FG")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Node.class),
-    		@ApiResponse(code = 409, message = "Conflict"),
-    		@ApiResponse(code = 404, message = "Not Found"),
-    		@ApiResponse(code = 422, message = "Unprocessable Entity"),
+    		@ApiResponse(code = 409, message = "Conflict", response = String.class),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
+    		@ApiResponse(code = 422, message = "Unprocessable Entity", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node putNode(Node node) {
 		if (node == null) throw new BadRequestException("Node descriptor not provided");
@@ -120,8 +121,6 @@ public class NodeResource {
 				throw new InternalServerErrorException(e1);
 			}
 			throw new InternalServerErrorException(e);
-		} catch (InvalidEntityException e) {
-			throw new UnprocessableEntityException(e);
 		}
 		
 		try {

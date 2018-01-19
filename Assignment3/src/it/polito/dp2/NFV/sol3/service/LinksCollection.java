@@ -13,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,8 +43,8 @@ public class LinksCollection {
     @ApiOperation(value = "Delete link")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK"),
-    		@ApiResponse(code = 409, message = "Conflict"),
-    		@ApiResponse(code = 422, message = "Unprocessable Entity"),
+    		@ApiResponse(code = 409, message = "Conflict", response = String.class),
+    		@ApiResponse(code = 422, message = "Unprocessable Entity", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link deleteLink(@PathParam("linkName") String id) {
 		throw new ServerErrorException(501);
@@ -54,13 +55,13 @@ public class LinksCollection {
     @ApiOperation(value = "Get link information")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Link.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link getLink(@PathParam("linkName") String name) {
 		try {
 			return deployer.getLink(graphName, name);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 	
@@ -68,13 +69,13 @@ public class LinksCollection {
     @ApiOperation(value = "Get the forward relationships")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Links.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Links getLinks() {
 		try {
 			return deployer.getLinks(graphName, nodeName);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 	
@@ -82,17 +83,14 @@ public class LinksCollection {
     @ApiOperation(value = "Create new link between nodes")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Link.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
-	public Link postLink(Link link) {
-		if (link == null) throw new BadRequestException("No link defined");
-		if (link.getName() == null) throw new UnprocessableEntityException("Link name cannot be empty");
-		if (link.getSrc() == null) throw new UnprocessableEntityException("Source node not defined");
-		if (link.getDst() == null) throw new UnprocessableEntityException("Destination node not defined");
+	public Link postLink(Link link) {		
 		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
 		
 		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
 		float reqThr = (link.getRequiredThroughput() == null) ? 0 : link.getRequiredThroughput();
+		
 		try {
 			return deployer.createLink(graphName, link.getName(), link.getSrc(), link.getDst(), reqLatency, reqThr, false);
 		} catch (AlreadyLoadedException e) {
@@ -101,8 +99,6 @@ public class LinksCollection {
 			throw new ConflictException(e);
 		} catch (ServiceException e) {
 			throw new InternalServerErrorException(e);
-		} catch (InvalidEntityException e) {
-			throw new UnprocessableEntityException(e);
 		}
 	}
 	
@@ -111,7 +107,7 @@ public class LinksCollection {
     @ApiOperation(value = "Create or replace link")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Link.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link putLink(Link link, @PathParam("linkName") String id) {
 		if (link == null) throw new BadRequestException("No link defined");
@@ -133,8 +129,6 @@ public class LinksCollection {
 			throw new UnprocessableEntityException(e);
 		} catch (ServiceException e) {
 			throw new InternalServerErrorException(e);
-		} catch (InvalidEntityException e) {
-			throw new UnprocessableEntityException(e);
 		}
 	}
 	

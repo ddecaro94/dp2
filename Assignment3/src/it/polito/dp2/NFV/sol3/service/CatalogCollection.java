@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,13 +40,13 @@ public class CatalogCollection {
 	@ApiOperation(value = "Get vnf info")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Vnf.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Vnf getVnf(@PathParam("vnfName") String vnfName) {
 		try {
 			return this.deployer.getVnfByName(vnfName);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 

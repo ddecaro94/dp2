@@ -273,6 +273,7 @@
 						<selector xpath="node" />
 						<field xpath="@name" />
 					</key>
+
 				</element>
 				<element name="links">
 					<complexType>
@@ -302,10 +303,18 @@
 						<selector xpath="link" />
 						<field xpath="@name" />
 					</key>
+
 				</element>
 			</sequence>
 			<attribute name="name" type="string"></attribute>
 		</complexType>
-
+		<keyref name="existingDestination" refer="tns:newNffgNodeNameKey">
+			<selector xpath="links/link/destinationNode" />
+			<field xpath="." />
+		</keyref>
+		<keyref name="existingSource" refer="tns:newNffgNodeNameKey">
+			<selector xpath="links/link/sourceNode" />
+			<field xpath="." />
+		</keyref>
 	</element>
 </schema>

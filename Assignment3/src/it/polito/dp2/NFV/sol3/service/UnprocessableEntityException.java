@@ -14,20 +14,12 @@ public class UnprocessableEntityException extends ClientErrorException {
 		super(422);
 	}
 
-	public UnprocessableEntityException(Response response) {
-		super(response);
-	}
-
-	public UnprocessableEntityException(String message, Response response) {
-		super(message, response);
-	}
-
 	public UnprocessableEntityException(Throwable cause) {
-		super(422, cause);
+		super(Response.status(422).entity(cause.getMessage()).build(), cause);
 	}
 
 	public UnprocessableEntityException(String message) {
-		super(message, 422);
+		super(Response.status(422).entity(message).build());
 	}
 
 

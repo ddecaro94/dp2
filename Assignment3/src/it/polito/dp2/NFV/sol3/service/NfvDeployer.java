@@ -8,17 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.WebApplicationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import com.sun.jersey.api.client.ClientResponse;
 
 import it.polito.dp2.NFV.FactoryConfigurationError;
-import it.polito.dp2.NFV.NfvReader;
 import it.polito.dp2.NFV.NfvReaderException;
 import it.polito.dp2.NFV.lab3.AllocationException;
 import it.polito.dp2.NFV.lab3.ServiceException;
@@ -60,7 +55,6 @@ public class NfvDeployer {
 	private Catalog catalog = new Catalog();
 	private Hosts hosts = new Hosts();
 	private Data dataApi;
-	private NfvReader reader;
 	private String baseUri;
 	private String dataUri;
 
@@ -77,71 +71,12 @@ public class NfvDeployer {
 	private ConcurrentMap<String, Map<String, Link>> linkNames = new ConcurrentHashMap<>(); // (nffg, (linkame, Link))
 
 	private NfvDeployer() throws DatatypeConfigurationException, NfvReaderException, FactoryConfigurationError {
-		System.out.println("Starting up...");
-		try {
-			baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
-			dataUri = System.getProperty("it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL",
-					"http://localhost:8080/Neo4JSimpleXML/rest");
 
-			dataApi = Neo4JSimpleXML.data(Neo4JSimpleXML.createClient(), URI.create(dataUri));
-			/*
-			 * 
-			 * reader = NfvReaderFactory.newInstance().newNfvReader();
-			 * this.nfv.setHosts(createHyperlink(baseUri + hostsPath));
-			 * this.nfv.setNffgs(createHyperlink(baseUri + nffgsPath));
-			 * this.nfv.setVnfCatalog(createHyperlink(baseUri + catalogPath));
-			 * 
-			 * for (VNFTypeReader t : reader.getVNFCatalog()) {
-			 * createVnf(FunctionalType.fromValue(t.getFunctionalType().toString()),
-			 * t.getName(), BigInteger.valueOf(t.getRequiredMemory()),
-			 * BigInteger.valueOf(t.getRequiredStorage()));
-			 * 
-			 * }
-			 * 
-			 * // load all hosts for (HostReader host : reader.getHosts()) { try {
-			 * createHost(host.getName(), host.getAvailableMemory(),
-			 * host.getAvailableStorage(), host.getMaxVNFs()); } catch
-			 * (AlreadyLoadedException e) { throw new ConflictException(); } }
-			 * 
-			 * // load connections for (HostReader hosti : reader.getHosts()) { for
-			 * (HostReader hostj : reader.getHosts()) { Connection cij = new Connection();
-			 * cij.setSrc(hosti.getName()); cij.setDst(hostj.getName()); cij.setHref(baseUri
-			 * + hostsPath + "/" + hosti.getName() + "/" + connectionsPath);
-			 * cij.setLatency(BigInteger.valueOf(reader.getConnectionPerformance(hosti,
-			 * hostj).getLatency()));
-			 * cij.setThroughput(Float.valueOf(reader.getConnectionPerformance(hosti,
-			 * hostj).getThroughput()));
-			 * 
-			 * this.connections.get(this.hostIds.get(hosti.getName())).getConnection().add(
-			 * cij); } }
-			 * 
-			 * // create NF-FG0 but NOT deployed NffgReader graph = reader.getNffg("Nffg0");
-			 * 
-			 * NewNffg nffg0 = new NewNffg(); nffg0.setName(graph.getName()); NewNffg.Nodes
-			 * nodes = new NewNffg.Nodes(); NewNffg.Links links = new NewNffg.Links(); for
-			 * (NodeReader n : graph.getNodes()) { NewNffg.Nodes.Node node = new
-			 * NewNffg.Nodes.Node(); node.setName(n.getName());
-			 * node.setVnf(n.getFuncType().getName());
-			 * node.setPreferredHost(n.getHost().getName()); for (LinkReader lr :
-			 * n.getLinks()) { NewNffg.Links.Link link = new NewNffg.Links.Link();
-			 * link.setName(lr.getName());
-			 * link.setDestinationNode(lr.getDestinationNode().getName());
-			 * link.setSourceNode(lr.getSourceNode().getName());
-			 * link.setRequiredLatency(BigInteger.valueOf(lr.getLatency()));
-			 * link.setRequiredThroughput(lr.getThroughput()); links.getLink().add(link); }
-			 * nodes.getNode().add(node); } nffg0.setNodes(nodes); nffg0.setLinks(links);
-			 * 
-			 * deployNffg(nffg0);
-			 */
+		baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
+		dataUri = System.getProperty("it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL",
+				"http://localhost:8080/Neo4JSimpleXML/rest");
 
-		} catch (WebApplicationException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			throw new InternalServerErrorException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalServerErrorException(e);
-		}
+		dataApi = Neo4JSimpleXML.data(Neo4JSimpleXML.createClient(), URI.create(dataUri));
 
 	}
 
@@ -228,7 +163,7 @@ public class NfvDeployer {
 	}
 
 	public Connection createConnection(String source, String destination, int latency, float throughput)
-			throws InvalidEntityException, UnknownEntityException {
+			throws UnknownEntityException {
 		if (!isExistingHost(source))
 			throw new UnknownEntityException("Host " + source + " does not exist");
 		if (!isExistingHost(destination))
@@ -312,7 +247,7 @@ public class NfvDeployer {
 
 	public synchronized Link createLink(String graphName, String linkName, String srcNode, String dstNode,
 			int minLatency, float minThroughput, boolean replace)
-			throws AlreadyLoadedException, UnknownEntityException, ServiceException, InvalidEntityException {
+			throws AlreadyLoadedException, UnknownEntityException, ServiceException {
 
 		// can be created even if graph not deployed, resource should check deployed
 		// status
@@ -327,10 +262,6 @@ public class NfvDeployer {
 			throw new UnknownEntityException("Destination node does not exist");
 		if (!isExistingNode(srcNode))
 			throw new UnknownEntityException("Source node does not exist");
-		if (minLatency < 0)
-			throw new InvalidEntityException("Required latency cannot be negative");
-		if (minThroughput < 0)
-			throw new InvalidEntityException("Required throughput cannot be negative");
 
 		it.polito.dp2.NFV.sol3.service.data.Relationship requestedLink = new it.polito.dp2.NFV.sol3.service.data.Relationship();
 		requestedLink.setDstNode(this.nodeIds.get(dstNode));
@@ -425,7 +356,7 @@ public class NfvDeployer {
 	}
 
 	public synchronized Node createNode(String nffg, String nodeName, String type, boolean replace)
-			throws AlreadyLoadedException, UnknownEntityException, ServiceException, InvalidEntityException {
+			throws AlreadyLoadedException, UnknownEntityException, ServiceException {
 
 		// a node can be created even if the nffg is not completely deployed, graph
 		// should be checked by invoker class
@@ -636,21 +567,15 @@ public class NfvDeployer {
 
 	// only a thread at a time will be able to perform deployment
 	public synchronized Nffg deployNffg(NewNffg nffg) throws AlreadyLoadedException, UnknownEntityException,
-			AllocationException, InvalidEntityException, DatatypeConfigurationException, ServiceException {
+			AllocationException, DatatypeConfigurationException, ServiceException {
 
 		boolean success = false;
 
 		if (nffgMap.containsKey(nffg.getName()))
 			throw new AlreadyLoadedException("NF-FG " + nffg.getName() + " already exists");
 
-		if (nffg.getName() == null)
-			throw new InvalidEntityException("No graph name provided");
-
 		for (NewNffg.Nodes.Node node : nffg.getNodes().getNode()) {
-			if (node.getName() == null)
-				throw new InvalidEntityException("Invalid node descriptor, no name defined");
-			if (node.getVnf() == null)
-				throw new InvalidEntityException("Invalid vnf descriptor");
+
 			if (node.getPreferredHost() != null) {
 				if (!isExistingHost(node.getPreferredHost()))
 					throw new UnknownEntityException("Host " + node.getPreferredHost() + " does not exist");
@@ -660,23 +585,6 @@ public class NfvDeployer {
 			if (!isExistingType(node.getVnf()))
 				throw new UnknownEntityException("VNF type " + node.getVnf() + " does not exist");
 
-		}
-
-		for (NewNffg.Links.Link link : nffg.getLinks().getLink()) {
-			if (link.getName() == null)
-				throw new InvalidEntityException("Invalid link descriptor, no name defined");
-			if (link.getSourceNode() == null)
-				throw new InvalidEntityException("Invalid link descriptor, no source node defined");
-			if (link.getDestinationNode() == null)
-				throw new InvalidEntityException("Invalid link descriptor, no destination node defined");
-
-			int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
-			float reqThr = link.getRequiredThroughput();
-
-			if (reqLatency < 0)
-				throw new InvalidEntityException("Invalid required latency");
-			if (reqThr < 0)
-				throw new InvalidEntityException("Invalid required throughput");
 		}
 
 		try {
@@ -694,7 +602,7 @@ public class NfvDeployer {
 				if (!isExistingNode(link.getSourceNode()))
 					throw new UnknownEntityException("Source node " + link.getDestinationNode() + " does not exist");
 				int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
-				float reqThr = (link.getRequiredThroughput());
+				float reqThr = link.getRequiredThroughput();
 				createLink(nffg.getName(), link.getName(), link.getSourceNode(), link.getDestinationNode(), reqLatency,
 						reqThr, false);
 			}

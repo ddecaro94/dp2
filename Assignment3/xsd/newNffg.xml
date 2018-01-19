@@ -9,15 +9,15 @@
       <vnf>token</vnf>
       <preferredHost>token</preferredHost>
     </node>
-    <node name="NODE2">
+    <node name="NODE3">
       <vnf>token</vnf>
       <preferredHost>token</preferredHost>
     </node>
   </nodes>
   <links>
     <link name="token" requiredLatency="0" requiredThroughput="0">
-      <sourceNode>token</sourceNode>
-      <destinationNode>token</destinationNode>
+      <sourceNode>NODE1</sourceNode>
+      <destinationNode>NODE3</destinationNode>
     </link>
   </links>
 </tns:newNffg>

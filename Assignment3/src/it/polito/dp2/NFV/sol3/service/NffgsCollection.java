@@ -19,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -46,8 +45,8 @@ public class NffgsCollection {
 	@ApiOperation(value = "Deploy a new nffg")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "OK", response = Nffg.class),
-			@ApiResponse(code = 409, message = "Conflict"),
-			@ApiResponse(code = 422, message = "Unprocessable Entity"),
+			@ApiResponse(code = 409, message = "Conflict", response = String.class),
+			@ApiResponse(code = 422, message = "Unprocessable Entity", response = String.class),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public Nffg deployNffg(NewNffg nffg) {
 		if (nffg == null) throw new BadRequestException("No NF-FG description defined");
@@ -61,9 +60,7 @@ public class NffgsCollection {
 			throw new UnprocessableEntityException(e);
 		} catch (AllocationException e) {
 			throw new ConflictException(e);
-		} catch (InvalidEntityException e) {
-			throw new UnprocessableEntityException(e);
-		} catch (DatatypeConfigurationException e) {
+		}catch (DatatypeConfigurationException e) {
 			throw new InternalServerErrorException(e);
 		} catch (ServiceException e) {
 			throw new InternalServerErrorException(e);

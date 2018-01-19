@@ -8,7 +8,6 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -22,7 +21,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.eclipse.persistence.jaxb.JAXBIntrospector;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -79,9 +77,9 @@ public class NfvMessageBodyReader implements MessageBodyReader<Object> {
                          InputStream entityStream) throws IOException, WebApplicationException {
 
     	try {
-            Unmarshaller unmarshaller = JAXBContext.newInstance(jaxbPackage).createUnmarshaller();
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             unmarshaller.setSchema(schema);
-			return JAXBIntrospector.getValue(unmarshaller.unmarshal(entityStream));
+			return javax.xml.bind.JAXBIntrospector.getValue(unmarshaller.unmarshal(entityStream));
 		} catch (JAXBException ex) {
 			logger.log(Level.WARNING, "Request body validation error.", ex);
 			Throwable linked = ex.getLinkedException();

@@ -5,28 +5,21 @@ import javax.ws.rs.core.Response;
 
 public class ConflictException extends ClientErrorException{
 
-    /**
+
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4515860597298940341L;
+	private static final long serialVersionUID = 1L;
 
 	public ConflictException() {
         super(Response.Status.CONFLICT); // 409
     }
 
 	public ConflictException(Throwable cause) {
-		super(Response.Status.CONFLICT, cause);
-	}
-
-	public ConflictException(Response response) {
-		super(response);
-	}
-
-	public ConflictException(Response response, Throwable cause) {
-		super(response, cause);
+		super(Response.status(409).entity(cause.getMessage()).build(), cause);
 	}
 
 	public ConflictException(String message) {
-		super(message, Response.Status.CONFLICT);
+		super(Response.status(409).entity(message).build());
 	}
 }

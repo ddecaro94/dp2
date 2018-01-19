@@ -18,7 +18,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 
 @Generated(value = {
     "wadl|http://localhost:8080/NfvDeployer/rest/application.wadl"
-}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-19T03:54:05.690+01:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-19T15:09:14.778+01:00")
 public class NfvDeployer {
 
     /**
@@ -2371,45 +2371,6 @@ public class NfvDeployer {
                             }
                         }
 
-                        public ClientResponse delete() {
-                            UriBuilder localUriBuilder = _uriBuilder.clone();
-                            WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                            ClientResponse response;
-                            response = resourceBuilder.method("DELETE", ClientResponse.class);
-                            return response;
-                        }
-
-                        public<T >T delete(GenericType<T> returnType) {
-                            UriBuilder localUriBuilder = _uriBuilder.clone();
-                            WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                            ClientResponse response;
-                            response = resourceBuilder.method("DELETE", ClientResponse.class);
-                            if (response.getStatus()>= 400) {
-                                throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                            }
-                            return response.getEntity(returnType);
-                        }
-
-                        public<T >T delete(Class<T> returnType) {
-                            UriBuilder localUriBuilder = _uriBuilder.clone();
-                            WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-                            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
-                            ClientResponse response;
-                            response = resourceBuilder.method("DELETE", ClientResponse.class);
-                            if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                                if (response.getStatus()>= 400) {
-                                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
-                                }
-                            }
-                            if (!ClientResponse.class.isAssignableFrom(returnType)) {
-                                return response.getEntity(returnType);
-                            } else {
-                                return returnType.cast(response);
-                            }
-                        }
-
                         public Node putXmlAsNode(Node input) {
                             UriBuilder localUriBuilder = _uriBuilder.clone();
                             WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
@@ -2494,6 +2455,45 @@ public class NfvDeployer {
                             resourceBuilder = resourceBuilder.type("text/xml");
                             ClientResponse response;
                             response = resourceBuilder.method("PUT", ClientResponse.class, input);
+                            if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                                if (response.getStatus()>= 400) {
+                                    throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                                }
+                            }
+                            if (!ClientResponse.class.isAssignableFrom(returnType)) {
+                                return response.getEntity(returnType);
+                            } else {
+                                return returnType.cast(response);
+                            }
+                        }
+
+                        public ClientResponse delete() {
+                            UriBuilder localUriBuilder = _uriBuilder.clone();
+                            WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                            ClientResponse response;
+                            response = resourceBuilder.method("DELETE", ClientResponse.class);
+                            return response;
+                        }
+
+                        public<T >T delete(GenericType<T> returnType) {
+                            UriBuilder localUriBuilder = _uriBuilder.clone();
+                            WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                            ClientResponse response;
+                            response = resourceBuilder.method("DELETE", ClientResponse.class);
+                            if (response.getStatus()>= 400) {
+                                throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                            }
+                            return response.getEntity(returnType);
+                        }
+
+                        public<T >T delete(Class<T> returnType) {
+                            UriBuilder localUriBuilder = _uriBuilder.clone();
+                            WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                            ClientResponse response;
+                            response = resourceBuilder.method("DELETE", ClientResponse.class);
                             if (!ClientResponse.class.isAssignableFrom(returnType)) {
                                 if (response.getStatus()>= 400) {
                                     throw new NfvDeployer.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());

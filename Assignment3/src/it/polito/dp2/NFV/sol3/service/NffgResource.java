@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +38,7 @@ public class NffgResource {
 	@ApiOperation(value = "Undeploy a nffg")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "OK", response = Nffgs.class),
-			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 404, message = "Not Found", response = String.class),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public void deleteNffg() {
 		throw new ServerErrorException(501);
@@ -52,13 +53,13 @@ public class NffgResource {
 	@ApiOperation(value = "Get nffg info")
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "OK", response = Nffg.class),
-    		@ApiResponse(code = 404, message = "Not Found"),
+    		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Nffg getNffg() {
 		try {
 			return this.deployer.getNffgByName(name);
 		} catch (UnknownEntityException e) {
-			throw new NotFoundException(e);
+			throw new NotFoundException(Response.status(404).entity(e.getMessage()).build());
 		}
 	}
 
