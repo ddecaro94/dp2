@@ -23,9 +23,6 @@ import it.polito.dp2.NFV.NfvReaderException;
 import it.polito.dp2.NFV.NfvReaderFactory;
 import it.polito.dp2.NFV.NodeReader;
 import it.polito.dp2.NFV.VNFTypeReader;
-import it.polito.dp2.NFV.lab3.AllocationException;
-import it.polito.dp2.NFV.lab3.ServiceException;
-import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.*;
 
 @Singleton
@@ -35,34 +32,22 @@ import it.polito.dp2.NFV.sol3.service.model.*;
 @Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 public class NfvResource {
 
-	public static final String catalogPath = "catalog";
-	public static final String connectionsPath = "connections";
-	public static final String hostsPath = "hosts";
-	public static final String linksPath = "links";
-	public static final String nffgsPath = "nffgs";
-	public static final String nodesPath = "nodes";
-	public static final String reachableHostsPath = "reachableHosts";
 
+	private Nfv nfv;
 	private NfvDeployer deployer = NfvDeployer.getInstance();
-	private Nfv nfv = new Nfv();
 	private CatalogCollection catalog = new CatalogCollection();
 	private NffgsCollection nffgs = new NffgsCollection();
 	private HostsCollection hosts = new HostsCollection();
 
 	private NfvReader reader;
-	private String baseUri;
 
 	public NfvResource() throws NfvReaderException, FactoryConfigurationError, AlreadyLoadedException,
 			UnknownEntityException, AllocationException, DatatypeConfigurationException, ServiceException {
-		baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
-
 		reader = NfvReaderFactory.newInstance().newNfvReader();
 
-		this.nfv.setHosts(createHyperlink(baseUri + hostsPath));
-		this.nfv.setNffgs(createHyperlink(baseUri + nffgsPath));
-		this.nfv.setVnfCatalog(createHyperlink(baseUri + catalogPath));
-
 		try {
+			this.nfv = deployer.createNfv();
+			
 			for (VNFTypeReader t : reader.getVNFCatalog()) {
 				deployer.createVnf(FunctionalType.fromValue(t.getFunctionalType().toString()), t.getName(),
 						BigInteger.valueOf(t.getRequiredMemory()), BigInteger.valueOf(t.getRequiredStorage()));
@@ -133,25 +118,19 @@ public class NfvResource {
 		return this.nfv;
 	}
 
-	@Path("catalog")
+	@Path(NfvDeployer.catalogPath)
 	public CatalogCollection getCatalog() {
 		return this.catalog;
 	}
 
-	@Path("nffgs")
+	@Path(NfvDeployer.nffgsPath)
 	public NffgsCollection getNffgs() {
 		return this.nffgs;
 	}
 
-	@Path("hosts")
+	@Path(NfvDeployer.hostsPath)
 	public HostsCollection getHosts() {
 		return this.hosts;
-	}
-
-	private Hyperlink createHyperlink(String ref) {
-		Hyperlink l = new Hyperlink();
-		l.setHref(ref);
-		return l;
 	}
 
 }

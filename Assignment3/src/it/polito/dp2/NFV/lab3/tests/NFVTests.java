@@ -444,7 +444,7 @@ public class NFVTests {
 	
 	@Test (expected=LinkAlreadyPresentException.class)
 	public final void testAddAlreadyExistingLink() throws Exception {
-		System.out.println("DEBUG: starting testAddLink");
+		System.out.println("DEBUG: starting testAddAlreadyExistingLink");
 		// Load the reference link to the reference node of Nffg0 with overwrite=false
 		// and check the right exception is thrown
 		

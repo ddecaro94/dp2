@@ -13,11 +13,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import com.sun.jersey.api.client.ClientResponse;
 
-import it.polito.dp2.NFV.FactoryConfigurationError;
-import it.polito.dp2.NFV.NfvReaderException;
-import it.polito.dp2.NFV.lab3.AllocationException;
-import it.polito.dp2.NFV.lab3.ServiceException;
-import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.*;
 import it.polito.dp2.NFV.sol3.service.model.Host.DeployedNodes;
 import it.polito.dp2.NFV.sol3.service.data.Labels;
@@ -37,21 +32,13 @@ public class NfvDeployer {
 	public static final String nodesPath = "nodes";
 	public static final String reachableHostsPath = "reachableHosts";
 
-	private static NfvDeployer INSTANCE;
-	static {
-		try {
-			INSTANCE = new NfvDeployer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ExceptionInInitializerError(e);
-		}
-	}
+	private static NfvDeployer INSTANCE = new NfvDeployer();
 
 	public static NfvDeployer getInstance() {
 		return INSTANCE;
 	}
 
-	private Nfv nfv = new Nfv();
+
 	private Catalog catalog = new Catalog();
 	private Hosts hosts = new Hosts();
 	private Data dataApi;
@@ -70,7 +57,7 @@ public class NfvDeployer {
 	private ConcurrentMap<String, Link> links = new ConcurrentHashMap<>(); // (relationshipID, Link)
 	private ConcurrentMap<String, Map<String, Link>> linkNames = new ConcurrentHashMap<>(); // (nffg, (linkame, Link))
 
-	private NfvDeployer() throws DatatypeConfigurationException, NfvReaderException, FactoryConfigurationError {
+	private NfvDeployer() {
 
 		baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
 		dataUri = System.getProperty("it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL",
@@ -79,22 +66,31 @@ public class NfvDeployer {
 		dataApi = Neo4JSimpleXML.data(Neo4JSimpleXML.createClient(), URI.create(dataUri));
 
 	}
+	
+	public Nfv createNfv() {
+		Nfv nfv = new Nfv();
+		nfv.setHosts(createHyperlink(baseUri + hostsPath));
+		nfv.setNffgs(createHyperlink(baseUri + nffgsPath));
+		nfv.setVnfCatalog(createHyperlink(baseUri + catalogPath));
+		
+		return nfv;
+	}
 
 	public synchronized boolean allocateNode(String nodeName, String preferenceHost)
 			throws AllocationException, UnknownEntityException {
 		if (!isExistingNode(nodeName))
-			throw new UnknownEntityException("Node " + nodeName + " does not exist");
+			throw new UnknownEntityException("Node [" + nodeName + "] does not exist");
 
 		if (preferenceHost != null && !hostIds.containsKey(preferenceHost))
-			throw new UnknownEntityException("Host " + preferenceHost + " not found");
+			throw new UnknownEntityException("Host [" + preferenceHost + "] not found");
 
 		if (nodeMap.get(nodeIds.get(nodeName)).getHost() != null)
-			throw new AllocationException("Node " + nodeName + " is already allocated");
+			throw new AllocationException("Node [" + nodeName + "] is already allocated");
 
 		// if the node is not allocated link the node to the host
 		Node n = nodeMap.get(nodeIds.get(nodeName));
 		if (!isExistingType(n.getVnf().getName()))
-			throw new UnknownEntityException("VNF type " + n.getVnf().getName() + " does not exist");
+			throw new UnknownEntityException("VNF type [" + n.getVnf().getName() + "] does not exist");
 
 		Vnf v = vnfs.get(n.getVnf().getName());
 		it.polito.dp2.NFV.sol3.service.data.Relationship allocatedOn = new it.polito.dp2.NFV.sol3.service.data.Relationship();
@@ -165,9 +161,9 @@ public class NfvDeployer {
 	public Connection createConnection(String source, String destination, int latency, float throughput)
 			throws UnknownEntityException {
 		if (!isExistingHost(source))
-			throw new UnknownEntityException("Host " + source + " does not exist");
+			throw new UnknownEntityException("Host [" + source + "] does not exist");
 		if (!isExistingHost(destination))
-			throw new UnknownEntityException("Host " + destination + " does not exist");
+			throw new UnknownEntityException("Host [" + destination + "] does not exist");
 
 		if (latency < 0)
 			throw new InvalidEntityException("Latency cannot be negative");
@@ -190,7 +186,7 @@ public class NfvDeployer {
 			Integer maxVnfs) throws AlreadyLoadedException, ServiceException {
 
 		if (this.hostIds.containsKey(hostName))
-			throw new AlreadyLoadedException("Host " + hostName + " already loaded");
+			throw new AlreadyLoadedException("Host [" + hostName + "] already loaded");
 
 		try {
 
@@ -209,9 +205,9 @@ public class NfvDeployer {
 					it.polito.dp2.NFV.sol3.service.data.Node.class);
 
 			if (createdHost == null)
-				throw new WebApplicationException("Unable to create node with name " + hostName);
+				throw new WebApplicationException("Unable to create node with name [" + hostName+"]");
 			if (createdHost.getId() == null)
-				throw new WebApplicationException("Unable to retrieve nodeID for node with name " + hostName);
+				throw new WebApplicationException("Unable to retrieve nodeID for node with name [" + hostName+"]");
 
 			Host h = new Host();
 			h.setHref(baseUri + hostsPath + "/" + hostName);
@@ -252,12 +248,12 @@ public class NfvDeployer {
 		// can be created even if graph not deployed, resource should check deployed
 		// status
 		if (!nffgMap.containsKey(graphName))
-			throw new UnknownEntityException("NF-FG " + graphName + " not found");
+			throw new UnknownEntityException("NF-FG [" + graphName + "] not found");
 
-		boolean exists = isExistingLink(graphName, linkName) || isDuplicateLink(graphName, srcNode, dstNode);
+		boolean exists = isExistingLink(graphName, linkName);
 
 		if (exists && !replace)
-			throw new AlreadyLoadedException("Link " + linkName + " already loaded");
+			throw new AlreadyLoadedException("Link [" + linkName + "] already loaded");
 		if (!isExistingNode(dstNode))
 			throw new UnknownEntityException("Destination node does not exist");
 		if (!isExistingNode(srcNode))
@@ -368,14 +364,14 @@ public class NfvDeployer {
 			throw new InvalidEntityException("VNF type not provided");
 
 		if (!nffgMap.containsKey(nffg))
-			throw new UnknownEntityException("NF-FG " + nffg + " does not exist");
+			throw new UnknownEntityException("NF-FG [" + nffg + "] does not exist");
 		if (!isExistingType(type))
-			throw new UnknownEntityException("VNF type " + type + " does not exist");
+			throw new UnknownEntityException("VNF type [" + type + "] does not exist");
 
 		boolean exists = isExistingNode(nodeName);
 
 		if (exists && !replace)
-			throw new AlreadyLoadedException("Node " + nodeName + " already loaded");
+			throw new AlreadyLoadedException("Node [" + nodeName + "] already loaded");
 		// the node has not already been created, nodes are unique system-wide
 
 		Node node = new Node();
@@ -402,14 +398,14 @@ public class NfvDeployer {
 					it.polito.dp2.NFV.sol3.service.data.Node.class);
 
 			if (createdNode == null)
-				throw new ServiceException("Unable to create node with name " + nodeName);
+				throw new ServiceException("Unable to create node with name [" + nodeName +"]");
 			if (createdNode.getId() == null)
-				throw new ServiceException("Unable to retrieve nodeID for node with name " + nodeName);
+				throw new ServiceException("Unable to retrieve nodeID for node with name [" + nodeName +"]");
 
 			// add labels for the node, replace if existing
 			ClientResponse r = this.dataApi.nodeNodeidLabels(createdNode.getId()).putXml(labels, ClientResponse.class);
 			if (r.getStatus() >= 400)
-				throw new ServiceException("Unable to create labels for node with id " + createdNode.getId());
+				throw new ServiceException("Unable to create labels for node with id [" + createdNode.getId()+"]");
 
 			if (exists) {
 				// replace
@@ -543,7 +539,7 @@ public class NfvDeployer {
 		// cannot use function isDeployed, a node can be deleted after a deployment
 		// error as rollback
 		if (!nffgMap.containsKey(graph))
-			throw new UnknownEntityException("NF-FG " + graph + " not defined");
+			throw new UnknownEntityException("NF-FG [" + graph + "] not defined");
 
 		if (!isExistingNode(n))
 			return false; // nothing to delete
@@ -572,18 +568,18 @@ public class NfvDeployer {
 		boolean success = false;
 
 		if (nffgMap.containsKey(nffg.getName()))
-			throw new AlreadyLoadedException("NF-FG " + nffg.getName() + " already exists");
+			throw new AlreadyLoadedException("NF-FG [" + nffg.getName() + "] already exists");
 
 		for (NewNffg.Nodes.Node node : nffg.getNodes().getNode()) {
 
 			if (node.getPreferredHost() != null) {
 				if (!isExistingHost(node.getPreferredHost()))
-					throw new UnknownEntityException("Host " + node.getPreferredHost() + " does not exist");
+					throw new UnknownEntityException("Host [" + node.getPreferredHost() + "] does not exist");
 			}
 			if (isExistingNode(node.getName()))
-				throw new AlreadyLoadedException("Node " + node.getName() + " is already existing");
+				throw new AlreadyLoadedException("Node [" + node.getName() + "] is already existing");
 			if (!isExistingType(node.getVnf()))
-				throw new UnknownEntityException("VNF type " + node.getVnf() + " does not exist");
+				throw new UnknownEntityException("VNF type [" + node.getVnf() + "] does not exist");
 
 		}
 
@@ -598,9 +594,9 @@ public class NfvDeployer {
 
 			for (NewNffg.Links.Link link : nffg.getLinks().getLink()) {
 				if (!isExistingNode(link.getSourceNode()))
-					throw new UnknownEntityException("Source node " + link.getSourceNode() + " does not exist");
+					throw new UnknownEntityException("Source node [" + link.getSourceNode() + "] does not exist");
 				if (!isExistingNode(link.getSourceNode()))
-					throw new UnknownEntityException("Source node " + link.getDestinationNode() + " does not exist");
+					throw new UnknownEntityException("Source node [" + link.getDestinationNode() + "] does not exist");
 				int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
 				float reqThr = link.getRequiredThroughput();
 				createLink(nffg.getName(), link.getName(), link.getSourceNode(), link.getDestinationNode(), reqLatency,
@@ -627,12 +623,12 @@ public class NfvDeployer {
 
 	public Connections getConnections(String hostName) throws UnknownEntityException {
 		if (!hostIds.containsKey(hostName))
-			throw new UnknownEntityException("No connections defined for hostname " + hostName);
+			throw new UnknownEntityException("No connections defined for hostname [" + hostName+"]");
 
 		String id = hostIds.get(hostName);
 
 		if (!connections.containsKey(id))
-			throw new UnknownEntityException("No host loaded with name " + hostName + " and ID " + id);
+			throw new UnknownEntityException("No host loaded with name [" + hostName + "] and ID [" + id+"]");
 
 		return connections.get(id);
 
@@ -640,12 +636,12 @@ public class NfvDeployer {
 
 	public Host getHostByName(String name) throws UnknownEntityException {
 		if (!hostIds.containsKey(name))
-			throw new UnknownEntityException("No host defined with the name " + name);
+			throw new UnknownEntityException("No host defined with the name [" + name+"]");
 
 		String id = this.hostIds.get(name);
 
 		if (!hostMap.containsKey(id))
-			throw new UnknownEntityException("No host loaded with name " + name + " and ID " + id);
+			throw new UnknownEntityException("No host loaded with name [" + name + "] and ID [" + id+"]");
 
 		return hostMap.get(id);
 
@@ -657,13 +653,13 @@ public class NfvDeployer {
 
 	public Link getLink(String graphName, String linkName) throws UnknownEntityException {
 		if (!isDeployed(graphName))
-			throw new UnknownEntityException("No NF-FG defined with name " + graphName);
+			throw new UnknownEntityException("No NF-FG defined with name [" + graphName+"]");
 
 		if (!linkNames.containsKey(graphName))
-			throw new UnknownEntityException("No NF-FG defined with name " + graphName);
+			throw new UnknownEntityException("No NF-FG defined with name [" + graphName+"]");
 
 		if (!linkNames.get(graphName).containsKey(linkName))
-			throw new UnknownEntityException("No link defined with name " + linkName + " in NF-FG " + graphName);
+			throw new UnknownEntityException("No link defined with name [" + linkName + "] in NF-FG [" + graphName+"]");
 
 		return linkNames.get(graphName).get(linkName);
 
@@ -672,13 +668,13 @@ public class NfvDeployer {
 	public Links getLinks(String graph, String node) throws UnknownEntityException {
 
 		if (!isDeployed(graph))
-			throw new UnknownEntityException("No NF-FG defined with name " + graph);
+			throw new UnknownEntityException("No NF-FG defined with name [" + graph+"]");
 
 		if (node == null)
 			return this.nffgLinks.get(graph);
 
 		if (!nodeIds.containsKey(node))
-			throw new UnknownEntityException("No node defined with name " + node);
+			throw new UnknownEntityException("No node defined with name [" + node+"]");
 
 		it.polito.dp2.NFV.sol3.service.data.Relationships linksFromNode = this.dataApi
 				.nodeNodeidRelationshipsOut(nodeIds.get(node)).getAsRelationships();
@@ -692,7 +688,7 @@ public class NfvDeployer {
 
 	public Nffg getNffgByName(String name) throws UnknownEntityException {
 		if (name == null || !isDeployed(name))
-			throw new UnknownEntityException("No NF-FG defined with name " + name);
+			throw new UnknownEntityException("No NF-FG defined with name [" + name+"]");
 
 		return nffgMap.get(name);
 
@@ -720,20 +716,16 @@ public class NfvDeployer {
 
 	}
 
-	public Nfv getNfv() {
-		return this.nfv;
-	}
-
 	public Node getNode(String graph, String name) throws UnknownEntityException {
 		if (!isDeployed(graph))
-			throw new UnknownEntityException("No NF-FG defined with name " + graph);
+			throw new UnknownEntityException("No NF-FG defined with name [" + graph+"]");
 		if (!nodeIds.containsKey(name))
-			throw new UnknownEntityException("No node defined for name " + name);
+			throw new UnknownEntityException("No node defined for name [" + name+"]");
 
 		String id = nodeIds.get(name);
 
 		if (!nodeMap.containsKey(id))
-			throw new UnknownEntityException("No node loaded with name " + name + " and ID " + id);
+			throw new UnknownEntityException("No node loaded with name [" + name + "] and ID [" + id+"]");
 
 		return nodeMap.get(id);
 
@@ -742,7 +734,7 @@ public class NfvDeployer {
 	public Nodes getNodes(String graph) throws UnknownEntityException {
 
 		if (graph == null || !isDeployed(graph))
-			throw new UnknownEntityException("No nffg defined with name " + graph);
+			throw new UnknownEntityException("No nffg defined with name [" + graph+"]");
 
 		Nodes nodes = new Nodes();
 		for (Node n : nffgNodes.get(graph).values()) {
@@ -772,9 +764,9 @@ public class NfvDeployer {
 
 	public Hosts getReachableHosts(String graph, String nodeName) throws UnknownEntityException, ServiceException {
 		if (!isDeployed(graph))
-			throw new UnknownEntityException("No nffg defined with name " + graph);
+			throw new UnknownEntityException("No nffg defined with name [" + graph+"]");
 		if (!nodeIds.containsKey(nodeName))
-			throw new UnknownEntityException("No node defined for name " + nodeName);
+			throw new UnknownEntityException("No node defined for name [" + nodeName+"]");
 
 		Hosts result = new Hosts();
 
@@ -788,7 +780,7 @@ public class NfvDeployer {
 					hostName = p.getValue();
 			}
 			if (hostName == null)
-				throw new ServiceException("Node " + n.getId() + " has no property 'name'");
+				throw new ServiceException("Node [" + n.getId() + "] has no property 'name'");
 			Host h = this.hostMap.get(n.getId());
 			result.getHost().add(createNamedRef(h.getName(), h.getHref()));
 		}
@@ -801,7 +793,7 @@ public class NfvDeployer {
 		if (vnfs.containsKey(name))
 			return vnfs.get(name);
 		else
-			throw new UnknownEntityException("No VNF defined with the name " + name);
+			throw new UnknownEntityException("No VNF defined with the name [" + name+"]");
 	}
 
 	public boolean isDeployed(String name) {

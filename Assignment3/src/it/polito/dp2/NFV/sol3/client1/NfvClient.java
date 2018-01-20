@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.WebApplicationException;
 
@@ -30,6 +31,7 @@ import it.polito.dp2.NFV.lab3.UnknownEntityException;
 public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 	private NfvDeployer.Index.Nffgs serviceApi;
 	private Map<NodeDescriptor, String> nodeNames;
+	private AtomicInteger counter = new AtomicInteger(1);
 	public NfvClient() {
 		String baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
 		serviceApi = new Nffgs(NfvDeployer.createClient(), URI.create(baseUri));
@@ -41,14 +43,14 @@ public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 		nodeNames = new HashMap<>();
 		
 		NewNffg newGraph = new NewNffg();
-		newGraph.setName("Nffg"+RandomUtils.nextInt());
+		newGraph.setName("Nffg"+counter.incrementAndGet());
 		
 		Nodes nodes = new Nodes();
 		Links links = new Links();
 		
 		for (NodeDescriptor n : nffg.getNodes()) {
 			Node newNode = new Node();
-			String nodeName = n.getFuncType().getName()+newGraph.getName()+RandomUtils.nextInt();
+			String nodeName = n.getFuncType().getName()+newGraph.getName()+counter.incrementAndGet();
 			newNode.setName(nodeName);
 			newNode.setVnf(n.getFuncType().getName());
 			newNode.setPreferredHost(n.getHostName());

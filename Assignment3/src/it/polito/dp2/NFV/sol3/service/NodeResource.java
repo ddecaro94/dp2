@@ -16,13 +16,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.lab3.AllocationException;
-import it.polito.dp2.NFV.lab3.ServiceException;
-import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Hosts;
 import it.polito.dp2.NFV.sol3.service.model.Node;
 
-@Api(hidden = true, tags = {NfvDeployer.nodesPath})
+@Api(hidden = true)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodeResource {
@@ -47,7 +44,7 @@ public class NodeResource {
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public void deleteNode() {
 		
-		if (!deployer.isDeployed(graphName)) throw new NotFoundException("NF-FG "+graphName+" not found");
+		if (!deployer.isDeployed(graphName)) throw new NotFoundException("NF-FG ["+graphName+"] not found");
 		try {
 			this.deployer.deleteNode(graphName, name);
 		} catch (UnknownEntityException e) {
@@ -103,9 +100,8 @@ public class NodeResource {
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node putNode(Node node) {
 		if (node == null) throw new BadRequestException("Node descriptor not provided");
-		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" not deployed");
-		if (node.getVnf() == null) throw new UnprocessableEntityException("VNF type not defined");
-		if (node.getName() == null) throw new UnprocessableEntityException("Node name not defined");
+		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG ["+graphName+"] not deployed");
+
 		String host = (node.getHost() != null) ? node.getHost().getName() : null;
 		
 		try {

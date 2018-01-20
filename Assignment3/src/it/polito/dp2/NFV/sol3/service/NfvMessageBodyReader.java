@@ -1,9 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
-// This validator performs JAXB unmarshalling with validation
-// against a schema
-// This version is thread-safe when using the JAXB reference implementation
-// (for which the documentation specifies JAXBContext is thread-safe while
-// Marshaller and Unmarshaller are not)
+
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 import javax.ws.rs.BadRequestException;

@@ -55,7 +55,7 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 		NamedEntity vnf = new NamedEntity();
 		vnf.setName(type.getName());
 		node.setVnf(vnf);
-		node.setName(vnf.getName()+graphName+RandomUtils.nextInt());
+		node.setName(vnf.getName()+graphName);
 		
 		
 		try {
@@ -84,7 +84,7 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 		l.setSrc(source.getName());
 		l.setDst(dest.getName());
 		
-		System.out.println("Adding link from "+source.getName()+" to "+dest.getName());
+		System.out.println("Adding link from "+source.getName()+" to "+dest.getName()+" with name "+l.getName()+" - overwrite: "+overwrite);
 		Link createdLink;
 		ClientResponse resp;
 		if (overwrite) {

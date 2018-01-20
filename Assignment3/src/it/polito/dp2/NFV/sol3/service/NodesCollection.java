@@ -19,13 +19,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.lab3.AllocationException;
-import it.polito.dp2.NFV.lab3.ServiceException;
-import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Node;
 import it.polito.dp2.NFV.sol3.service.model.Nodes;
 
-@Api(hidden = true, tags = {NfvDeployer.nodesPath})
+@Api(hidden = true)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodesCollection {
@@ -66,14 +63,13 @@ public class NodesCollection {
     		@ApiResponse(code = 422, message = "Unprocessable Entity", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Node postNode(Node node) {
-		if (node == null) throw new BadRequestException("Node descriptor not provided");
-		if (!deployer.isDeployed(graph)) throw new ConflictException("NF-FG "+graph+" not deployed");
-		if (node.getVnf() == null) throw new UnprocessableEntityException("VNF type not defined");
-		if (node.getName() == null) throw new UnprocessableEntityException("Node name not defined");
+		
+		if (!deployer.isDeployed(graph)) throw new ConflictException("NF-FG ["+graph+"] not deployed");
+
 		String host = (node.getHost() != null) ? node.getHost().getName() : null;
 		
 		try {
-			Node n = deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
+			deployer.createNode(graph, node.getName(), node.getVnf().getName(), false);
 
 		} catch (AlreadyLoadedException e) {
 			throw new ConflictException(e);

@@ -19,12 +19,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.polito.dp2.NFV.lab3.ServiceException;
-import it.polito.dp2.NFV.lab3.UnknownEntityException;
 import it.polito.dp2.NFV.sol3.service.model.Link;
 import it.polito.dp2.NFV.sol3.service.model.Links;
 
-@Api(hidden = true, tags = {NfvDeployer.nffgsPath, NfvDeployer.nodesPath})
+@Api(hidden = true)
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class LinksCollection {
@@ -86,7 +84,7 @@ public class LinksCollection {
     		@ApiResponse(code = 404, message = "Not Found", response = String.class),
     		@ApiResponse(code = 500, message = "Internal Server Error")})
 	public Link postLink(Link link) {		
-		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
+		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG ["+graphName+"] does not exist");
 		
 		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
 		float reqThr = (link.getRequiredThroughput() == null) ? 0 : link.getRequiredThroughput();
@@ -115,7 +113,7 @@ public class LinksCollection {
 		if (!link.getName().equals(id)) throw new UnprocessableEntityException("Link name and link resource identifier cannot be different, identifier: "+id+", link name: "+link.getName());
 		if (link.getSrc() == null) throw new UnprocessableEntityException("Source node not defined");
 		if (link.getDst() == null) throw new UnprocessableEntityException("Destination node not defined");
-		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG "+graphName+" does not exist");
+		if (!deployer.isDeployed(graphName)) throw new ConflictException("NF-FG ["+graphName+"] does not exist");
 		
 		int reqLatency = (link.getRequiredLatency() == null) ? 0 : link.getRequiredLatency().intValue();
 		float reqThr = (link.getRequiredThroughput() == null) ? 0 : link.getRequiredThroughput();
