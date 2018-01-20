@@ -49,7 +49,7 @@ public class ExceptionLogger implements ExtendedExceptionMapper<Throwable> {
     public Response toResponse(Throwable throwable) {
     	WebApplicationException exc = (WebApplicationException) throwable;
     	
-        return Response.status(exc.getResponse().getStatus()).entity(request.getRequestURI()+"\n"+throwable.getMessage()).type("text/plain").build();
+        return Response.status(exc.getResponse().getStatus()).entity(throwable.getMessage()).type("text/plain").build();
     }
 
 }

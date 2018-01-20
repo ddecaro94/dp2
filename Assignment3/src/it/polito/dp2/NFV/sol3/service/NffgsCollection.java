@@ -68,7 +68,7 @@ public class NffgsCollection {
 
 	@Path("{nffgName}")
 	public NffgResource getNffg(@PathParam("nffgName")
-								@Pattern(regexp = "(20\\d{2})(\\d{2})(\\d{2})") String name) {
+								@Pattern(regexp = "\\d{8}") String name) {
 		return nffgResources.getOrDefault(name, new NffgResource(name));
 	}
 	

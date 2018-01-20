@@ -46,6 +46,7 @@ code {
   of the service: both data and URLs of the resources are created in a singleton class (<i>NfvDeployer</i>), shared between resources. In this way, resources do not know
   their location, yet they provide access and methods to interact with the service, and deal with service exceptions mapping them to their corresponding <i>WebApplicationException</i>.
   
+  
   <h2>NfvDeployer</h2>
   <p>The <i>NfvDeployer</i> class is the component in charge of storing data about the NFV and performing the operations requested by the web interface;
   it's instanced in a non-lazy fashion outside the constructor, and it's shared through the <i>getInstance</i> method. Defines path constants in order to relief the resource classes
@@ -66,6 +67,10 @@ code {
   Each operation invokes one or at most two methods of the NfvDeployer, leaving the business logic as much as possible outside the resource class.
   It's part of the resources tasks to catch deployer's exceptins and translate them into HTTP status codes understandable from a REST point of view. On the other hand, NfvDeployer tries to define
   methods that can only throw checked exceptions, in order to reduce the amount of <i>Internal Server Error</i>s thrown by the servlet container.
+  <p>The resources are in charge of running some basic checks on the input data: the most important is to check that the NF-FG is deployed,
+  through a method offered by NfvDeployer. This allows the service to not restrict creation of nodes and links at the deployer method level, 
+  allowing usage of the same methods (<i>createNode</i>,<i>createLink</i>) for multiple tasks, to initialize the first NF-FG, to deploy a new graph, 
+  and to create those entities from the REST interface.
   
   <h2>Providers</h2>
   <p>In order to customize the user experience and provide validation against the XML schema two classes annotated with <i>@Provider</i> are defined:
