@@ -24,7 +24,7 @@ import it.polito.dp2.NFV.sol3.service.model.Node;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodeResource {
 
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	private String name;
 	private String graphName;
 	private LinksCollection links;
@@ -33,6 +33,7 @@ public class NodeResource {
 		this.name = nodeName;
 		this.graphName = graphName;
 		this.links = new LinksCollection(graphName, name);
+		this.deployer = NfvDeployer.getInstance();
 	}
 	
 	@DELETE

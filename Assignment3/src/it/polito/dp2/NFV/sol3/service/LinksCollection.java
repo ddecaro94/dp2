@@ -27,13 +27,14 @@ import it.polito.dp2.NFV.sol3.service.model.Links;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class LinksCollection {
 
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	private String nodeName;
 	private String graphName;
 	
 	public LinksCollection(String graphName, String nodeName) {
 		this.nodeName = nodeName;
 		this.graphName = graphName;
+		this.deployer = NfvDeployer.getInstance();
 	}
 	
 	@DELETE

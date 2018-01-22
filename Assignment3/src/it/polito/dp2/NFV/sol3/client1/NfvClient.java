@@ -33,7 +33,12 @@ public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 	private Map<NodeDescriptor, String> nodeNames;
 	private AtomicInteger counter = new AtomicInteger(1);
 	public NfvClient() {
-		String baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
+		String baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL");
+		if (baseUri == null) {
+			System.out.println("Property it.polito.dp2.NFV.lab3.URL not found, using default: 'http://localhost:8080/NfvDeployer/rest/'");
+			baseUri = "http://localhost:8080/NfvDeployer/rest/";
+		}
+		//System.out.println("Creating client with base URL "+baseUri);
 		serviceApi = new Nffgs(NfvDeployer.createClient(), URI.create(baseUri));
 	}
 

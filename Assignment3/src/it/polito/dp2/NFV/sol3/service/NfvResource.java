@@ -1,13 +1,18 @@
 package it.polito.dp2.NFV.sol3.service;
 
 import java.math.BigInteger;
+import java.net.URI;
+
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import io.swagger.annotations.Api;
@@ -31,22 +36,29 @@ import it.polito.dp2.NFV.sol3.service.model.*;
 @Consumes({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 @Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 public class NfvResource {
-
-
+	
 	private Nfv nfv;
-	private NfvDeployer deployer = NfvDeployer.getInstance();
-	private CatalogCollection catalog = new CatalogCollection();
-	private NffgsCollection nffgs = new NffgsCollection();
-	private HostsCollection hosts = new HostsCollection();
+	private NfvDeployer deployer = null;
+	private CatalogCollection catalog;
+	private NffgsCollection nffgs;
+	private HostsCollection hosts;
 
 	private NfvReader reader;
+	
 
-	public NfvResource() throws NfvReaderException, FactoryConfigurationError, AlreadyLoadedException,
+
+	public NfvResource(@Context UriInfo uriinfo) throws NfvReaderException, FactoryConfigurationError, AlreadyLoadedException,
 			UnknownEntityException, AllocationException, DatatypeConfigurationException, ServiceException {
 		reader = NfvReaderFactory.newInstance().newNfvReader();
 
 		try {
+			this.deployer = NfvDeployer.getInstance(uriinfo.getBaseUri());
+			 
 			this.nfv = deployer.createNfv();
+			this.catalog = new CatalogCollection();
+			this.nffgs = new NffgsCollection();
+			this.hosts = new HostsCollection();			
+			
 			
 			for (VNFTypeReader t : reader.getVNFCatalog()) {
 				deployer.createVnf(FunctionalType.fromValue(t.getFunctionalType().toString()), t.getName(),

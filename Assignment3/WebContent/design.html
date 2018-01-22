@@ -43,14 +43,15 @@ code {
   Starting from the root resource, <i>NfvResource</i>, all subresource handlers are created at runtime through the <i>@Path</i> annotation on methods.
   Except for the root, no other classes have the <i>@Path</i> annotation at class level, this implies that subresources won't be automatically created by the Jersey runtime, 
   but they will have to be instanced by the parent classes, allowing easy reorganization of the resource tree. This characteristic goes together with the HATEOAS model
-  of the service: both data and URLs of the resources are created in a singleton class (<i>NfvDeployer</i>), shared between resources. In this way, resources do not know
+  of the service: both data and URLs of the resources are created in a singleton class, (<i>NfvDeployer</i>), shared between resources. In this way, resources do not know
   their location, yet they provide access and methods to interact with the service, and deal with service exceptions mapping them to their corresponding <i>WebApplicationException</i>.
   
   
   <h2>NfvDeployer</h2>
   <p>The <i>NfvDeployer</i> class is the component in charge of storing data about the NFV and performing the operations requested by the web interface;
-  it's instanced in a non-lazy fashion outside the constructor, and it's shared through the <i>getInstance</i> method. Defines path constants in order to relief the resource classes
-  from managing hard coded URIs, making them configurable by modifying a single class. 
+  it's instanced in a lazy fashion using the static method <i>getInstance</i>, receiving the base URL from the first resource instantiating it; after initialization, it's shared between all resources invoking the same method with no parameters. 
+  Defines path constants in order to relief the resource classes from managing hard coded URIs, 
+  making them configurable by modifying a single class. 
   <p>The class holds all data structures and references to the external Neo4jSimpleXML service, and provides methods to create the basic components of the NFV, accessed both at initialization time and through the REST endpoints.
   Provides concurrency management making these basic methods <i>synchronized</i>, and since more methods can access at the same time to the same data structures, avoids data races 
   using <i>ConcurrentHashMap</i>s to store objects.

@@ -20,12 +20,12 @@ import it.polito.dp2.NFV.sol3.service.model.*;
 @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 @Api(hidden = true)
 public class HostsCollection {
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	private Map<String, HostResource> hostResources = new HashMap<>();
 	
 	
 	public HostsCollection() {
-		
+		this.deployer = NfvDeployer.getInstance();
 	}
 
 	@Path("{hostName}")

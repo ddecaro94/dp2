@@ -20,11 +20,12 @@ import it.polito.dp2.NFV.sol3.service.model.Host;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class HostResource {
 
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	private String name;
 	
 	public HostResource(String name) {
 		this.name = name;
+		this.deployer = NfvDeployer.getInstance();
 	}
 	
 	@GET

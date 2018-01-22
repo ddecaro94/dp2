@@ -1,6 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -13,11 +12,9 @@ import org.glassfish.jersey.spi.ExtendedExceptionMapper;
 @Provider
 public class ExceptionLogger implements ExtendedExceptionMapper<Throwable> {
 
-	@Context private HttpServletRequest request;
 	
     @Override
     public boolean isMappable(Throwable thro) {
-    	Logger.getLogger().debug(request.getRequestURI());
         if (isServerError(thro)) Logger.printThrowable(thro);
         if (isClientError(thro)) return true;
         

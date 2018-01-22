@@ -9,8 +9,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+
+import org.omg.PortableInterceptor.INACTIVE;
+
 import com.sun.jersey.api.client.ClientResponse;
 
 import it.polito.dp2.NFV.sol3.service.model.*;
@@ -31,20 +37,23 @@ public class NfvDeployer {
 	public static final String nffgsPath = "nffgs";
 	public static final String nodesPath = "nodes";
 	public static final String reachableHostsPath = "reachableHosts";
-
-	private static NfvDeployer INSTANCE = new NfvDeployer();
+	
+	private static NfvDeployer INSTANCE = null;
 
 	public static NfvDeployer getInstance() {
 		return INSTANCE;
 	}
 
+	public static NfvDeployer getInstance(URI absolutePath) {
+		INSTANCE = new NfvDeployer(absolutePath);
+		return INSTANCE;
+	}
 
 	private Catalog catalog = new Catalog();
 	private Hosts hosts = new Hosts();
 	private Data dataApi;
-	private String baseUri;
 	private String dataUri;
-
+	private URI baseUri;
 	private Map<String, Vnf> vnfs = new HashMap<>(); // name,vnf;
 	private Map<String, Connections> connections = new HashMap<>(); // hostname, connections
 	private Map<String, String> hostIds = new HashMap<>(); // hostname, hostId
@@ -57,9 +66,15 @@ public class NfvDeployer {
 	private ConcurrentMap<String, Link> links = new ConcurrentHashMap<>(); // (relationshipID, Link)
 	private ConcurrentMap<String, Map<String, Link>> linkNames = new ConcurrentHashMap<>(); // (nffg, (linkame, Link))
 
-	private NfvDeployer() {
+	private NfvDeployer(URI baseUri) {
 
-		baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL", "http://localhost:8080/NfvDeployer/rest/");
+		this.baseUri = baseUri;
+		if (this.baseUri == null) {
+			System.out.println("Base URI not found, impossible to proceed");	
+		}
+		
+		System.out.println("Creating server with base URL "+baseUri);
+		
 		dataUri = System.getProperty("it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL",
 				"http://localhost:8080/Neo4JSimpleXML/rest");
 
@@ -250,7 +265,7 @@ public class NfvDeployer {
 		if (!nffgMap.containsKey(graphName))
 			throw new UnknownEntityException("NF-FG [" + graphName + "] not found");
 
-		boolean exists = isExistingLink(graphName, linkName);
+		boolean exists = isExistingLink(graphName, linkName) || isDuplicateLink(graphName, srcNode, dstNode);
 
 		if (exists && !replace)
 			throw new AlreadyLoadedException("Link [" + linkName + "] already loaded");
@@ -842,5 +857,6 @@ public class NfvDeployer {
 			return false;
 		return true;
 	}
+
 
 }

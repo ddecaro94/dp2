@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen-src"/>
 	<classpathentry kind="lib" path="lib/lab3.jar"/>
 	<classpathentry kind="lib" path="lib/NFV.jar"/>
 	<classpathentry kind="lib" path="lib/NFVRandom.jar"/>
@@ -78,6 +79,5 @@
 	<classpathentry kind="lib" path="shared/lib/wadl-core-1.1.6.jar"/>
 	<classpathentry kind="lib" path="shared/lib/wadl-xslt-1.1.6.jar"/>
 	<classpathentry kind="lib" path="shared/lib/xsom-20140925.jar"/>
-	<classpathentry kind="lib" path="shared/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

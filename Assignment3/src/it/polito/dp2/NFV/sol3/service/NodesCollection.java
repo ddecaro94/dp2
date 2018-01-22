@@ -27,12 +27,13 @@ import it.polito.dp2.NFV.sol3.service.model.Nodes;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NodesCollection {
 
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	private String graph;
 	private Map<String, NodeResource> nodeResources = new HashMap<>();
 	
 	public NodesCollection(String name) {
 		this.graph = name;
+		this.deployer = NfvDeployer.getInstance();
 	}
 	
 	@Path("{nodeName}")

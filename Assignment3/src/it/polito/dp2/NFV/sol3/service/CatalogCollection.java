@@ -21,9 +21,10 @@ import it.polito.dp2.NFV.sol3.service.model.Vnf;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class CatalogCollection {
 
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	
 	public CatalogCollection () {
+		this.deployer = NfvDeployer.getInstance();
 	}
 	@GET
     @ApiOperation(value = "Get the vnf catalog")

@@ -22,7 +22,7 @@ import it.polito.dp2.NFV.sol3.service.model.Nffgs;
 @Produces({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
 public class NffgResource {
 
-	private NfvDeployer deployer = NfvDeployer.getInstance();
+	private NfvDeployer deployer = null;
 	private String name;
 	private NodesCollection nodes;
 	private LinksCollection links;
@@ -31,6 +31,7 @@ public class NffgResource {
 		this.name = name;
 		this.nodes = new NodesCollection(name);
 		this.links = new LinksCollection(name, null);
+		this.deployer = NfvDeployer.getInstance();
 	}
 	
 	@DELETE
