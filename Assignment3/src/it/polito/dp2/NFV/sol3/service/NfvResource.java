@@ -1,7 +1,6 @@
 package it.polito.dp2.NFV.sol3.service;
 
 import java.math.BigInteger;
-import java.net.URI;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -11,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.datatype.DatatypeConfigurationException;
 

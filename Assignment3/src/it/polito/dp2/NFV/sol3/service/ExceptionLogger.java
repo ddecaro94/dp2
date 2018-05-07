@@ -1,7 +1,6 @@
 package it.polito.dp2.NFV.sol3.service;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.ext.Provider;

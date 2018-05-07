@@ -6,8 +6,6 @@ package it.polito.dp2.NFV.sol3.client1;
 import java.net.URI;
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.lang.math.RandomUtils;
-
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
@@ -59,7 +57,7 @@ public class DeployedNffg implements it.polito.dp2.NFV.lab3.DeployedNffg {
 		
 		
 		try {
-			System.out.println("Adding node: host "+hostName+", type "+type.getName());
+			//System.out.println("Adding node: host "+hostName+", type "+type.getName());
 			ClientResponse resp = nodesService.post(ClientResponse.class, node);
 			
 			if (resp.getStatus() >= 500) throw new ServiceException(resp.getStatusInfo().getReasonPhrase());

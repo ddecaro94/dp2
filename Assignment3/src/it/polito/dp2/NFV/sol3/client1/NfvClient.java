@@ -8,8 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.lang.math.RandomUtils;
-
 import com.sun.jersey.api.client.ClientResponse;
 
 import it.polito.dp2.NFV.lab3.AllocationException;
@@ -31,7 +29,7 @@ import it.polito.dp2.NFV.lab3.UnknownEntityException;
 public class NfvClient implements it.polito.dp2.NFV.lab3.NfvClient {
 	private NfvDeployer.Index.Nffgs serviceApi;
 	private Map<NodeDescriptor, String> nodeNames;
-	private AtomicInteger counter = new AtomicInteger(1);
+	private AtomicInteger counter = new AtomicInteger(0);
 	public NfvClient() {
 		String baseUri = System.getProperty("it.polito.dp2.NFV.lab3.URL");
 		if (baseUri == null) {
